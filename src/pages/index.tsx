@@ -1,7 +1,6 @@
 import { FeatureCard } from '@/components/FeatureCard/FeatureCard'
 import { FileText, FileCodeIcon as FileContract, Scale, FileSpreadsheet } from 'lucide-react'
 import styles from '../styles/Home.module.css'
-import { Sidebar } from '@/components/SideBar/SideBar'
 
 export default function Home() {
     return (
