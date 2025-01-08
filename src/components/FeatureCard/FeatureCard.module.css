@@ -1,0 +1,47 @@
+.featureCard {
+    position: relative;
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--primary);
+    background-color: rgba(39, 39, 42, 0.5);
+    transition: background-color 0.2s;
+}
+
+.featureCard:hover {
+    background-color: #27272a;
+}
+
+.featureBadge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+}
+
+.badgeMostUsed {
+    background-color: rgba(34, 211, 238, 0.1);
+    color: #22d3ee;
+}
+
+.badgeComingSoon {
+    background-color: rgba(96, 165, 250, 0.1);
+    color: #60a5fa;
+}
+
+.featureIcon {
+    color: white;
+    margin-bottom: 1rem;
+}
+
+.featureTitle {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: white;
+    margin-bottom: 0.5rem;
+}
+
+.featureDescription {
+    color: #a1a1aa;
+}
