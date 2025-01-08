@@ -1,4 +1,5 @@
 import Document, { Html, Head, Main, NextScript } from 'next/document';
+import Script from 'next/script';
 
 class MyDocument extends Document {
     render() {
@@ -16,6 +17,20 @@ class MyDocument extends Document {
                     <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
                     <meta httpEquiv="Content-Language" content="pt-br" />
                     <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+
+                    {/* Scripts */}
+                    <Script id="theme-switcher" strategy="beforeInteractive">
+                        {`
+                            try {
+                            const savedTheme = localStorage.getItem('theme')
+                            const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+                            const theme = savedTheme || systemTheme
+                            document.documentElement.setAttribute('data-theme', theme)
+                            } catch (e) {
+                            console.log('Theme initialization error:', e)
+                            }
+                        `}
+                    </Script>
                 </Head>
                 <body>
                     <Main />

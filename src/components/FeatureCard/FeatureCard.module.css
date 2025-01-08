@@ -2,7 +2,7 @@
     position: relative;
     padding: 1.5rem;
     border-radius: 0.5rem;
-    border: 1px solid #3f3f46;
+    border: 1px solid var(--primary);
     background-color: rgba(39, 39, 42, 0.5);
     transition: background-color 0.2s;
 }

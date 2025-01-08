@@ -1,7 +1,6 @@
 .header {
   height: 64px;
-  background-color: var(--background);
-  border-bottom: 1px solid var(--border);
+  background-color: var(--foreground);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -14,14 +13,27 @@
   gap: 0.5rem;
 }
 
-.logoIcon {
-  color: var(--primary);
-}
-
 .logoText {
   font-size: 1.25rem;
   font-weight: 600;
-  color: var(--foreground);
+  color: var(--accent-foreground);
+}
+
+.rightContainer {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.loginLink {
+  color: var(--accent-foreground);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.loginLink:hover {
+  color: var(--accent-foreground);
 }
 
 .avatarContainer {

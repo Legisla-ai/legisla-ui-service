@@ -1,5 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
+import { ThemeToggle } from '../ThemeToggle/ThemeToggle';
 import styles from './Header.module.css';
 
 export const Header: React.FC = () => {
@@ -17,14 +19,18 @@ export const Header: React.FC = () => {
                 </div>
                 <span className={styles.logoText}>Legisla.AI</span>
             </div>
-            <div className={styles.avatarContainer}>
-                <Image
-                    src="https://avatar.iran.liara.run/public"
-                    alt="User Avatar"
-                    width={32}
-                    height={32}
-                    className={styles.avatar}
-                />
+            <div className={styles.rightContainer}>
+                <ThemeToggle />
+                <div className={styles.avatarContainer}>
+                    <Image
+                        src="https://avatar.iran.liara.run/public/boy"
+                        loading='lazy'
+                        alt="User Avatar"
+                        width={32}
+                        height={32}
+                        className={styles.avatar}
+                    />
+                </div>
             </div>
         </header>
     );
