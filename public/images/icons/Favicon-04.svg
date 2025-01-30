@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Camada_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 144 144">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: url(#Gradiente_sem_nome_13);
+      }
+
+      .cls-2 {
+        fill: url(#Gradiente_sem_nome_11);
+      }
+
+      .cls-3 {
+        fill: url(#Gradiente_sem_nome_9);
+      }
+    </style>
+    <linearGradient id="Gradiente_sem_nome_13" data-name="Gradiente sem nome 13" x1="88.58" y1="104.57" x2="146.99" y2="63.67" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#026490"/>
+      <stop offset="1" stop-color="#c7f9f6"/>
+    </linearGradient>
+    <linearGradient id="Gradiente_sem_nome_11" data-name="Gradiente sem nome 11" x1="-42.18" y1="-798.29" x2="-49.35" y2="-880.28" gradientTransform="translate(516.07 811.06) rotate(-30)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#053468"/>
+      <stop offset=".44" stop-color="#0289a3"/>
+      <stop offset=".78" stop-color="#00c6ce"/>
+      <stop offset=".95" stop-color="#00dedf"/>
+    </linearGradient>
+    <linearGradient id="Gradiente_sem_nome_9" data-name="Gradiente sem nome 9" x1="-45.8" y1="-763.96" x2="-45.8" y2="-916.41" gradientTransform="translate(516.07 811.06) rotate(-30)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#053468"/>
+      <stop offset=".11" stop-color="#044f7b"/>
+      <stop offset=".32" stop-color="#02829e"/>
+      <stop offset=".52" stop-color="#01a9ba"/>
+      <stop offset=".7" stop-color="#00c6ce"/>
+      <stop offset=".86" stop-color="#00d7da"/>
+      <stop offset=".98" stop-color="#00dedf"/>
+    </linearGradient>
+  </defs>
+  <polygon class="cls-1" points="78.34 69.05 78.34 69.05 78.34 69.05 72.98 78.34 105.81 135.2 138.64 78.34 144 69.05 78.34 69.05"/>
+  <polygon class="cls-2" points="72.98 78.34 105.81 135.2 40.15 135.2 72.98 78.34"/>
+  <polygon class="cls-3" points="40.15 135.2 72.98 78.34 32.83 8.8 0 65.66 40.15 135.2"/>
+</svg>
