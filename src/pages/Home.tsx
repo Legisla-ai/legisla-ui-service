@@ -1,15 +1,19 @@
 import { FeatureCard } from '../components/FeatureCard/FeatureCard'
 import { FileText, Scale, FileSpreadsheet, ReceiptText } from 'lucide-react'
+import styles from '../styles/Home.module.css'
+import { FloatButton } from 'antd'
+import { WhatsAppOutlined } from '@ant-design/icons'
+import { whatsappLink } from '../lib/utils'
 
 export default function Home() {
     return (
-        <div className="bg-zinc-900 flex flex-col min-h-screen">
-            <main className="flex-1 p-8 overflow-y-auto">
-                <h1 className="text-3xl font-bold text-white mb-8">
+        <div className={styles.container}>
+            <main className={styles.mainContent}>
+                <h1 className={styles.pageTitle}>
                     Qual problema você gostaria de resolver hoje?
                 </h1>
 
-                <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+                <div className={styles.featuresGrid}>
                     <FeatureCard
                         title="Resumo de petição"
                         description="Transforme documentos jurídicos complexos em resumos claros e objetivos com apenas um clique."
@@ -39,6 +43,12 @@ export default function Home() {
                     />
                 </div>
             </main>
+
+            <FloatButton
+                icon={<WhatsAppOutlined />}
+                href={whatsappLink}
+                target="_blank"
+            />
         </div>
     )
 }
