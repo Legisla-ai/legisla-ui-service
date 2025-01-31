@@ -1,40 +1,45 @@
-// pages/login.tsx
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { FaSignInAlt } from 'react-icons/fa';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import styles from '../styles/Form.module.css';
+import { UserRoundPlus } from 'lucide-react';
 
-interface LoginFormInputs {
+interface RegisterFormInputs {
+    name: string;
     email: string;
     password: string;
 }
 
 const schema = yup.object().shape({
+    name: yup.string().required('Nome é obrigatório'),
     email: yup.string().email('E-mail inválido').required('E-mail é obrigatório'),
     password: yup.string().min(6, 'Senha deve ter pelo menos 6 caracteres').required('Senha é obrigatória'),
 });
 
-const Login: React.FC = () => {
+const Register: React.FC = () => {
     const {
         register,
         handleSubmit,
         formState: { errors },
-    } = useForm<LoginFormInputs>({
+    } = useForm<RegisterFormInputs>({
         resolver: yupResolver(schema),
     });
 
-    const onSubmit = (data: LoginFormInputs) => {
+    const onSubmit = (data: RegisterFormInputs) => {
         console.log(data);
-        // Aqui você pode chamar a API para fazer o login
     };
 
     return (
         <div className={styles.container}>
-            <FaSignInAlt size={50} color="#0070f3" />
-            <h1>Login</h1>
+            <UserRoundPlus size={50} color="#0070f3" />
+            <h1>Registro</h1>
             <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
+                <div className={styles.field}>
+                    <label htmlFor="name">Nome</label>
+                    <input id="name" type="text" {...register('name')} />
+                    {errors.name && <p className={styles.error}>{errors.name.message}</p>}
+                </div>
                 <div className={styles.field}>
                     <label htmlFor="email">E-mail</label>
                     <input id="email" type="email" {...register('email')} />
@@ -46,11 +51,11 @@ const Login: React.FC = () => {
                     {errors.password && <p className={styles.error}>{errors.password.message}</p>}
                 </div>
                 <button type="submit" className={styles.button}>
-                    Entrar
+                    Registrar
                 </button>
             </form>
         </div>
     );
 };
 
-export default Login;
+export default Register;

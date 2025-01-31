@@ -18,6 +18,15 @@
   color: var(--primary);
 }
 
+.logoIcon:hover {
+  transform: scale(1.15);
+  transition: transform 0.2s ease-in-out;
+}
+
+.logoIcon:not(:hover) {
+  transition: transform 0.2s ease-in-out;
+}
+
 .logoText {
   font-size: 1.25rem;
   font-weight: 600;
@@ -32,4 +41,19 @@
 .avatar {
   border-radius: 50%;
   background-color: var(--muted);
+}
+
+.expertButton {
+  background-color: #0ca83b;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  padding: 1.1rem 1rem;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.expertButton:hover {
+  background-color: #087c2b !important;
+  color: #ffffff !important;
 }
