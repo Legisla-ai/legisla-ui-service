@@ -1,7 +1,7 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
-import styles from '../styles/Form.module.css';
+import styles from '@/styles/Form.module.css';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { LogIn } from 'lucide-react';
 

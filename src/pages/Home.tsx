@@ -1,9 +1,9 @@
-import { FeatureCard } from '../components/FeatureCard/FeatureCard'
+import { FeatureCard } from '@/components/FeatureCard/FeatureCard'
 import { FileText, Scale, FileSpreadsheet, ReceiptText } from 'lucide-react'
-import styles from '../styles/Home.module.css'
-import { FloatButton } from 'antd'
+import styles from '@/styles/Home.module.css'
 import { WhatsAppOutlined } from '@ant-design/icons'
-import { whatsappLink } from '../lib/utils'
+import { whatsappLink } from '@/lib/utils'
+import { FloatButton } from '@/components/FloatButton/FloatButton'
 
 export default function Home() {
     return (
@@ -46,8 +46,7 @@ export default function Home() {
 
             <FloatButton
                 icon={<WhatsAppOutlined />}
-                href={whatsappLink}
-                target="_blank"
+                onClick={() => window.open(whatsappLink, '_blank')}
             />
         </div>
     )

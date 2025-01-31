@@ -7,7 +7,9 @@
   --primary: #22d3ee;
   --primary-foreground: #0c4a6e;
   --accent: #3f3f46;
-  --accent-foreground: #ffffff;
+  --accent-foreground: ;
+  --whatsapp: #0ca83b;
+  --whatsapp-hover: #0a7d2d;
 }
 
 body {

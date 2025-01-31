@@ -2,7 +2,7 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import styles from '../styles/Form.module.css';
+import styles from '@/styles/Form.module.css';
 import { UserRoundPlus } from 'lucide-react';
 
 interface RegisterFormInputs {

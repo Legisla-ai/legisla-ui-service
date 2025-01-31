@@ -1,5 +1,6 @@
 import { createBrowserRouter } from "react-router";
-import Home from "../pages/Home";
+import Home from "@/pages/Home";
+import Login from "@/pages/Login";
 
 interface RouteObject {
     path: string;
@@ -11,6 +12,10 @@ const routes: RouteObject[] = [
     {
         path: "/",
         element: <Home />,
+    },
+    {
+        path: "/login",
+        element: <Login />,
     }
 ];
 

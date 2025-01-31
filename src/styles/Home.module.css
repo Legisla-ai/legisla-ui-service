@@ -1,5 +1,5 @@
 .container {
-  background-color: #18181b;
+  background-color: var(--background);
   display: flex;
   flex-direction: column;
 }
@@ -17,8 +17,16 @@
 .pageTitle {
   font-size: 1.875rem;
   font-weight: bold;
-  color: white;
+  color: var(--accent-foreground);
   margin-bottom: 2rem;
+}
+
+.floatButton {
+  position: fixed;
+  background-color: var(--whatsapp);
+  bottom: 0;
+  margin-bottom: 1rem;
+  padding: 1rem;
 }
 
 .featuresGrid {
