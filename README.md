@@ -8,7 +8,7 @@ Antes de começar, certifique-se de ter os seguintes requisitos instalados:
 
 - [Bun](https://bun.sh/) (pode ser instalado via `curl -fsSL https://bun.sh/install | bash`)
 
-## Criando um Novo Projeto React com Bun
+## Como iniciar
 
 1. **Clone o repositório:**
 
