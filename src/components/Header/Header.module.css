@@ -1,4 +1,5 @@
 .header {
+  position: relative;
   height: 64px;
   background-color: #ffffff;
   border-bottom: 1px solid #e5e5e5;
@@ -7,6 +8,16 @@
   align-items: center;
   padding: 0 2rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  font-family: 'Satoshi', sans-serif;
+}
+
+.navButtons>button {
+  display: inline-block;
+  gap: 1rem;
+  font-size: 1rem;
+  font-family: 'Satoshi', sans-serif;
+  font-weight: 600;
+  color: #4f555e;
 }
 
 .logoContainer {

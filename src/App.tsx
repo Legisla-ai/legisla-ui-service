@@ -2,6 +2,7 @@ import React from 'react';
 import { Layout } from 'antd';
 import { Header } from './components/Header/Header';
 import styles from './styles/Layout.module.css';
+import './globals.css';
 import { Outlet } from 'react-router-dom';
 
 const { Content } = Layout;

@@ -1,3 +1,4 @@
+import { Button } from 'antd';
 import styles from './FeatureCard.module.css'
 
 interface FeatureCardProps {
@@ -7,18 +8,15 @@ interface FeatureCardProps {
     badge?: 'most-used' | 'coming-soon';
 }
 
-export function FeatureCard({ title, description, icon, badge }: FeatureCardProps) {
+export function FeatureCard({ title, description, icon }: FeatureCardProps) {
     return (
         <div className={styles.featureCard}>
-            {badge && (
-                <span className={`${styles.featureBadge} ${badge === 'most-used' ? styles.badgeMostUsed : styles.badgeComingSoon
-                    }`}>
-                    {badge === 'most-used' ? 'Mais usado' : 'Em breve'}
-                </span>
-            )}
-            <div className={styles.featureIcon}>{icon}</div>
-            <h3 className={styles.featureTitle}>{title}</h3>
+            <div className={styles.title}>
+                <div className={styles.featureIcon}>{icon}</div>
+                <h3 className={styles.featureTitle}>{title}</h3>
+            </div>
             <p className={styles.featureDescription}>{description}</p>
+            <Button type="primary" className={styles.featureButton}> Criar {title.toLowerCase()}</Button>
         </div>
     )
 }
