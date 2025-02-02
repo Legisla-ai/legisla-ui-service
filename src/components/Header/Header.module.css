@@ -1,11 +1,12 @@
 .header {
   height: 64px;
-  background-color: var(--background);
-  border-bottom: 1px solid var(--border);
+  background-color: #ffffff;
+  border-bottom: 1px solid #e5e5e5;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0 2rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .logoContainer {
@@ -15,16 +16,15 @@
 }
 
 .logoIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   color: var(--primary);
+  transition: transform 0.3s ease-in-out;
 }
 
 .logoIcon:hover {
   transform: scale(1.15);
-  transition: transform 0.2s ease-in-out;
-}
-
-.logoIcon:not(:hover) {
-  transition: transform 0.2s ease-in-out;
 }
 
 .logoText {
@@ -41,19 +41,29 @@
 .avatar {
   border-radius: 50%;
   background-color: var(--muted);
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
 }
 
 .expertButton {
-  background-color: #0ca83b;
+  background-color: var(--whatsapp);
   color: #ffffff;
   font-size: 16px;
   font-weight: bold;
   border: none;
-  padding: 1.1rem 1rem;
-  transition: background-color 0.2s ease-in-out;
+  padding: 0.75rem 1.25rem;
+  border-radius: 8px;
+  transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
 
 .expertButton:hover {
   background-color: #087c2b !important;
-  color: #ffffff !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.expertButton:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(10, 200, 100, 0.5);
 }

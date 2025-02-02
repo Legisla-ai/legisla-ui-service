@@ -1,21 +1,21 @@
 import React from 'react';
-import router from './routes/Routes';
-import { RouterProvider } from 'react-router';
+import { Layout } from 'antd';
 import { Header } from './components/Header/Header';
 import styles from './styles/Layout.module.css';
-import { Sidebar } from './components/SideBar/SideBar';
+import { Outlet } from 'react-router-dom';
+
+const { Content } = Layout;
 
 const App: React.FC = () => {
     return (
-        <div className={styles.container}>
+        <Layout>
             <Header />
-            <div className={styles.content}>
-                <Sidebar />
-                <div className={styles.main}>
-                    <RouterProvider router={router} />
-                </div>
-            </div>
-        </div>
+            <Layout rootClassName={styles.layout}>
+                <Content className={styles.main}>
+                    <Outlet />
+                </Content>
+            </Layout>
+        </Layout>
     );
 }
 
