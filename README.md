@@ -1,50 +1,63 @@
-# React + TypeScript + Vite
+# React com Bun
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Este documento fornece instruções básicas para iniciar um projeto React utilizando o gerenciador de pacotes [Bun](https://bun.sh/).
 
-Currently, two official plugins are available:
+## Requisitos
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Antes de começar, certifique-se de ter os seguintes requisitos instalados:
 
-## Expanding the ESLint configuration
+- [Bun](https://bun.sh/) (pode ser instalado via `curl -fsSL https://bun.sh/install | bash`)
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Criando um Novo Projeto React com Bun
 
-- Configure the top-level `parserOptions` property like this:
+1. **Clone o repositório:**
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+   ```sh
+   git clone https://github.com/Legisla-ai/legisla-ui-service.git
+   ```
+
+2. **Acesse a pasta do projeto:**
+
+   ```sh
+   cd legisla-ui-service
+   ```
+
+3. **Instale as dependências:**
+
+   ```sh
+   bun install
+   ```
+
+## Executando o Projeto
+
+Para rodar o projeto em ambiente de desenvolvimento, utilize:
+
+```sh
+bun dev
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+O servidor iniciará e o projeto estará acessível normalmente em `http://localhost:5173` (ou outra porta definida).
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+## Build para Produção
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+Para gerar uma versão otimizada para produção:
+
+```sh
+bun run build
 ```
+
+Os arquivos de saída serão gerados na pasta `dist/`.
+
+## Executando o Servidor em Produção
+
+Após construir o projeto, você pode servir os arquivos com:
+
+```sh
+bun run preview
+```
+
+## Considerações Finais
+
+Bun é um gerenciador de pacotes rápido e eficiente, oferecendo uma alternativa moderna ao npm e yarn. Ele também pode ser usado para rodar scripts e gerenciar servidores backend em Node.js de forma mais performática.
+
+Para mais informações, consulte a [documentação oficial do Bun](https://bun.sh/docs).
