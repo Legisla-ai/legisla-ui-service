@@ -49,8 +49,8 @@ export default function Home() {
                     <h1 className="text-4xl md:text-5xl font-bold mb-4">
                         Seu assistente jurídico <span className="bg-gradient-to-l from-teal-300 to-cyan-600 bg-clip-text text-transparent">potencializado por IA</span>
                     </h1>
-                    <p className="text-xl text-gray-600">
-                        Crie, analise e gerencie documentos jurídicos com eficiência e precisão inigualáveis.
+                    <p className="text-xl text-gray-600 dark:text-gray-700 leading-relaxed ">
+                        Crie, analise e gerencie documentos jurídicos com eficiência e precisão inigualáveis
                     </p>
                 </div>
 

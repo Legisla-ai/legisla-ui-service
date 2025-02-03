@@ -1,7 +1,8 @@
 .header {
-  position: relative;
+  position: fixed;
+  width: 100vw;
   height: 64px;
-  background-color: #ffffff;
+  background-color: #ffffffda;
   border-bottom: 1px solid #e5e5e5;
   display: flex;
   justify-content: space-between;
@@ -9,6 +10,7 @@
   padding: 0 2rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   font-family: 'Satoshi', sans-serif;
+  z-index: 9999;
 }
 
 .navButtons>button {
