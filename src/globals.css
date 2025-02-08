@@ -1,4 +1,5 @@
-@import "tailwindcss";
+@import 'tailwindcss';
+@tailwind utilities;
 
 @font-face {
   font-family: 'Satoshi';
@@ -28,13 +29,6 @@
   font-style: italic;
 }
 
-
-body {
-  font-family: 'Satoshi', sans-serif !important;
-  line-height: 1.5;
-}
-
-
 :root {
   --background: #ffffff;
   --foreground: #212121;
@@ -48,7 +42,6 @@ body {
   --whatsapp: #0ca83b;
   --whatsapp-hover: #0a7d2d;
 }
-
 
 /* CSS Reset */
 * {
