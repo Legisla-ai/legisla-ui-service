@@ -22,23 +22,23 @@ const BloomBackground = () => {
 
     if (bloom1Ref.current) {
       bloom1Ref.current.style.transition = 'transform 4s ease-in-out, filter 4s ease-in-out';
-      updateTransformAndBrightness(bloom1Ref.current, '24px', 50);
+      updateTransformAndBrightness(bloom1Ref.current, '18px', 50);
     }
     if (bloom2Ref.current) {
       bloom2Ref.current.style.transition = 'transform 5s ease-in-out, filter 5s ease-in-out';
-      updateTransformAndBrightness(bloom2Ref.current, '28px', 50);
+      updateTransformAndBrightness(bloom2Ref.current, '20px', 50);
     }
     if (bloom3Ref.current) {
       bloom3Ref.current.style.transition = 'transform 4.5s ease-in-out, filter 4.5s ease-in-out';
-      updateTransformAndBrightness(bloom3Ref.current, '24px', 50);
+      updateTransformAndBrightness(bloom3Ref.current, '22px', 50);
     }
     if (bloom4Ref.current) {
       bloom4Ref.current.style.transition = 'transform 5.5s ease-in-out, filter 5.5s ease-in-out';
-      updateTransformAndBrightness(bloom4Ref.current, '20px', 50);
+      updateTransformAndBrightness(bloom4Ref.current, '24px', 50);
     }
     if (bloom5Ref.current) {
       bloom5Ref.current.style.transition = 'transform 3.5s ease-in-out, filter 3.5s ease-in-out';
-      updateTransformAndBrightness(bloom5Ref.current, '22px', 50);
+      updateTransformAndBrightness(bloom5Ref.current, '26px', 50);
     }
 
     const interval1 = setInterval(() => updateTransformAndBrightness(bloom1Ref.current, '24px', 50), 4000);

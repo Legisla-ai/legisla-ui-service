@@ -1,9 +1,4 @@
-export const content = ['./pages/**/*.{js,jsx,ts,tsx}', './components/**/*.{js,jsx,ts,tsx}'];
-export const theme = {
-  extend: {
-    fontFamily: {
-      satoshi: ['Satoshi', 'sans-serif'],
-    },
-  },
-};
+/** @type {import('tailwindcss').Config} */
+export const content = ['./index.html', './src/**/*.{js,jsx,ts,tsx}'];
+export const theme = {};
 export const plugins = [];
