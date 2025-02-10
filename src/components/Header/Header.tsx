@@ -13,7 +13,7 @@ export const Header: React.FC = () => {
           <div className={styles.logoIcon}>
             <img src="/icons/logo.png" alt="Legisla.ai" width={34} height={34} className={styles.logo} />
           </div>
-          <span className="font-bold text-2xl">
+          <span className="text-black font-bold text-2xl">
             Legisla
             <span className="bg-gradient-to-l from-teal-300 to-cyan-600 bg-clip-text text-transparent">AI</span>
           </span>
