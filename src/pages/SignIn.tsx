@@ -45,7 +45,7 @@ export default function SignIn() {
 
       <div className="flex flex-1 flex-col justify-center p-8 bg-gray-50">
         <div className="max-w-md w-full mx-auto">
-          <h2 className="text-2xl font-semibold text-gray-800 mb-4">Bem-vindo de volta</h2>
+          <h2 className="text-2xl font-semibold text-gray-800 mb-4">Bem-vindo de volta!</h2>
           <p className="text-gray-600 mb-8">Entre com sua conta</p>
 
           <button
