@@ -16,7 +16,7 @@ const schema = yup
   })
   .required();
 
-export default function SignUp() {
+export default function SignIn() {
   const navigate = useNavigate();
   const {
     register,
@@ -26,29 +26,27 @@ export default function SignUp() {
 
   const onSubmit = (data: FormData) => {
     console.log(data);
-    // Processar dados de inscrição
+    // Processar dados de login
   };
 
   return (
     <div className="min-h-screen flex relative">
       <div className="absolute top-4 right-4 flex items-center text-sm">
-        <span className="text-gray-700 mr-2">Já tem conta?</span>
+        <span className="text-gray-700 mr-2">Não tem conta?</span>
         <button
           type="button"
-          onClick={() => navigate('/login')}
+          onClick={() => navigate('/register')}
           className="px-4 py-2 border border-[#026490] text-[#026490] rounded hover:bg-[#026490] hover:text-white cursor-pointer"
         >
-          Fazer login
+          Cadastrar
         </button>
       </div>
       <BloomBackground />
 
       <div className="flex flex-1 flex-col justify-center p-8 bg-gray-50">
         <div className="max-w-md w-full mx-auto">
-          <h2 className="text-2xl font-semibold text-gray-800 mb-4">
-            Comece sua revolução com Inteligência Artificial
-          </h2>
-          <p className="text-gray-600 mb-8">Experimente 7 dias grátis</p>
+          <h2 className="text-2xl font-semibold text-gray-800 mb-4">Bem-vindo de volta</h2>
+          <p className="text-gray-600 mb-8">Entre com sua conta</p>
 
           <button
             type="button"
@@ -74,7 +72,7 @@ export default function SignUp() {
             <div>
               <input
                 type="email"
-                placeholder="Email profissional"
+                placeholder="Email"
                 {...register('email')}
                 className="w-full border border-gray-300 p-2 rounded bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
@@ -93,17 +91,9 @@ export default function SignUp() {
               type="submit"
               className="w-full bg-[#026490] hover:bg-[#025C81] hover:shadow-lg transition text-white py-2 rounded cursor-pointer"
             >
-              Começar agora
+              Entrar
             </button>
           </form>
-
-          <p className="text-center text-xs text-gray-500 mt-4">
-            Ao se inscrever, você concorda com os{' '}
-            <a href="/terms" className="text-[#026490] hover:underline">
-              Termos de uso
-            </a>
-            .
-          </p>
         </div>
       </div>
     </div>

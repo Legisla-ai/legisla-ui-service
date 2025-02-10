@@ -3,9 +3,6 @@ import { Input } from 'antd';
 import { FeatureCard } from '@/components/FeatureCard/FeatureCard';
 import { FileText, Scale, FileSpreadsheet, ReceiptText, SearchIcon } from 'lucide-react';
 import styles from '@/styles/Home.module.css';
-import { WhatsAppOutlined } from '@ant-design/icons';
-import { whatsappLink } from '@/lib/utils';
-import { FloatButton } from '@/components/FloatButton/FloatButton';
 
 export default function Home() {
   const [search, setSearch] = useState('');
@@ -75,8 +72,6 @@ export default function Home() {
           ))}
         </div>
       </main>
-
-      <FloatButton icon={<WhatsAppOutlined />} onClick={() => window.open(whatsappLink, '_blank')} />
     </div>
   );
 }
