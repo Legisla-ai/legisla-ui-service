@@ -1,6 +1,5 @@
 import { createBrowserRouter, RouteObject } from 'react-router-dom';
 import Home from '@/pages/Home';
-import Chat from '@/pages/Chat';
 import App from '@/App';
 import Signup from '@/pages/SignUp';
 
@@ -16,10 +15,6 @@ const routes: RouteObject[] = [
       {
         path: 'register',
         element: <Signup />,
-      },
-      {
-        path: 'chat',
-        element: <Chat />,
       },
     ],
   },
