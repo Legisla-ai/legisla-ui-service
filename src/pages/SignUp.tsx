@@ -30,6 +30,7 @@ export default function SignUp() {
   };
 
   return (
+    /* Painel esquerdo */
     <div className="min-h-screen flex relative">
       <div className="absolute top-4 right-4 flex items-center text-sm">
         <span className="text-gray-700 mr-2">Já tem conta?</span>
@@ -40,9 +41,9 @@ export default function SignUp() {
           Fazer login
         </button>
       </div>
-
       <BloomBackground />
 
+      {/* Painel direito */}
       <div className="flex flex-1 flex-col justify-center p-8 bg-gray-50">
         <div className="max-w-md w-full mx-auto">
           <h2 className="text-2xl font-semibold text-gray-800 mb-4">
@@ -91,7 +92,7 @@ export default function SignUp() {
             </div>
             <button
               type="submit"
-              className="w-full bg-[#026490] hover:bg-blue-700 text-white py-2 rounded cursor-pointer"
+              className="w-full bg-[#026490] hover:bg-[#025C81] hover:shadow-lg transition text-white py-2 rounded cursor-pointer"
             >
               Começar agora
             </button>

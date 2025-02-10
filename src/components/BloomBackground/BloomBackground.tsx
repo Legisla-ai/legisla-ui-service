@@ -57,7 +57,7 @@ const BloomBackground = () => {
   }, []);
 
   return (
-    <div className="hidden lg:flex flex-1 items-center justify-center bg-black p-8 relative overflow-hidden">
+    <div className="min-h-screen  hidden lg:flex flex-1 items-center justify-center bg-black p-8 relative overflow-hidden">
       <div
         ref={bloom1Ref}
         style={{ filter: 'blur(14px) brightness(1)' }}
