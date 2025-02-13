@@ -21,9 +21,15 @@ export const Header: React.FC = () => {
       </Link>
 
       <div className={styles.navButtons}>
-        <Button type="text">Chat</Button>
-        <Button type="text">Documentos</Button>
-        <Button type="text">Análises</Button>
+        <Link to="/chat">
+          <Button type="text">Chat</Button>
+        </Link>
+        <Link to="/documents">
+          <Button type="text">Documentos</Button>
+        </Link>
+        <Link to="/analyses">
+          <Button type="text">Análises</Button>
+        </Link>
       </div>
 
       <Button

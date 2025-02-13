@@ -4,7 +4,6 @@
   flex-direction: column;
   min-height: calc(100vh - 4rem);
   font-family: 'Satoshi', sans-serif;
-  margin-top: 64px;
 }
 
 .content {
@@ -112,7 +111,9 @@
   padding: 1rem;
   border-radius: 50%;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
 }
 
 .floatButton:hover {
