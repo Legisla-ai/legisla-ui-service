@@ -1,21 +1,31 @@
 import { createBrowserRouter, RouteObject } from 'react-router-dom';
+import { DefaultLayout } from '@/layouts/DefaultLayout';
+import { NoHeaderLayout } from '@/layouts/NoHeaderLayout';
 import Home from '@/pages/Home';
-import App from '@/App';
-import Signup from '@/pages/SignUp';
+import Chat from '@/pages/Chat';
+import SignUp from '@/pages/SignUp';
 import SignIn from '@/pages/SignIn';
 
 const routes: RouteObject[] = [
   {
-    path: '/',
-    element: <App />,
+    element: <DefaultLayout />,
     children: [
       {
-        index: true,
+        path: '/',
         element: <Home />,
       },
       {
+        path: 'chat',
+        element: <Chat />,
+      },
+    ],
+  },
+  {
+    element: <NoHeaderLayout />,
+    children: [
+      {
         path: 'register',
-        element: <Signup />,
+        element: <SignUp />,
       },
       {
         path: 'login',
