@@ -31,9 +31,9 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #212121;
-  --muted: #f5f5f5;
-  --muted-foreground: #6e6e6e;
+  --foreground: #f9f9f9;
+  --muted: #e3e3e3;
+  --muted-foreground: #0d0d0d;
   --border: #e5e5e5;
   --primary: #22d3ee;
   --primary-foreground: #ffffff;
@@ -41,4 +41,6 @@
   --accent-foreground: #212121;
   --whatsapp: #0ca83b;
   --whatsapp-hover: #0a7d2d;
+  --legisla-turquoise-1: #4fe0e0;
+  --legisla-turquoise-2: #026490;
 }

@@ -1,4 +1,6 @@
-import { PlusCircle, MessageCircle, ChevronDown, Settings, X } from 'lucide-react';
+// src/components/Sidebar/Sidebar.tsx
+import { useState } from 'react';
+import { Menu, Plus } from 'lucide-react';
 import { Button } from 'antd';
 import { cn } from '@/lib/utils';
 
@@ -8,44 +10,44 @@ interface SidebarProps {
 }
 
 export function Sidebar({ isOpen, onClose }: SidebarProps) {
+  const [selectedChat, setSelectedChat] = useState<number | null>(null);
+
   return (
     <div
       className={cn(
-        'w-64 bg-white shadow-lg transition-transform duration-300 ease-in-out h-full',
+        'w-64 h-full bg-white border-r border-[var(--muted)] shadow-lg transition-transform duration-300 ease-in-out',
         isOpen ? 'translate-x-0' : '-translate-x-full'
       )}
     >
       <div className="flex flex-col h-full p-4">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-lg font-semibold text-gray-800">Menu</h2>
-          <Button variant="solid" onClick={onClose} className="md:hidden">
-            <X className="h-5 w-5" />
+        {/* Container para o botão <Menu> e "Novo Chat" */}
+        <div className="flex items-center mb-4 gap-2">
+          <Button type="text" onClick={onClose} className="hover:bg-[var(--muted)]! px-2! py-3!">
+            <Menu className="h-5 w-5" />
+          </Button>
+          <Button className="ml-auto border-[var(--muted)]! hover:bg-[var(--muted)]! px-10! py-3!">
+            <Plus className="h-5 w-5" />
           </Button>
         </div>
-        <Button className="w-full mb-4 bg-[#01b1b1] text-white hover:bg-[#01b1b1]/90">
-          <PlusCircle className="mr-2 h-5 w-5" /> Novo Chat
-        </Button>
-        <div className="mb-4">
-          <Button variant="solid" className="w-full justify-between">
-            Chats Recentes
-            <ChevronDown className="h-4 w-4 transition-transform transform rotate-180" />
-          </Button>
+
+        {/* Lista de chats */}
+        <div className="flex flex-col gap-2">
           {[1, 2, 3, 4, 5].map((num) => (
             <Button
               key={num}
-              variant="solid"
-              className="w-full justify-start text-gray-600 hover:text-[#01b1b1] hover:bg-[#01b1b1]/10"
+              type="text"
+              onClick={() => setSelectedChat(num)}
+              className={cn(
+                'justify-start! transition-colors',
+                selectedChat === num
+                  ? 'bg-[var(--muted)]! text-[var(--muted-foreground)]!'
+                  : 'text-gray-600! hover:bg-gray-100!'
+              )}
             >
-              <MessageCircle className="mr-2 h-5 w-5" /> Chat {num}
+              <span className="text-sm">Chat {num}</span>
             </Button>
           ))}
         </div>
-        <Button
-          variant="solid"
-          className="w-full justify-start mt-auto text-gray-600 hover:text-[#01b1b1] hover:bg-[#01b1b1]/10"
-        >
-          <Settings className="mr-2 h-5 w-5" /> Configurações
-        </Button>
       </div>
     </div>
   );
