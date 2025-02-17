@@ -1,4 +1,3 @@
-// src/pages/Chat.tsx
 import { ChatArea } from '@/components/ChatArea/ChatArea';
 import { Sidebar } from '@/components/Sidebar/Sidebar';
 import { useState, useEffect } from 'react';
@@ -13,11 +12,7 @@ export default function Chat() {
     const handleResize = () => {
       const mobile = window.innerWidth < 700;
       setIsMobile(mobile);
-      if (mobile) {
-        setIsSidebarOpen(false);
-      } else {
-        setIsSidebarOpen(true);
-      }
+      setIsSidebarOpen(!mobile);
     };
 
     window.addEventListener('resize', handleResize);
@@ -33,10 +28,11 @@ export default function Chat() {
       >
         <Sidebar isOpen={isSidebarOpen} onClose={toggleSidebar} />
       </div>
-      <div className="flex flex-col flex-1">
+      <div className="flex flex-col flex-1 relative">
+        {/* Botão Menu com estilo similar ao da Sidebar */}
         {!isSidebarOpen && (
           <div className="absolute top-2 left-2 z-30">
-            <Button variant="solid" onClick={toggleSidebar}>
+            <Button type="text" onClick={toggleSidebar} className="hover:bg-[var(--muted)]! px-2! py-3! m-2">
               <Menu className="h-5 w-5" />
             </Button>
           </div>

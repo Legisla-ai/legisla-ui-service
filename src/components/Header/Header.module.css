@@ -24,7 +24,7 @@
 
 .logoContainer {
   display: flex;
-  align-items: center;
+  align-items: end;
   gap: 0.5rem;
 }
 

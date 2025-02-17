@@ -29,7 +29,7 @@ export const promptsItems: PromptsProps['items'] = [
 export const getPromptClasses = (windowWidth: number): Partial<Record<SemanticType, string>> => ({
   title: 'text-center font-bold mb-4 text-lg', // título centralizado, negrito e margem inferior
   list: windowWidth < breakpoint ? 'flex items-center! flex-col gap-2' : 'flex flex-row items-center gap-4', // layout responsivo com espaçamento
-  item: windowWidth < breakpoint ? 'w-[85%]' : 'w-[25vw]',
+  item: windowWidth < breakpoint ? 'w-[85%] shadow-md m-1 select-none' : 'w-[25vw] shadow-md my-4 mx-1 select-none',
 });
 
 export const promptClassNames: Partial<Record<SemanticType, string>> = {};

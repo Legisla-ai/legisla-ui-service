@@ -103,6 +103,9 @@ export function ChatArea() {
               <div className="w-full">
                 <Prompts
                   title=""
+                  onItemClick={(item) => {
+                    console.log('Selected item:', item.data);
+                  }}
                   items={promptsItems}
                   classNames={{
                     ...promptClassNames,

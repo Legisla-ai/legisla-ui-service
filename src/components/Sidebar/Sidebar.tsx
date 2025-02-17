@@ -1,4 +1,3 @@
-// src/components/Sidebar/Sidebar.tsx
 import { useState } from 'react';
 import { Menu, Plus } from 'lucide-react';
 import { Button } from 'antd';
@@ -15,7 +14,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
   return (
     <div
       className={cn(
-        'w-64 h-full bg-white border-r border-[var(--muted)] shadow-lg transition-transform duration-300 ease-in-out',
+        'w-64 h-full bg-white border-r border-[var(--muted)]',
         isOpen ? 'translate-x-0' : '-translate-x-full'
       )}
     >
@@ -30,6 +29,10 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
           </Button>
         </div>
 
+        <div className="mt-4 mb-2">
+          <span className="text-md font-bold text-[var(--muted-foreground)] select-none p-2">Seus arquivos</span>
+        </div>
+
         {/* Lista de chats */}
         <div className="flex flex-col gap-2">
           {[1, 2, 3, 4, 5].map((num) => (
@@ -38,13 +41,13 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
               type="text"
               onClick={() => setSelectedChat(num)}
               className={cn(
-                'justify-start! transition-colors',
+                'justify-start! transition-colors p-2!',
                 selectedChat === num
                   ? 'bg-[var(--muted)]! text-[var(--muted-foreground)]!'
                   : 'text-gray-600! hover:bg-gray-100!'
               )}
             >
-              <span className="text-sm">Chat {num}</span>
+              <span className="text-sm font-sans">Chat {num}</span>
             </Button>
           ))}
         </div>
