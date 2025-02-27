@@ -1,40 +1,40 @@
-import { createBrowserRouter, RouteObject } from 'react-router-dom';
-import { DefaultLayout } from '@/layouts/DefaultLayout';
-import { NoHeaderLayout } from '@/layouts/NoHeaderLayout';
-import Home from '@/pages/Home';
-import Repository from '@/pages/Repository.tsx';
-import SignUp from '@/pages/SignUp';
-import SignIn from '@/pages/SignIn';
+import { Routes, Route } from "react-router-dom";
+import { DefaultLayout } from "@/layouts/DefaultLayout";
+import { NoHeaderLayout } from "@/layouts/NoHeaderLayout";
+import Home from "@/pages/Home";
+import Repository from "@/pages/Repository";
+import SignUp from "@/pages/SignUp";
+import SignIn from "@/pages/SignIn";
+import ProtectedRoute from "@/components/ProtectedRoute";
 
-const routes: RouteObject[] = [
-  {
-    element: <DefaultLayout />,
-    children: [
-      {
-        path: '/',
-        element: <Home />,
-      },
-      {
-        path: 'repositorio',
-        element: <Repository />,
-      },
-    ],
-  },
-  {
-    element: <NoHeaderLayout />,
-    children: [
-      {
-        path: 'cadastro',
-        element: <SignUp />,
-      },
-      {
-        path: 'login',
-        element: <SignIn />,
-      },
-    ],
-  },
-];
+const AppRoutes = () => {
+  return (
+    <Routes>
+      <Route element={<DefaultLayout />}>
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <Home />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/repositorio"
+          element={
+            <ProtectedRoute>
+              <Repository />
+            </ProtectedRoute>
+          }
+        />
+      </Route>
 
-const router = createBrowserRouter(routes);
+      <Route element={<NoHeaderLayout />}>
+        <Route path="/cadastro" element={<SignUp />} />
+        <Route path="/login" element={<SignIn />} />
+      </Route>
+    </Routes>
+  );
+};
 
-export default router;
+export default AppRoutes;
