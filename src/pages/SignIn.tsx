@@ -35,7 +35,7 @@ export default function SignIn() {
         <span className="text-gray-700 mr-2">Não tem conta?</span>
         <button
           type="button"
-          onClick={() => navigate('/register')}
+          onClick={() => navigate('/cadastro')}
           className="px-4 py-2 border border-[#026490] text-[#026490] rounded hover:bg-[#026490] hover:text-white cursor-pointer"
         >
           Cadastrar

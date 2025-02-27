@@ -58,30 +58,3 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin-top: auto;
 }
-
-.featureButton:hover {
-  transform: translateY(-2px);
-  background: linear-gradient(135deg, #733ce8, #01b1b1) !important;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-/* Ajuste na badge */
-.mostUsedTag {
-  position: absolute;
-  top: -10px;
-  right: -15px;
-  padding: 5px 12px;
-  background-color: #fa541c;
-  color: white;
-  border-radius: 15px;
-  display: flex;
-  align-items: center;
-  font-size: 14px;
-  font-weight: bold;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-}
-
-.mostUsedTagText {
-  margin-left: 5px;
-  font-size: 12px;
-}
