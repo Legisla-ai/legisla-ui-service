@@ -11,7 +11,7 @@ export default function Home() {
   const features = [
     {
       title: 'Repositório',
-      description: 'Envie seus documentos e deixe que nossa IA extraia informações relevantes parasdasdasd asdasdasdasad asdasdasdasdasddasasddasdasasddasadsadsasdasda você.',
+      description: 'Envie seus documentos e deixe que nossa IA extraia informações relevantes para você.',
       buttonText: 'Acessar repositório',
       link: '/repositorio',
       mostUsed: true,
