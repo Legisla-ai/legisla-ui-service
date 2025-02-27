@@ -1,10 +1,8 @@
-import React from 'react';
-import { RouterProvider } from 'react-router-dom';
-import router from './routes/Routes';
-import './globals.css';
+import React from "react";
+import AppRoutes from "@/routes/Routes.tsx";
 
 const App: React.FC = () => {
-  return <RouterProvider router={router} />;
+  return <AppRoutes />;
 };
 
 export default App;

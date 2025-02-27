@@ -1,8 +1,11 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import BloomBackground from '@/components/BloomBackground/BloomBackground';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import { useAuth } from '@/context/AuthContext';
+import { loginUser } from '@/services/authService';
+import BloomBackground from '@/components/BloomBackground/BloomBackground';
 
 interface FormData {
   email: string;
@@ -18,15 +21,28 @@ const schema = yup
 
 export default function SignIn() {
   const navigate = useNavigate();
+  const { login } = useAuth();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<FormData>({ resolver: yupResolver(schema) });
 
-  const onSubmit = (data: FormData) => {
-    console.log(data);
-    // Processar dados de login
+  const onSubmit = async (data: FormData) => {
+    setLoading(true);
+    setError("");
+
+    try {
+      const loginResponse = await loginUser(data.email, data.password);
+      login(loginResponse);
+    } catch (err) {
+      setError("Usuário ou senha inválidos.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -48,26 +64,6 @@ export default function SignIn() {
           <h2 className="text-2xl font-semibold text-gray-800 mb-4">Bem-vindo de volta!</h2>
           <p className="text-gray-600 mb-8">Entre com sua conta</p>
 
-          <button
-            type="button"
-            className="w-full flex items-center justify-center bg-white border border-gray-300 hover:bg-gray-100 text-gray-800 py-2 rounded mb-6 cursor-pointer"
-            onClick={() => {
-              // Implementar login com Google
-            }}
-          >
-            <img src="/icons/google.png" alt="Google" className="w-5 h-5 mr-2" />
-            Continuar com o Google
-          </button>
-
-          <div className="relative mb-6">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-300" />
-            </div>
-            <div className="relative flex justify-center">
-              <span className="bg-gray-50 px-2 text-gray-500">ou</span>
-            </div>
-          </div>
-
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div>
               <input
@@ -87,11 +83,15 @@ export default function SignIn() {
               />
               {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password.message}</p>}
             </div>
+
+            {error && <p className="text-red-500 text-sm">{error}</p>}
+
             <button
               type="submit"
               className="w-full bg-[#026490] hover:bg-[#025C81] hover:shadow-lg transition text-white py-2 rounded cursor-pointer"
+              disabled={loading}
             >
-              Entrar
+              {loading ? "Entrando..." : "Entrar"}
             </button>
           </form>
         </div>
