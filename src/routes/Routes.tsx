@@ -2,7 +2,7 @@ import { createBrowserRouter, RouteObject } from 'react-router-dom';
 import { DefaultLayout } from '@/layouts/DefaultLayout';
 import { NoHeaderLayout } from '@/layouts/NoHeaderLayout';
 import Home from '@/pages/Home';
-import Chat from '@/pages/Chat';
+import Repositorio from '@/pages/Repositorio.tsx';
 import SignUp from '@/pages/SignUp';
 import SignIn from '@/pages/SignIn';
 
@@ -15,8 +15,8 @@ const routes: RouteObject[] = [
         element: <Home />,
       },
       {
-        path: 'chat',
-        element: <Chat />,
+        path: 'repositorio',
+        element: <Repositorio />,
       },
     ],
   },

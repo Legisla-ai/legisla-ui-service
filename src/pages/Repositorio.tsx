@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { Menu } from 'lucide-react';
 import { Button } from 'antd';
 
-export default function Chat() {
+export default function Repositorio() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(window.innerWidth >= 700);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 700);
 
