@@ -19,7 +19,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
       )}
     >
       <div className="flex flex-col h-full p-4">
-        {/* Container para o botão <Menu> e "Novo Repositorio" */}
+        {/* Container para o botão <Menu> e "Novo Repository" */}
         <div className="flex items-center mb-4 gap-2">
           <Button type="text" onClick={onClose} className="hover:bg-[var(--muted)]! px-2! py-3!">
             <Menu className="h-5 w-5" />

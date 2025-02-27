@@ -2,7 +2,7 @@ import { createBrowserRouter, RouteObject } from 'react-router-dom';
 import { DefaultLayout } from '@/layouts/DefaultLayout';
 import { NoHeaderLayout } from '@/layouts/NoHeaderLayout';
 import Home from '@/pages/Home';
-import Repositorio from '@/pages/Repositorio.tsx';
+import Repository from '@/pages/Repository.tsx';
 import SignUp from '@/pages/SignUp';
 import SignIn from '@/pages/SignIn';
 
@@ -16,7 +16,7 @@ const routes: RouteObject[] = [
       },
       {
         path: 'repositorio',
-        element: <Repositorio />,
+        element: <Repository />,
       },
     ],
   },
@@ -24,7 +24,7 @@ const routes: RouteObject[] = [
     element: <NoHeaderLayout />,
     children: [
       {
-        path: 'register',
+        path: 'cadastro',
         element: <SignUp />,
       },
       {
