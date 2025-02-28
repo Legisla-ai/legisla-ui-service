@@ -14,8 +14,7 @@ export const Header: React.FC = () => {
             <img src="/icons/logo.png" alt="Legisla.ai" width={34} height={34} className={styles.logo} />
           </div>
           <span className="text-black font-bold text-2xl">
-            Legisla.
-            <span className="bg-gradient-to-l from-teal-300 to-cyan-600 bg-clip-text text-transparent">AI</span>
+            Legisla.AI
           </span>
         </div>
       </Link>
@@ -44,5 +43,3 @@ export const Header: React.FC = () => {
     </header>
   );
 };
-
-export default Header;

@@ -1,29 +1,34 @@
-import { User, Bot } from 'lucide-react';
-import { cn } from '@/lib/utils';
-
 interface ChatMessageProps {
-  message: string;
-  isUser?: boolean;
+  message: string
+  isUser: boolean
 }
 
-export function ChatMessage({ message, isUser = false }: ChatMessageProps) {
+export function ChatMessage({ message, isUser }: ChatMessageProps) {
   return (
-    <div className={cn('flex items-end', isUser ? 'justify-end' : 'justify-start')}>
-      <div
-        className={cn('flex items-end space-x-2 max-w-[80%]', isUser ? 'flex-row-reverse space-x-reverse' : 'flex-row')}
-      >
-        <div
-          className={cn(
-            'w-8 h-8 rounded-full flex items-center justify-center',
-            isUser ? 'bg-[#01b1b1]' : 'bg-gray-300'
-          )}
-        >
-          {isUser ? <User className="h-5 w-5 text-white" /> : <Bot className="h-5 w-5 text-gray-600" />}
+    <div className={`flex ${isUser ? "justify-end" : "justify-start"} mb-4 gap-2`}>
+      {!isUser && (
+        <div className="flex-shrink-0 w-8 h-8 rounded-full bg-[#1890ff] flex items-center justify-center text-white">
+          AI
         </div>
-        <div className={cn('p-3 rounded-lg shadow-sm', isUser ? 'bg-[#01b1b1] text-white' : 'bg-white text-gray-800')}>
-          <p className="text-sm">{message}</p>
+      )}
+
+      <div
+        className={`max-w-[80%] rounded-lg px-4 py-3 ${
+          isUser
+            ? "bg-[#1890ff] text-white"
+            : "bg-[#f5f5f5]"
+        }`}
+      >
+        <div className="whitespace-pre-wrap text-sm">
+          {message}
         </div>
       </div>
+
+      {isUser && (
+        <div className="flex-shrink-0 w-8 h-8 rounded-full bg-[#52c41a] flex items-center justify-center text-white">
+          U
+        </div>
+      )}
     </div>
-  );
+  )
 }
