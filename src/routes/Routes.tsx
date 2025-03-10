@@ -1,11 +1,11 @@
-import { Routes, Route } from "react-router-dom";
-import { DefaultLayout } from "@/layouts/DefaultLayout";
-import { NoHeaderLayout } from "@/layouts/NoHeaderLayout";
-import Home from "@/pages/Home";
-import Repository from "@/pages/Repository";
-import SignUp from "@/pages/SignUp";
-import SignIn from "@/pages/SignIn";
-import ProtectedRoute from "@/components/ProtectedRoute";
+import { Routes, Route } from 'react-router-dom';
+import { DefaultLayout } from '@/layouts/DefaultLayout';
+import { NoHeaderLayout } from '@/layouts/NoHeaderLayout';
+import Home from '@/pages/Home';
+import Repository from '@/pages/Repository';
+import SignUp from '@/pages/SignUp';
+import SignIn from '@/pages/SignIn';
+import ProtectedRoute from './ProtectedRoute';
 
 const AppRoutes = () => {
   return (

@@ -1,32 +1,28 @@
-import { useNavigate } from 'react-router-dom';
+// src/pages/SignUp.tsx
 import BloomBackground from '@/components/BloomBackground/BloomBackground';
-import { useForm } from 'react-hook-form';
+import { Button } from '@/components/ui/button';
+import { useRegisterUser } from '@/hooks/useAuth';
+import { signUpSchema, SignUpSchemaType } from '@/schemas/signUpSchema';
+import { LoadingOutlined } from '@ant-design/icons';
 import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
+import React from 'react';
+import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 
-interface FormData {
-  email: string;
-  password: string;
-}
-
-const schema = yup
-  .object({
-    email: yup.string().email('Email inválido').required('Email é obrigatório'),
-    password: yup.string().min(8, 'A senha deve ter pelo menos 8 caracteres').required('Senha é obrigatória'),
-  })
-  .required();
-
-export default function SignUp() {
+const SignUp: React.FC = () => {
   const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormData>({ resolver: yupResolver(schema) });
+  } = useForm<SignUpSchemaType>({
+    resolver: yupResolver(signUpSchema),
+  });
 
-  const onSubmit = (data: FormData) => {
-    console.log(data);
-    // Processar dados de inscrição
+  const { mutate, isPending, isError, error } = useRegisterUser();
+
+  const onSubmit = (data: SignUpSchemaType) => {
+    mutate(data);
   };
 
   return (
@@ -73,28 +69,75 @@ export default function SignUp() {
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div>
               <input
+                type="text"
+                placeholder="Nome completo"
+                {...register('name')}
+                className="w-full border border-gray-300 p-2 rounded bg-white text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name.message}</p>}
+            </div>
+            <div>
+              <input
                 type="email"
                 placeholder="Email profissional"
                 {...register('email')}
-                className="w-full border border-gray-300 p-2 rounded bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full border border-gray-300 p-2 rounded bg-white text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
               {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>}
+            </div>
+            <div>
+              <input
+                type="text"
+                placeholder="Telefone"
+                {...register('phone')}
+                className="w-full border border-gray-300 p-2 rounded bg-white text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone.message}</p>}
             </div>
             <div>
               <input
                 type="password"
                 placeholder="Senha"
                 {...register('password')}
-                className="w-full border border-gray-300 p-2 rounded bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full border border-gray-300 p-2 rounded bg-white text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
               {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password.message}</p>}
             </div>
-            <button
-              type="submit"
-              className="w-full bg-[#026490] hover:bg-[#025C81] hover:shadow-lg transition text-white py-2 rounded cursor-pointer"
+            <div>
+              <input
+                type="text"
+                placeholder="Nome da Organização"
+                {...register('organizationName')}
+                className="w-full border border-gray-300 p-2 rounded bg-white text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              {errors.organizationName && (
+                <p className="text-red-500 text-xs mt-1">{errors.organizationName.message}</p>
+              )}
+            </div>
+            <div>
+              <input
+                type="number"
+                placeholder="Número de Funcionários"
+                {...register('numberOfEmployees', { valueAsNumber: true })}
+                className="w-full border border-gray-300 p-2 rounded bg-white text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
+                min="1"
+                max="100"
+              />
+              {errors.numberOfEmployees && (
+                <p className="text-red-500 text-xs mt-1">{errors.numberOfEmployees.message}</p>
+              )}
+            </div>
+            {isError && (
+              <p className="text-red-500 text-xs mt-1">
+                {(error as Error).message || 'Erro ao registrar. Tente novamente.'}
+              </p>
+            )}
+            <Button
+              disabled={isPending}
+              className="w-full bg-[#026490] hover:bg-[#025C81] hover:shadow-lg transition text-white py-2 rounded cursor-pointer disabled:opacity-50 border-none"
             >
-              Começar agora
-            </button>
+              {isPending ? <LoadingOutlined /> : 'Começar agora'}
+            </Button>
           </form>
 
           <p className="text-center text-xs text-gray-500 mt-4">
@@ -108,4 +151,6 @@ export default function SignUp() {
       </div>
     </div>
   );
-}
+};
+
+export default SignUp;
