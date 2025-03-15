@@ -1,9 +1,12 @@
-import { createContext, useContext, useState, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import { LoginResponse } from '@/services/authService.ts';
+// src/context/AuthContext.tsx
+import { createContext, useContext, useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { fetchCurrentUser, logoutUser } from '@/services/authService';
+import { LoginResponse } from '@/interfaces/auth';
 
 interface AuthContextType {
   isAuthenticated: boolean;
+  currentUser?: LoginResponse;
   login: (loginResponse: LoginResponse) => void;
   logout: () => void;
 }
@@ -11,47 +14,62 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
-    return !!localStorage.getItem("accessToken");
-  });
-
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [currentUser, setCurrentUser] = useState<LoginResponse | undefined>(undefined);
   const navigate = useNavigate();
   const location = useLocation();
 
+  // Checa o status de autenticação consultando o backend
   useEffect(() => {
-    const publicRoutes = ["/login", "/cadastro"];
+    const checkAuth = async () => {
+      try {
+        //const userData = await fetchCurrentUser(); // mudar isso quando tiver backend pra fazer autenticação
+        setCurrentUser(userData);
+        setIsAuthenticated(true);
+      } catch (error) {
+        setCurrentUser(undefined);
+        setIsAuthenticated(false);
+      }
+    };
+
+    checkAuth();
+  }, []);
+
+  // Redireciona para "/login" se a rota não for pública e o usuário não estiver autenticado
+  useEffect(() => {
+    const publicRoutes = ['/login', '/cadastro'];
     if (!isAuthenticated && !publicRoutes.includes(location.pathname)) {
-      navigate("/login");
+      navigate('/login');
     }
   }, [isAuthenticated, navigate, location.pathname]);
 
-  const login = (loginResponse : LoginResponse) => {
-    localStorage.setItem("accessToken", loginResponse.accessToken);
-    localStorage.setItem("refreshToken", loginResponse.refreshToken);
-    localStorage.setItem("idToken", loginResponse.idToken);
+  // Após um login bem-sucedido (que já atualizou os cookies via authService)
+  const login = (loginResponse: LoginResponse) => {
+    setCurrentUser(loginResponse);
     setIsAuthenticated(true);
-    navigate("/");
+    navigate('/');
   };
 
-  const logout = () => {
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
-    localStorage.removeItem("idToken");
-    setIsAuthenticated(false);
-    navigate("/login");
+  const logout = async () => {
+    try {
+      await logoutUser(); // Backend limpa os cookies
+      setCurrentUser(undefined);
+      setIsAuthenticated(false);
+      navigate('/login');
+    } catch (error) {
+      console.error('Erro ao deslogar:', error);
+    }
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
-      {children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={{ isAuthenticated, currentUser, login, logout }}>{children}</AuthContext.Provider>
   );
 }
 
 export function useAuth() {
   const context = useContext(AuthContext);
   if (!context) {
-    throw new Error("useAuth deve ser usado dentro de um AuthProvider");
+    throw new Error('useAuth deve ser usado dentro de um AuthProvider');
   }
   return context;
 }

@@ -4,8 +4,15 @@ export const signUpSchema = yup
   .object({
     name: yup.string().required('Nome é obrigatório'),
     email: yup.string().email('Email inválido').required('Email é obrigatório'),
-    phone: yup.string().required('Telefone é obrigatório'),
-    password: yup.string().min(8, 'A senha deve ter pelo menos 8 caracteres').required('Senha é obrigatória'),
+    phone: yup
+      .string()
+      .required('Telefone é obrigatório')
+      .matches(/^\d{11}$/, 'Formato de telefone inválido. Ex: +5547999999999'),
+    password: yup
+      .string()
+      .min(8, 'A senha deve ter pelo menos 8 caracteres')
+      .matches(/[a-z]/, 'A senha deve conter pelo menos um caractere minúsculo')
+      .required('Senha é obrigatória'),
     organizationName: yup.string().required('Nome da organização é obrigatório'),
     numberOfEmployees: yup
       .number()

@@ -30,13 +30,14 @@ export default function Home() {
       buttonText: 'Buscar jurisprudências',
       link: '/repositorio',
       icon: <Scale size={24} />,
-    }
+    },
   ];
 
   const futureFeatures = [
     {
       title: 'Especialista',
-      description: 'Em breve, nossa plataforma contará com um especialista jurídico para te auxiliar nas suas tarefas do dia a dia.',
+      description:
+        'Em breve, nossa plataforma contará com um especialista jurídico para te auxiliar nas suas tarefas do dia a dia.',
       icon: <UserSearch size={24} />,
     },
     {
@@ -52,14 +53,15 @@ export default function Home() {
   ];
 
   const filteredFeatures = features.filter((feature) => feature.title.toLowerCase().includes(search.toLowerCase()));
-  const filteredFutureFeatures = futureFeatures.filter((feature) => feature.title.toLowerCase().includes(search.toLowerCase()));
+  const filteredFutureFeatures = futureFeatures.filter((feature) =>
+    feature.title.toLowerCase().includes(search.toLowerCase())
+  );
 
   return (
     <div className={styles.container}>
       <main className={styles.mainContent}>
-
         {/* Seção Hero */}
-        <div className="max-w mx-auto text-center mb-12">
+        <div className="max-w mx-auto text-center">
           <h1 className="text-4x4 md:text-5xl mb-4">
             Seu assistente jurídico{' '}
             <span className="bg-gradient-to-l from-teal-300 to-cyan-600 bg-clip-text text-transparent">
@@ -86,21 +88,36 @@ export default function Home() {
         </div>
 
         {/* Seção Features */}
-        {filteredFeatures.length === 0 && filteredFutureFeatures.length === 0 && <p className={styles.noResults}>Nenhum recurso encontrado.</p>}
+        {filteredFeatures.length === 0 && filteredFutureFeatures.length === 0 && (
+          <p className={styles.noResults}>Nenhum recurso encontrado.</p>
+        )}
 
         <div className={styles.featuresGrid}>
           {filteredFeatures.map((feature, index) => (
-            <FeatureCard key={index} title={feature.title} description={feature.description} buttonText={feature.buttonText} link={feature.link} icon={feature.icon} mostUsed={feature.mostUsed} />
+            <FeatureCard
+              key={index}
+              title={feature.title}
+              description={feature.description}
+              buttonText={feature.buttonText}
+              link={feature.link}
+              icon={feature.icon}
+              mostUsed={feature.mostUsed}
+            />
           ))}
         </div>
 
         {/* Seção Features Futuras */}
         {filteredFutureFeatures.length > 0 && (
           <>
-            <h2 className="text-3xl mt-12 mb-6">Em breve</h2>
+            <h2 className="text-3xl mt-6 mb-6">Em breve</h2>
             <div className={styles.featuresGrid}>
               {filteredFutureFeatures.map((feature, index) => (
-                <FutureFeatureCard key={index} title={feature.title} description={feature.description} icon={feature.icon} />
+                <FutureFeatureCard
+                  key={index}
+                  title={feature.title}
+                  description={feature.description}
+                  icon={feature.icon}
+                />
               ))}
             </div>
           </>

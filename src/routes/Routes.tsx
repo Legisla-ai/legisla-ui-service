@@ -1,10 +1,11 @@
-import { Routes, Route } from 'react-router-dom';
 import { DefaultLayout } from '@/layouts/DefaultLayout';
 import { NoHeaderLayout } from '@/layouts/NoHeaderLayout';
 import Home from '@/pages/Home';
+import JurisprudenceSearch from '@/pages/JurisprudenceSearch';
 import Repository from '@/pages/Repository';
-import SignUp from '@/pages/SignUp';
 import SignIn from '@/pages/SignIn';
+import SignUp from '@/pages/SignUp';
+import { Route, Routes } from 'react-router-dom';
 import ProtectedRoute from './ProtectedRoute';
 
 const AppRoutes = () => {
@@ -24,6 +25,14 @@ const AppRoutes = () => {
           element={
             <ProtectedRoute>
               <Repository />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/jurisprudencias"
+          element={
+            <ProtectedRoute>
+              <JurisprudenceSearch />
             </ProtectedRoute>
           }
         />

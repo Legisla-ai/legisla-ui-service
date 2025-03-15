@@ -1,5 +1,5 @@
 .container {
-  background: linear-gradient(to bottom, #00ffe51b, #ffffff);
+  background: linear-gradient(to top, #00ffe51b, #ffffff);
   display: flex;
   flex-direction: column;
   min-height: calc(100vh - 4rem);
@@ -55,6 +55,7 @@
 .searchInput {
   width: 100%;
   max-width: 600px;
+  margin-bottom: 1rem;
 }
 
 .searchInput .ant-input-affix-wrapper {
