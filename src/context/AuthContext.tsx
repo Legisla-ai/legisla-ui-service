@@ -1,75 +1,115 @@
 // src/context/AuthContext.tsx
-import { createContext, useContext, useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { fetchCurrentUser, logoutUser } from '@/services/authService';
-import { LoginResponse } from '@/interfaces/auth';
+import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
+import { User, LoginResponse } from '@/interfaces/auth';
+import { fetchCurrentUser } from '@/services/authService';
 
 interface AuthContextType {
+  user: User | null;
+  tokens: {
+    accessToken: string;
+    refreshToken: string;
+    idToken: string;
+  } | null;
   isAuthenticated: boolean;
-  currentUser?: LoginResponse;
-  login: (loginResponse: LoginResponse) => void;
+  isLoading: boolean;
+  login: (response: LoginResponse, userData?: User) => void;
   logout: () => void;
+  updateTokens: (tokens: { accessToken: string; refreshToken: string; idToken: string }) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  const [currentUser, setCurrentUser] = useState<LoginResponse | undefined>(undefined);
-  const navigate = useNavigate();
-  const location = useLocation();
+const TOKEN_STORAGE_KEY = 'auth_tokens';
+const USER_STORAGE_KEY = 'auth_user';
 
-  // Checa o status de autenticação consultando o backend
+export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const [user, setUser] = useState<User | null>(null);
+  const [tokens, setTokens] = useState<AuthContextType['tokens']>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        //const userData = await fetchCurrentUser(); // mudar isso quando tiver backend pra fazer autenticação
-        setCurrentUser(userData);
-        setIsAuthenticated(true);
-      } catch (error) {
-        setCurrentUser(undefined);
-        setIsAuthenticated(false);
+    try {
+      const storedTokens = localStorage.getItem(TOKEN_STORAGE_KEY);
+      const storedUser = localStorage.getItem(USER_STORAGE_KEY);
+      if (storedTokens) {
+        setTokens(JSON.parse(storedTokens));
       }
-    };
-
-    checkAuth();
+      if (storedUser) {
+        setUser(JSON.parse(storedUser));
+      }
+    } catch (err) {
+      console.error('Erro ao carregar dados de autenticação:', err);
+      localStorage.removeItem(TOKEN_STORAGE_KEY);
+      localStorage.removeItem(USER_STORAGE_KEY);
+    } finally {
+      setIsLoading(false);
+    }
   }, []);
 
-  // Redireciona para "/login" se a rota não for pública e o usuário não estiver autenticado
   useEffect(() => {
-    const publicRoutes = ['/login', '/cadastro'];
-    if (!isAuthenticated && !publicRoutes.includes(location.pathname)) {
-      navigate('/login');
+    const verifyAuth = async () => {
+      if (tokens?.accessToken && !user) {
+        try {
+          const currentUser = await fetchCurrentUser();
+          setUser(currentUser);
+          localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(currentUser));
+        } catch (e) {
+          console.error('Token inválido, fazendo logout:', e);
+          logout();
+        }
+      }
+    };
+    if (!isLoading && tokens) {
+      verifyAuth();
     }
-  }, [isAuthenticated, navigate, location.pathname]);
+  }, [tokens, user, isLoading]);
 
-  // Após um login bem-sucedido (que já atualizou os cookies via authService)
-  const login = (loginResponse: LoginResponse) => {
-    setCurrentUser(loginResponse);
-    setIsAuthenticated(true);
-    navigate('/');
+  const login = (response: LoginResponse, userData?: User) => {
+    const newTokens = {
+      accessToken: response.accessToken,
+      refreshToken: response.refreshToken,
+      idToken: response.idToken,
+    };
+    setTokens(newTokens);
+    localStorage.setItem(TOKEN_STORAGE_KEY, JSON.stringify(newTokens));
+
+    if (userData) {
+      setUser(userData);
+      localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(userData));
+    }
   };
 
-  const logout = async () => {
-    try {
-      await logoutUser(); // Backend limpa os cookies
-      setCurrentUser(undefined);
-      setIsAuthenticated(false);
-      navigate('/login');
-    } catch (error) {
-      console.error('Erro ao deslogar:', error);
-    }
+  const logout = () => {
+    setUser(null);
+    setTokens(null);
+    localStorage.removeItem(TOKEN_STORAGE_KEY);
+    localStorage.removeItem(USER_STORAGE_KEY);
   };
 
-  return (
-    <AuthContext.Provider value={{ isAuthenticated, currentUser, login, logout }}>{children}</AuthContext.Provider>
-  );
-}
+  const updateTokens = (newTokens: { accessToken: string; refreshToken: string; idToken: string }) => {
+    setTokens(newTokens);
+    localStorage.setItem(TOKEN_STORAGE_KEY, JSON.stringify(newTokens));
+  };
 
-export function useAuth() {
+  const isAuthenticated = !!tokens?.accessToken && !!user;
+
+  const value: AuthContextType = {
+    user,
+    tokens,
+    isAuthenticated,
+    isLoading,
+    login,
+    logout,
+    updateTokens,
+  };
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+};
+
+export const useAuth = (): AuthContextType => {
   const context = useContext(AuthContext);
   if (!context) {
     throw new Error('useAuth deve ser usado dentro de um AuthProvider');
   }
   return context;
-}
+};

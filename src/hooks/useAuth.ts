@@ -1,74 +1,108 @@
 // src/hooks/useAuth.ts
-import { LoginResponse, RegisterResponse, RegisterUser } from '@/interfaces/auth';
+import { useAuth } from '@/context/AuthContext';
+import { LoginResponse, RegisterResponse, RegisterUser, User } from '@/interfaces/auth';
 import { queryKeys } from '@/query/queryKeys';
 import { loginUser, registerUser } from '@/services/authService';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-type AuthContext = {
+type AuthContextReturn = {
   previousUserData: unknown;
 };
 
 export const useRegisterUser = () => {
   const queryClient = useQueryClient();
+  const { login } = useAuth();
 
-  return useMutation<RegisterResponse, Error, RegisterUser, AuthContext>({
+  return useMutation<RegisterResponse, Error, RegisterUser, AuthContextReturn>({
     mutationFn: (user: RegisterUser) => registerUser(user),
     onMutate: async (newUser: RegisterUser) => {
-      // Cancela queries pendentes para a key de autenticação
-      await queryClient.cancelQueries({ queryKey: queryKeys.auth() });
-      // Captura o estado atual do cache para permitir rollback
+      await queryClient.cancelQueries({
+        queryKey: queryKeys.auth(),
+      });
       const previousUserData = queryClient.getQueryData(queryKeys.auth());
-      // Atualização otimista: atualiza o cache com os dados do novo usuário
-      queryClient.setQueryData(queryKeys.auth(), newUser);
       return { previousUserData };
     },
     onError: (error, _newUser, context) => {
       console.error('Erro ao registrar usuário:', error);
-      // Se houver contexto de rollback, restaura o cache para o estado anterior
       if (context?.previousUserData) {
         queryClient.setQueryData(queryKeys.auth(), context.previousUserData);
       }
     },
-    onSuccess: (data) => {
-      console.log('Registro efetuado com sucesso!', data);
-      // Atualiza o cache com a resposta completa do backend (token, etc.)
-      queryClient.setQueryData(queryKeys.auth(), data);
-      // Invalida a query para garantir que, se houver alguma outra dependência, seja feita uma refetch
-      queryClient.invalidateQueries({ queryKey: queryKeys.auth() });
+    onSuccess: (data, variables) => {
+      const userData: User = {
+        id: '',
+        name: variables.name,
+        email: variables.email,
+        phone: variables.phone,
+        organizationName: variables.organizationName,
+        numberOfEmployees: variables.numberOfEmployees,
+      };
+      login(data, userData);
+
+      queryClient.setQueryData(queryKeys.auth(), {
+        ...data,
+        user: userData,
+      });
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.auth(),
+      });
     },
-    onSettled: () => {
-      console.log('Mutation de registro concluída.');
-    },
+    onSettled: () => { },
   });
 };
 
 export const useLoginUser = () => {
   const queryClient = useQueryClient();
+  const { login } = useAuth();
 
-  return useMutation<LoginResponse, Error, { email: string; password: string }, AuthContext>({
+  return useMutation<LoginResponse, Error, { email: string; password: string }, AuthContextReturn>({
     mutationFn: ({ email, password }) => loginUser(email, password),
     onMutate: async (credentials) => {
-      await queryClient.cancelQueries({ queryKey: queryKeys.auth() });
+      await queryClient.cancelQueries({
+        queryKey: queryKeys.auth(),
+      });
       const previousUserData = queryClient.getQueryData(queryKeys.auth());
-      // Atualização otimista: atualiza o cache com um objeto parcial (p.ex.: somente o email)
-      queryClient.setQueryData(queryKeys.auth(), { email: credentials.email });
       return { previousUserData };
     },
     onError: (error, _credentials, context) => {
       console.error('Erro ao fazer login:', error);
-      // Reverte o cache para o estado anterior se necessário
       if (context?.previousUserData) {
         queryClient.setQueryData(queryKeys.auth(), context.previousUserData);
       }
     },
     onSuccess: (data) => {
-      console.log('Login efetuado com sucesso!', data);
-      // Atualiza o cache com os dados do usuário autenticado (tokens, etc.)
+      login(data);
       queryClient.setQueryData(queryKeys.auth(), data);
-      queryClient.invalidateQueries({ queryKey: queryKeys.auth() });
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.auth(),
+      });
     },
     onSettled: () => {
-      console.log('Mutation de login concluída.');
+    },
+  });
+};
+
+export const useLogoutUser = () => {
+  const queryClient = useQueryClient();
+  const { logout } = useAuth();
+
+  return useMutation<void, Error, void>({
+    mutationFn: () => {
+      return import('@/services/authService').then((mod) => mod.logoutUser());
+    },
+    onSuccess: () => {
+      logout();
+      queryClient.removeQueries({
+        queryKey: queryKeys.auth(),
+      });
+      queryClient.clear();
+    },
+    onError: (error) => {
+      console.error('Erro ao fazer logout:', error);
+      logout();
+      queryClient.removeQueries({
+        queryKey: queryKeys.auth(),
+      });
     },
   });
 };

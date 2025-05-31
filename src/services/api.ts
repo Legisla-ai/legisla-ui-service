@@ -1,34 +1,119 @@
-import axios from 'axios';
+// src/services/api.ts
+import axios, { AxiosError, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 
-const API_BASE_URL = 'http://localhost:8081/core';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8081/core';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
-  withCredentials: true,
+  timeout: 10000,
+  headers: {
+    'Content-Type': 'application/json',
+  },
 });
 
+let isRefreshing = false;
+let failedQueue: Array<{
+  resolve: (value?: unknown) => void;
+  reject: (reason?: unknown) => void;
+}> = [];
+
+const processQueue = (error: AxiosError | null, token: string | null): void => {
+  failedQueue.forEach(({ resolve, reject }) => {
+    if (error) {
+      reject(error);
+    } else {
+      resolve(token);
+    }
+  });
+  failedQueue = [];
+};
+
 api.interceptors.request.use(
-  (config) => {
-    const excludedRoutes = ['/persona/auth/login', '/persona/auth/cadastro'];
-    if (!excludedRoutes.includes(config.url || '')) {
-      const token = localStorage.getItem('accessToken');
-      if (token) {
-        config.headers['Authorization'] = `Bearer ${token}`;
+  (config: InternalAxiosRequestConfig) => {
+    const storedTokens = localStorage.getItem('auth_tokens');
+    if (storedTokens) {
+      try {
+        const tokens = JSON.parse(storedTokens);
+        if (tokens.accessToken && config.headers) {
+          config.headers.Authorization = `Bearer ${tokens.accessToken}`;
+        }
+      } catch (e) {
+        console.error('Erro ao parse dos tokens:', e);
+        localStorage.removeItem('auth_tokens');
       }
     }
     return config;
   },
-  (error) => Promise.reject(error)
+  (err) => Promise.reject(err)
 );
 
 api.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    if (error.response && error.response.status === 401) {
-      localStorage.removeItem('accessToken');
-      window.location.href = '/login';
+  (response: AxiosResponse) => response,
+  async (err: AxiosError) => {
+    const originalRequest = err.config as InternalAxiosRequestConfig & {
+      _retry?: boolean;
+    };
+
+    if (err.response?.status === 401 && !originalRequest._retry) {
+      if (isRefreshing) {
+        return new Promise((resolve, reject) => {
+          failedQueue.push({ resolve, reject });
+        })
+          .then((token) => {
+            if (originalRequest.headers) {
+              originalRequest.headers.Authorization = `Bearer ${token}`;
+            }
+            return api(originalRequest);
+          })
+          .catch((error) => Promise.reject(error));
+      }
+
+      originalRequest._retry = true;
+      isRefreshing = true;
+
+      const storedTokens = localStorage.getItem('auth_tokens');
+      if (!storedTokens) {
+        processQueue(err, null);
+        isRefreshing = false;
+        window.location.href = '/login';
+        return Promise.reject(err);
+      }
+
+      try {
+        const tokens = JSON.parse(storedTokens);
+        if (!tokens.refreshToken) {
+          throw new Error('No refresh token available');
+        }
+        const response = await axios.post(`${API_BASE_URL}/persona/auth/refresh`, {
+          refreshToken: tokens.refreshToken,
+        });
+
+        const newTokens = {
+          accessToken: response.data.accessToken,
+          refreshToken: response.data.refreshToken || tokens.refreshToken,
+          idToken: response.data.idToken || tokens.idToken,
+        };
+
+        localStorage.setItem('auth_tokens', JSON.stringify(newTokens));
+
+        if (originalRequest.headers) {
+          originalRequest.headers.Authorization = `Bearer ${newTokens.accessToken}`;
+        }
+
+        processQueue(null, newTokens.accessToken);
+        return api(originalRequest);
+      } catch (refreshError) {
+        processQueue(refreshError as AxiosError, null);
+        localStorage.removeItem('auth_tokens');
+        localStorage.removeItem('auth_user');
+        window.location.href = '/login';
+        return Promise.reject(refreshError);
+      } finally {
+        isRefreshing = false;
+      }
     }
-    return Promise.reject(error);
+
+    return Promise.reject(err);
   }
 );
 
