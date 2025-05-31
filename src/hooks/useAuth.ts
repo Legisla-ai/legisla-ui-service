@@ -15,7 +15,7 @@ export const useRegisterUser = () => {
 
   return useMutation<RegisterResponse, Error, RegisterUser, AuthContextReturn>({
     mutationFn: (user: RegisterUser) => registerUser(user),
-    onMutate: async (newUser: RegisterUser) => {
+    onMutate: async (_newUser: RegisterUser) => {
       await queryClient.cancelQueries({
         queryKey: queryKeys.auth(),
       });
@@ -57,7 +57,7 @@ export const useLoginUser = () => {
 
   return useMutation<LoginResponse, Error, { email: string; password: string }, AuthContextReturn>({
     mutationFn: ({ email, password }) => loginUser(email, password),
-    onMutate: async (credentials) => {
+    onMutate: async (_credentials) => {
       await queryClient.cancelQueries({
         queryKey: queryKeys.auth(),
       });
