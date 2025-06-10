@@ -58,10 +58,10 @@ export default function Home() {
   );
 
   return (
-    <div className={styles.container}>
+    <div className={`${styles.container} fade-in`}>
       <main className={styles.mainContent}>
         {/* Seção Hero */}
-        <div className="max-w mx-auto text-center">
+        <div className="max-w mx-auto text-center slide-down">
           <h1 className="text-4x4 md:text-5xl mb-4">
             Seu assistente jurídico{' '}
             <span className="bg-gradient-to-l from-teal-300 to-cyan-600 bg-clip-text text-transparent">
@@ -74,7 +74,7 @@ export default function Home() {
         </div>
 
         {/* Seção Search */}
-        <div className={styles.searchInput}>
+        <div className={`${styles.searchInput} slide-up`}>
           <Input
             id="search-input"
             placeholder="Busque por tipo de documento, área do direito ou palavras-chave..."
@@ -92,7 +92,7 @@ export default function Home() {
           <p className={styles.noResults}>Nenhum recurso encontrado.</p>
         )}
 
-        <div className={styles.featuresGrid}>
+        <div className={`${styles.featuresGrid} slide-up`}>
           {filteredFeatures.map((feature, index) => (
             <FeatureCard
               key={index}
@@ -110,7 +110,7 @@ export default function Home() {
         {filteredFutureFeatures.length > 0 && (
           <>
             <h2 className="text-3xl mt-6 mb-6">Em breve</h2>
-            <div className={styles.featuresGrid}>
+            <div className={`${styles.featuresGrid} slide-up`}>
               {filteredFutureFeatures.map((feature, index) => (
                 <FutureFeatureCard
                   key={index}

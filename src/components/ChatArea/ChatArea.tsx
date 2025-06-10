@@ -96,9 +96,9 @@ export function ChatArea({ mode = 'repository', isSidebarOpen = false }: ChatAre
           <Attachments {...sharedAttachmentProps} placeholder={getPlaceholderFn(defaultInlinePlaceholder)} />
         </div>
       ) : (
-        <div className="flex flex-col items-center transition-all duration-700 w-full max-w-full">
+        <div className="flex flex-col items-center transition-all duration-200 w-full max-w-full">
           {isUploading ? (
-            <div className="mb-6 flex flex-col items-center transition-opacity duration-700">
+            <div className="mb-6 flex flex-col items-center transition-opacity duration-200">
               <LoadingOutlined style={{ fontSize: '32px' }} spin />
               <p className="mt-2 animate-pulse text-xl font-medium">Estamos carregando seu documento...</p>
             </div>

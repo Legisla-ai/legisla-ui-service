@@ -27,7 +27,7 @@ export function FeatureCard({ title, description, buttonText, link, icon, mostUs
       </div>
       <p className={styles.featureDescription}>{description}</p>
       <Link to={link}>
-        <Button type="primary" className={styles.featureButton}>
+        <Button type="primary" className={`${styles.featureButton} btn-primary`}>
           {buttonText}
         </Button>
       </Link>
