@@ -7,10 +7,28 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 2rem;
+  padding: 0 1rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   font-family: 'Satoshi', sans-serif;
   z-index: 9999;
+}
+
+@media (min-width: 1024px) {
+  .header {
+    padding: 0 2rem;
+  }
+}
+
+.navButtons {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+@media (max-width: 1023px) {
+  .navButtons {
+    display: none;
+  }
 }
 
 .navButtons > a > button {
@@ -83,4 +101,105 @@
 .expertButton:focus {
   outline: none;
   box-shadow: 0 0 0 2px rgba(10, 200, 100, 0.5);
+}
+
+/* Responsive styles */
+.rightSection {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  position: relative;
+}
+
+.expertButtonMobile {
+  padding: 0.75rem !important;
+  min-width: 48px;
+}
+
+.mobileMenuContainer {
+  position: relative;
+}
+
+.hamburgerButton {
+  padding: 0.5rem;
+  border: none;
+  background: transparent;
+  font-size: 1.25rem;
+  color: #4f555e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
+  z-index: 1001;
+}
+
+.hamburgerButton:hover {
+  background-color: #f5f5f5 !important;
+  color: #4f555e !important;
+}
+
+.mobileDropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: white;
+  border: 1px solid #e5e5e5;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  z-index: 1000;
+  min-width: 220px;
+  overflow: hidden;
+  animation: dropdownFadeIn 0.2s ease-out;
+}
+
+@keyframes dropdownFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.mobileNavItems {
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem;
+}
+
+.mobileNavButton {
+  justify-content: flex-start !important;
+  padding: 0.75rem 1rem !important;
+  height: auto !important;
+  font-size: 1rem !important;
+  font-family: 'Satoshi', sans-serif !important;
+  font-weight: 500 !important;
+  color: #4f555e !important;
+  border-radius: 8px !important;
+  transition: all 0.2s ease !important;
+  margin: 0 !important;
+}
+
+.mobileNavButton:hover {
+  background-color: #f3f4f6 !important;
+  color: #1f2937 !important;
+}
+
+.mobileNavButton:focus {
+  background-color: #e5e7eb !important;
+  color: #1f2937 !important;
+}
+
+/* Logo responsive adjustments */
+@media (max-width: 480px) {
+  .logoContainer span {
+    font-size: 1.5rem;
+  }
+  
+  .header {
+    padding: 0 0.75rem;
+  }
 }

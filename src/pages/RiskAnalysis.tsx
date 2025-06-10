@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { Menu } from 'lucide-react';
 import { Button } from 'antd';
 
-export default function Repository() {
+export default function RiskAnalysis() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(window.innerWidth >= 700);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 700);
 
@@ -37,7 +37,7 @@ export default function Repository() {
             </Button>
           </div>
         )}
-        <ChatArea mode="repository" isSidebarOpen={isSidebarOpen} />
+        <ChatArea mode="riskAnalysis" isSidebarOpen={isSidebarOpen} />
       </div>
     </div>
   );

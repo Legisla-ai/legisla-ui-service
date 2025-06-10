@@ -6,9 +6,16 @@ import { Tooltip } from 'antd';
 import { Upload } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { getPromptClasses, promptClassNames, promptsItems } from './constants';
+import { completeAnalysisPromptsItems, getCompleteAnalysisPromptClasses, completeAnalysisPromptClassNames } from './completeAnalysisConstants';
+import { riskAnalysisPromptsItems, getRiskAnalysisPromptClasses, riskAnalysisPromptClassNames } from './riskAnalysisConstants';
 import { defaultInlinePlaceholder, getPlaceholderFn } from './helpers';
 
-export function ChatArea() {
+interface ChatAreaProps {
+  mode?: 'repository' | 'completeAnalysis' | 'riskAnalysis';
+  isSidebarOpen?: boolean;
+}
+
+export function ChatArea({ mode = 'repository', isSidebarOpen = false }: ChatAreaProps) {
   const [items, setItems] = useState<AttachmentsProps['items']>([]);
   const [uploadCompleted, setUploadCompleted] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
@@ -52,12 +59,21 @@ export function ChatArea() {
       originFileObj: file,
     };
 
-    setItems([newItem]);
+    setItems([newItem as any]);
     setIsUploading(true);
     setUploadCompleted(false);
 
     setTimeout(() => {
-      setItems([{ ...newItem, status: 'done', percent: 100 }]);
+      setItems([{
+        ...newItem,
+        status: 'done', 
+        percent: 100,
+        originFileObj: {
+          ...newItem.originFileObj,
+          uid: newItem.uid,
+          lastModifiedDate: new Date(),
+        }
+      }]);
       setIsUploading(false);
       setUploadCompleted(true);
     }, 500);
@@ -72,13 +88,15 @@ export function ChatArea() {
   };
 
   return (
-    <div className="flex items-center justify-center h-screen bg-[var(--background)]">
+    <div className="flex items-center justify-center h-screen bg-[var(--background)] w-full overflow-hidden">
       {/* Input file escondido para seleção de novo arquivo */}
       <input type="file" ref={hiddenInputRef} onChange={handleFileSelect} style={{ display: 'none' }} />
-      {items.length === 0 ? (
-        <Attachments {...sharedAttachmentProps} placeholder={getPlaceholderFn(defaultInlinePlaceholder)} />
+      {(!items || items.length === 0) ? (
+        <div className="w-full max-w-full px-4">
+          <Attachments {...sharedAttachmentProps} placeholder={getPlaceholderFn(defaultInlinePlaceholder)} />
+        </div>
       ) : (
-        <div className="flex flex-col items-center transition-all duration-700">
+        <div className="flex flex-col items-center transition-all duration-700 w-full max-w-full">
           {isUploading ? (
             <div className="mb-6 flex flex-col items-center transition-opacity duration-700">
               <LoadingOutlined style={{ fontSize: '32px' }} spin />
@@ -98,18 +116,32 @@ export function ChatArea() {
             </div>
           )}
           {uploadCompleted && !isUploading && (
-            <div className="w-full p-4">
-              <h3 className="mb-4 text-lg font-semibold text-center">O que você quer fazer com {items[0].name}?</h3>
-              <div className="w-full">
+            <div className="w-full max-w-full px-4 overflow-hidden">
+              <h3 className="mb-4 text-lg font-semibold text-center">O que você quer fazer com {items[0]?.name}?</h3>
+              <div className="w-full max-w-full overflow-hidden">
                 <Prompts
                   title=""
                   onItemClick={(item) => {
                     console.log('Selected item:', item.data);
                   }}
-                  items={promptsItems}
+                  items={
+                    mode === 'completeAnalysis' 
+                      ? completeAnalysisPromptsItems 
+                      : mode === 'riskAnalysis' 
+                      ? riskAnalysisPromptsItems 
+                      : promptsItems
+                  }
                   classNames={{
-                    ...promptClassNames,
-                    ...getPromptClasses(windowWidth),
+                    ...(mode === 'completeAnalysis' 
+                        ? completeAnalysisPromptClassNames 
+                        : mode === 'riskAnalysis' 
+                        ? riskAnalysisPromptClassNames 
+                        : promptClassNames),
+                    ...(mode === 'completeAnalysis' 
+                        ? getCompleteAnalysisPromptClasses(windowWidth, isSidebarOpen) 
+                        : mode === 'riskAnalysis' 
+                        ? getRiskAnalysisPromptClasses(windowWidth, isSidebarOpen) 
+                        : getPromptClasses(windowWidth, isSidebarOpen)),
                   }}
                 />
               </div>
