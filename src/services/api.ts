@@ -1,7 +1,7 @@
 // src/services/api.ts
 import axios, { AxiosError, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8081/core';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8081/core';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -44,7 +44,7 @@ api.interceptors.request.use(
     }
     return config;
   },
-  (err) => Promise.reject(err)
+  (err) => Promise.reject(err instanceof Error ? err : new Error(String(err)))
 );
 
 api.interceptors.response.use(
@@ -65,7 +65,7 @@ api.interceptors.response.use(
             }
             return api(originalRequest);
           })
-          .catch((error) => Promise.reject(error));
+          .catch((error) => Promise.reject(error instanceof Error ? error : new Error(String(error))));
       }
 
       originalRequest._retry = true;
@@ -90,8 +90,8 @@ api.interceptors.response.use(
 
         const newTokens = {
           accessToken: response.data.accessToken,
-          refreshToken: response.data.refreshToken || tokens.refreshToken,
-          idToken: response.data.idToken || tokens.idToken,
+          refreshToken: response.data.refreshToken ?? tokens.refreshToken,
+          idToken: response.data.idToken ?? tokens.idToken,
         };
 
         localStorage.setItem('auth_tokens', JSON.stringify(newTokens));
@@ -107,7 +107,7 @@ api.interceptors.response.use(
         localStorage.removeItem('auth_tokens');
         localStorage.removeItem('auth_user');
         window.location.href = '/login';
-        return Promise.reject(refreshError);
+        return Promise.reject(refreshError instanceof Error ? refreshError : new Error(String(refreshError)));
       } finally {
         isRefreshing = false;
       }

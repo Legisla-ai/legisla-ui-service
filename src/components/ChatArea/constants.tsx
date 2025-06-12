@@ -5,7 +5,7 @@ import { SemanticType } from '@ant-design/x/es/prompts';
 
 export const promptsItems: PromptsProps['items'] = [
   {
-    key: 'resume',
+    key: 'summarize',
     icon: <FileTextOutlined style={{ color: '#1890ff' }} />,
     label: 'Resumir',
     description: 'Criar um resumo do documento',

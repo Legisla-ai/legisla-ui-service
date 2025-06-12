@@ -5,20 +5,22 @@ import { Attachments, Prompts } from '@ant-design/x';
 import { Tooltip } from 'antd';
 import { Upload } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
+import { analyzeDocument } from '../../services/documentAnalysisService';
 import { getPromptClasses, promptClassNames, promptsItems } from './constants';
 import { completeAnalysisPromptsItems, getCompleteAnalysisPromptClasses, completeAnalysisPromptClassNames } from './completeAnalysisConstants';
 import { riskAnalysisPromptsItems, getRiskAnalysisPromptClasses, riskAnalysisPromptClassNames } from './riskAnalysisConstants';
 import { defaultInlinePlaceholder, getPlaceholderFn } from './helpers';
 
 interface ChatAreaProps {
-  mode?: 'repository' | 'completeAnalysis' | 'riskAnalysis';
-  isSidebarOpen?: boolean;
+  readonly mode?: 'repository' | 'completeAnalysis' | 'riskAnalysis';
+  readonly isSidebarOpen?: boolean;
 }
 
-export function ChatArea({ mode = 'repository', isSidebarOpen = false }: ChatAreaProps) {
+export function ChatArea({ mode, isSidebarOpen = false }: ChatAreaProps) {
   const [items, setItems] = useState<AttachmentsProps['items']>([]);
   const [uploadCompleted, setUploadCompleted] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const hiddenInputRef = useRef<HTMLInputElement>(null);
 
@@ -64,16 +66,18 @@ export function ChatArea({ mode = 'repository', isSidebarOpen = false }: ChatAre
     setUploadCompleted(false);
 
     setTimeout(() => {
-      setItems([{
-        ...newItem,
-        status: 'done', 
-        percent: 100,
-        originFileObj: {
-          ...newItem.originFileObj,
-          uid: newItem.uid,
-          lastModifiedDate: new Date(),
-        }
-      }]);
+      setItems([
+        {
+          ...newItem,
+          status: 'done',
+          percent: 100,
+          originFileObj: {
+            ...newItem.originFileObj,
+            uid: newItem.uid,
+            lastModifiedDate: new Date(),
+          },
+        },
+      ]);
       setIsUploading(false);
       setUploadCompleted(true);
     }, 500);
@@ -87,11 +91,34 @@ export function ChatArea({ mode = 'repository', isSidebarOpen = false }: ChatAre
     }
   };
 
+  const handlePromptSubmit = async (promptKey: string) => {
+    setIsSubmitting(true);
+    
+    if (!items || items.length === 0) {
+      console.error('Nenhum arquivo foi enviado');
+      return;
+    }
+
+    const file = items[0];
+    if (!file.originFileObj) {
+      console.error('Arquivo não encontrado');
+      return;
+    }
+
+    try {
+      await analyzeDocument({ file: file.originFileObj, promptType: promptKey });
+    } catch (error) {
+      console.error('Erro durante a análise:', error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div className="flex items-center justify-center h-screen bg-[var(--background)] w-full overflow-hidden">
       {/* Input file escondido para seleção de novo arquivo */}
       <input type="file" ref={hiddenInputRef} onChange={handleFileSelect} style={{ display: 'none' }} />
-      {(!items || items.length === 0) ? (
+      {!items || items.length === 0 ? (
         <div className="w-full max-w-full px-4">
           <Attachments {...sharedAttachmentProps} placeholder={getPlaceholderFn(defaultInlinePlaceholder)} />
         </div>
@@ -106,10 +133,7 @@ export function ChatArea({ mode = 'repository', isSidebarOpen = false }: ChatAre
             <div className="flex flex-row items-center gap-4 relative mb-4">
               <Attachments.FileCard item={items[0]} />
               <Tooltip title="Substituir documento">
-                <button
-                  onClick={handleReplace}
-                  className="p-1 text-[#2f2f2f]/50 hover:text-[var(--muted-foreground)] cursor-pointer"
-                >
+                <button onClick={handleReplace} className="p-1 text-[#2f2f2f]/50 hover:text-[var(--muted-foreground)] cursor-pointer">
                   <Upload style={{ fontSize: '24px' }} />
                 </button>
               </Tooltip>
@@ -118,33 +142,48 @@ export function ChatArea({ mode = 'repository', isSidebarOpen = false }: ChatAre
           {uploadCompleted && !isUploading && (
             <div className="w-full max-w-full px-4 overflow-hidden">
               <h3 className="mb-4 text-lg font-semibold text-center">O que você quer fazer com {items[0]?.name}?</h3>
-              <div className="w-full max-w-full overflow-hidden">
-                <Prompts
-                  title=""
-                  onItemClick={(item) => {
-                    console.log('Selected item:', item.data);
-                  }}
-                  items={
-                    mode === 'completeAnalysis' 
-                      ? completeAnalysisPromptsItems 
-                      : mode === 'riskAnalysis' 
-                      ? riskAnalysisPromptsItems 
-                      : promptsItems
-                  }
-                  classNames={{
-                    ...(mode === 'completeAnalysis' 
-                        ? completeAnalysisPromptClassNames 
-                        : mode === 'riskAnalysis' 
-                        ? riskAnalysisPromptClassNames 
-                        : promptClassNames),
-                    ...(mode === 'completeAnalysis' 
-                        ? getCompleteAnalysisPromptClasses(windowWidth, isSidebarOpen) 
-                        : mode === 'riskAnalysis' 
-                        ? getRiskAnalysisPromptClasses(windowWidth, isSidebarOpen) 
-                        : getPromptClasses(windowWidth, isSidebarOpen)),
-                  }}
-                />
-              </div>
+              {isSubmitting ? (
+                <div className="flex flex-col items-center justify-center py-8">
+                  <LoadingOutlined style={{ fontSize: '32px' }} spin />
+                  <p className="mt-2 animate-pulse text-lg font-medium">Processando sua solicitação...</p>
+                </div>
+              ) : (
+                <div className="w-full max-w-full overflow-hidden">
+                  {(() => {
+                    let promptItems;
+                    let baseClassNames;
+                    let dynamicClasses;
+
+                    if (mode === 'completeAnalysis') {
+                      promptItems = completeAnalysisPromptsItems;
+                      baseClassNames = completeAnalysisPromptClassNames;
+                      dynamicClasses = getCompleteAnalysisPromptClasses(windowWidth, isSidebarOpen);
+                    } else if (mode === 'riskAnalysis') {
+                      promptItems = riskAnalysisPromptsItems;
+                      baseClassNames = riskAnalysisPromptClassNames;
+                      dynamicClasses = getRiskAnalysisPromptClasses(windowWidth, isSidebarOpen);
+                    } else if (mode === 'repository') {
+                      promptItems = promptsItems;
+                      baseClassNames = promptClassNames;
+                      dynamicClasses = getPromptClasses(windowWidth, isSidebarOpen);
+                    }
+
+                    return (
+                      <Prompts
+                        title=""
+                        onItemClick={(item) => {
+                          handlePromptSubmit(item.data.key);
+                        }}
+                        items={promptItems}
+                        classNames={{
+                          ...baseClassNames,
+                          ...dynamicClasses,
+                        }}
+                      />
+                    );
+                  })()}
+                </div>
+              )}
             </div>
           )}
         </div>

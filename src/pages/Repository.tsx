@@ -23,9 +23,7 @@ export default function Repository() {
 
   return (
     <div className="flex h-full relative">
-      <div
-        className={`transition-all duration-300 ${isSidebarOpen ? 'w-64' : 'w-0'} ${isMobile ? 'absolute z-20' : ''}`}
-      >
+      <div className={`transition-all duration-300 ${isSidebarOpen ? 'w-64' : 'w-0'} ${isMobile ? 'absolute z-20' : ''}`}>
         <Sidebar isOpen={isSidebarOpen} onClose={toggleSidebar} />
       </div>
       <div className="flex flex-col flex-1 relative">
