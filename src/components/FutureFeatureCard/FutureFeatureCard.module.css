@@ -1,19 +1,24 @@
 .featureCard {
   position: relative;
   padding: 1.5rem 1.8rem;
-  border-radius: 0.5rem;
-  border: 1px solid #e0e0e0;
-  background-color: var(--background);
-  transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s;
+  border-radius: 12px;
+  border: 1px solid rgba(226, 232, 240, 0.6);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(249, 250, 251, 0.9));
+  transition: all 0.15s ease;
   display: flex;
   flex-direction: column;
   gap: 1rem;
   height: 100%;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  opacity: 0.85;
 }
 
 .featureCard:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  border-color: rgba(156, 163, 175, 0.4);
+  opacity: 1;
 }
 
 .title {
@@ -26,35 +31,51 @@
 }
 
 .featureIcon {
-  color: #007acc;
-  font-size: 2rem;
-  background-color: #e0e7ff;
-  border-radius: 50%;
-  padding: 0.7rem;
+  color: #9ca3af;
+  font-size: 1.8rem;
+  background: linear-gradient(135deg, rgba(156, 163, 175, 0.1), rgba(107, 114, 128, 0.1));
+  border-radius: 12px;
+  padding: 0.8rem;
+  transition: all 0.15s ease;
+}
+
+.featureCard:hover .featureIcon {
+  transform: scale(1.02);
+  color: #6b7280;
+  background: linear-gradient(135deg, rgba(156, 163, 175, 0.15), rgba(107, 114, 128, 0.15));
 }
 
 .featureTitle {
   font-size: 1.25rem;
   font-weight: 600;
-  color: #222;
+  color: #6b7280;
 }
 
 .featureDescription {
-  color: #555;
+  color: #9ca3af;
   line-height: 1.5;
   font-size: 1rem;
   flex-grow: 1;
 }
 
 .featureButton {
-  background: linear-gradient(45deg, #733ce8, #01b1b1);
-  color: #ffffff;
+  background: linear-gradient(135deg, #e5e7eb, #d1d5db);
+  color: #6b7280;
   font-size: 16px;
-  font-weight: bold;
+  font-weight: 600;
   border: none;
-  padding: 1.3rem 0.5rem;
-  border-radius: 8px;
-  transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 1rem 1.5rem;
+  border-radius: 10px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 8px rgba(107, 114, 128, 0.1);
   margin-top: auto;
+  position: relative;
+  overflow: hidden;
+  cursor: not-allowed;
+}
+
+.featureButton:hover {
+  transform: translateY(-1px);
+  background: linear-gradient(135deg, #d1d5db, #e5e7eb);
+  box-shadow: 0 4px 12px rgba(107, 114, 128, 0.15);
 }

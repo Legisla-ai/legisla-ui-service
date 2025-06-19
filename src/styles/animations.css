@@ -1,0 +1,196 @@
+/* Global Animation Utilities */
+
+/* Base transitions */
+.transition-base {
+  transition: all 0.15s ease;
+}
+
+.transition-fast {
+  transition: all 0.1s ease;
+}
+
+.transition-slow {
+  transition: all 0.2s ease;
+}
+
+/* Hover effects */
+.hover-lift:hover {
+  transform: translateY(-1px);
+}
+
+.hover-scale:hover {
+  transform: scale(1.02);
+}
+
+.hover-opacity:hover {
+  opacity: 0.8;
+}
+
+.hover-subtle:hover {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.hover-primary:hover {
+  background: rgba(59, 130, 246, 0.08);
+  color: #3b82f6;
+}
+
+/* Button animations */
+.btn-base {
+  transition: all 0.15s ease;
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+.btn-primary {
+  background: #3b82f6;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+}
+
+.btn-primary:hover {
+  background: #2563eb;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: #6b7280;
+  border: 1px solid #e5e7eb;
+  padding: 0.75rem 1.5rem;
+}
+
+.btn-secondary:hover {
+  background: #f9fafb;
+  border-color: #d1d5db;
+  color: #374151;
+}
+
+.btn-ghost {
+  background: transparent;
+  color: #6b7280;
+  border: none;
+  padding: 0.5rem 1rem;
+}
+
+.btn-ghost:hover {
+  background: rgba(0, 0, 0, 0.05);
+  color: #374151;
+}
+
+/* Card animations */
+.card-base {
+  transition: all 0.15s ease;
+  border-radius: 12px;
+  background: white;
+  border: 1px solid #e5e7eb;
+}
+
+.card-hover:hover {
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+  border-color: #d1d5db;
+}
+
+.card-interactive:hover {
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  transform: translateY(-1px);
+}
+
+/* Input animations */
+.input-base {
+  transition: all 0.15s ease;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+}
+
+.input-base:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Loading animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.2s ease-out;
+}
+
+.slide-up {
+  animation: slideUp 0.2s ease-out;
+}
+
+.slide-down {
+  animation: slideDown 0.2s ease-out;
+}
+
+.pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Utility classes */
+.no-animation {
+  transition: none !important;
+  animation: none !important;
+}
+
+.reduce-motion {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+}
+
+/* Responsive motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

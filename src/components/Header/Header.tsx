@@ -54,7 +54,7 @@ export const Header: React.FC = () => {
   return (
     <header className={styles.header}>
       <Link to="/">
-        <div className={styles.logoContainer + ' hover:text-black'}>
+        <div className={`${styles.logoContainer}`}>
           <div className={styles.logoIcon}>
             <img src="/icons/logo.png" alt="Legisla.ai" width={34} height={34} className={styles.logo} />
           </div>
@@ -92,7 +92,7 @@ export const Header: React.FC = () => {
               type="text"
               icon={isMenuOpen ? <CloseOutlined /> : <MenuOutlined />}
               onClick={toggleMenu}
-              className={styles.hamburgerButton}
+              className={`${styles.hamburgerButton} ${isMenuOpen ? styles.hamburgerButtonActive : ''}`}
             />
             
             {/* Mobile Dropdown Menu */}
@@ -101,7 +101,11 @@ export const Header: React.FC = () => {
                 <div className={styles.mobileNavItems}>
                   {navItems.map((item) => (
                     <Link key={item.to} to={item.to} onClick={() => setIsMenuOpen(false)}>
-                      <Button type="text" block className={styles.mobileNavButton}>
+                      <Button 
+                        type="text" 
+                        block 
+                        className={styles.mobileNavButton}
+                      >
                         {item.label}
                       </Button>
                     </Link>

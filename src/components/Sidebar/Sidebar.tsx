@@ -14,17 +14,17 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
   return (
     <div
       className={cn(
-        'w-64 h-full bg-white border-r border-[var(--muted)]',
+        'w-64 h-full bg-white border-r border-[var(--muted)] transition-transform duration-200 ease-out',
         isOpen ? 'translate-x-0' : '-translate-x-full'
       )}
     >
       <div className="flex flex-col h-full p-4">
         {/* Container para o botão <Menu> e "Novo Repository" */}
         <div className="flex items-center mb-4 gap-2">
-          <Button type="text" onClick={onClose} className="hover:bg-[var(--muted)]! px-2! py-3!">
+          <Button type="text" onClick={onClose} className="hover:bg-[var(--muted)]! px-2! py-3! transition-all duration-150">
             <Menu className="h-5 w-5" />
           </Button>
-          <Button className="ml-auto border-[var(--muted)]! hover:bg-[var(--muted)]! px-10! py-3!">
+          <Button className="ml-auto border-[var(--muted)]! hover:bg-[var(--muted)]! px-10! py-3! transition-all duration-150">
             <Plus className="h-5 w-5" />
           </Button>
         </div>
@@ -41,7 +41,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
               type="text"
               onClick={() => setSelectedChat(num)}
               className={cn(
-                'justify-start! transition-colors p-2!',
+                'justify-start! transition-all duration-150 p-2!',
                 selectedChat === num
                   ? 'bg-[var(--muted)]! text-[var(--muted-foreground)]!'
                   : 'text-gray-600! hover:bg-gray-100!'

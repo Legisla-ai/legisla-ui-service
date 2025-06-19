@@ -1,19 +1,22 @@
 .featureCard {
   position: relative;
   padding: 1.5rem 1.8rem;
-  border-radius: 0.5rem;
-  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  border: 1px solid rgba(226, 232, 240, 0.6);
   background-color: var(--background);
-  transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s;
+  transition: all 0.15s ease;
   display: flex;
   flex-direction: column;
   gap: 1rem;
   height: 100%;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
 .featureCard:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border-color: rgba(34, 211, 238, 0.3);
 }
 
 .title {
@@ -26,11 +29,17 @@
 }
 
 .featureIcon {
-  color: #007acc;
-  font-size: 2rem;
-  background-color: #e0e7ff;
-  border-radius: 50%;
-  padding: 0.7rem;
+  color: #026490;
+  font-size: 1.8rem;
+  background: linear-gradient(135deg, rgba(34, 211, 238, 0.1), rgba(2, 100, 144, 0.1));
+  border-radius: 12px;
+  padding: 0.8rem;
+  transition: all 0.15s ease;
+}
+
+.featureCard:hover .featureIcon {
+  transform: scale(1.02);
+  background: linear-gradient(135deg, rgba(34, 211, 238, 0.15), rgba(2, 100, 144, 0.15));
 }
 
 .featureTitle {
@@ -47,41 +56,64 @@
 }
 
 .featureButton {
-  background: linear-gradient(45deg, #733ce8, #01b1b1);
+  background: linear-gradient(135deg, #026490, #22d3ee);
   color: #ffffff;
   font-size: 16px;
-  font-weight: bold;
+  font-weight: 600;
   border: none;
-  padding: 1.3rem 0.5rem;
-  border-radius: 8px;
-  transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 1rem 1.5rem;
+  border-radius: 10px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 8px rgba(2, 100, 144, 0.2);
   margin-top: auto;
+  position: relative;
+  overflow: hidden;
+}
+
+.featureButton::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.6s;
+}
+
+.featureButton:hover::before {
+  left: 100%;
 }
 
 .featureButton:hover {
-  transform: translateY(-2px);
-  background: linear-gradient(135deg, #733ce8, #01b1b1) !important;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transform: translateY(-1px);
+  background: linear-gradient(135deg, #22d3ee, #026490) !important;
+  box-shadow: 0 6px 20px rgba(2, 100, 144, 0.3);
 }
 
-/* Ajuste na badge */
+/* Badge styling */
 .mostUsedTag {
   position: absolute;
-  top: -10px;
-  right: -15px;
-  padding: 5px 12px;
-  background-color: #fa541c;
+  top: -8px;
+  right: -8px;
+  padding: 6px 12px;
+  background: linear-gradient(135deg, #f59e0b, #d97706);
   color: white;
-  border-radius: 15px;
+  border-radius: 12px;
   display: flex;
   align-items: center;
-  font-size: 14px;
-  font-weight: bold;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  font-size: 12px;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+  animation: subtlePulse 3s ease-in-out infinite;
+}
+
+@keyframes subtlePulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.02); }
 }
 
 .mostUsedTagText {
-  margin-left: 5px;
-  font-size: 12px;
+  margin-left: 4px;
+  font-size: 11px;
 }
