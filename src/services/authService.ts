@@ -5,7 +5,7 @@ import { LoginResponse, RegisterResponse, RegisterUser } from '@/interfaces/auth
 
 const LOGIN_URL = '/persona/auth/login';
 const REGISTER_URL = '/persona/auth/register';
-const ME_URL = '/persona/auth/me';
+const ME_URL = '/persona/user/details';
 
 const normalizePhone = (phone: string): string => {
   const onlyDigits = phone.replace(/\D/g, '');
