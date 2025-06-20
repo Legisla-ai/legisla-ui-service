@@ -237,12 +237,12 @@
   .logoContainer span {
     font-size: 1.5rem;
   }
-  
+
   .header {
     padding: 0 0.75rem;
     height: 64px;
   }
-  
+
   .rightSection {
     gap: 0.5rem;
   }
@@ -253,7 +253,7 @@
     font-size: 14px;
     padding: 0.625rem 1rem;
   }
-  
+
   .mobileDropdown {
     min-width: 200px;
     right: -8px;

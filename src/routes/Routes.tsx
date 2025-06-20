@@ -1,4 +1,3 @@
-// src/AppRoutes.tsx (ou onde estiver sua definição de rotas)
 import { DefaultLayout } from '@/layouts/DefaultLayout';
 import { NoHeaderLayout } from '@/layouts/NoHeaderLayout';
 import Home from '@/pages/Home';
@@ -8,7 +7,7 @@ import CompleteAnalysis from '@/pages/CompleteAnalysis';
 import RiskAnalysis from '@/pages/RiskAnalysis';
 import SignIn from '@/pages/SignIn';
 import SignUp from '@/pages/SignUp';
-import { Route, Routes, Navigate } from 'react-router-dom'; // importe Navigate
+import { Route, Routes, Navigate } from 'react-router-dom';
 import ProtectedRoute from './ProtectedRoute';
 
 const AppRoutes = () => {

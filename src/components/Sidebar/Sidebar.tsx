@@ -4,8 +4,8 @@ import { Button } from 'antd';
 import { cn } from '@/lib/utils';
 
 interface SidebarProps {
-  isOpen: boolean;
-  onClose: () => void;
+  readonly isOpen: boolean;
+  readonly onClose: () => void;
 }
 
 export function Sidebar({ isOpen, onClose }: SidebarProps) {
@@ -21,7 +21,11 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
       <div className="flex flex-col h-full p-4">
         {/* Container para o botão <Menu> e "Novo Repository" */}
         <div className="flex items-center mb-4 gap-2">
-          <Button type="text" onClick={onClose} className="hover:bg-[var(--muted)]! px-2! py-3! transition-all duration-150">
+          <Button
+            type="text"
+            onClick={onClose}
+            className="hover:bg-[var(--muted)]! px-2! py-3! transition-all duration-150"
+          >
             <Menu className="h-5 w-5" />
           </Button>
           <Button className="ml-auto border-[var(--muted)]! hover:bg-[var(--muted)]! px-10! py-3! transition-all duration-150">

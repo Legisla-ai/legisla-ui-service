@@ -93,7 +93,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const isAuthenticated = !!tokens?.accessToken && !!user;
 
-  const value: AuthContextType = {
+  const value = React.useMemo<AuthContextType>(() => ({
     user,
     tokens,
     isAuthenticated,
@@ -101,7 +101,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     login,
     logout,
     updateTokens,
-  };
+  }), [user, tokens, isAuthenticated, isLoading, login, logout, updateTokens]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

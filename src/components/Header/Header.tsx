@@ -94,18 +94,14 @@ export const Header: React.FC = () => {
               onClick={toggleMenu}
               className={`${styles.hamburgerButton} ${isMenuOpen ? styles.hamburgerButtonActive : ''}`}
             />
-            
+
             {/* Mobile Dropdown Menu */}
             {isMenuOpen && (
               <div className={styles.mobileDropdown}>
                 <div className={styles.mobileNavItems}>
                   {navItems.map((item) => (
                     <Link key={item.to} to={item.to} onClick={() => setIsMenuOpen(false)}>
-                      <Button 
-                        type="text" 
-                        block 
-                        className={styles.mobileNavButton}
-                      >
+                      <Button type="text" block className={styles.mobileNavButton}>
                         {item.label}
                       </Button>
                     </Link>

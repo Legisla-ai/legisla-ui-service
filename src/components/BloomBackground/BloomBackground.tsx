@@ -52,7 +52,7 @@ const BloomBackground = () => {
       >
         <div className="w-full h-full rounded-full bg-gradient-to-tr from-[#026490] via-[#4fe0e0] to-transparent" />
       </div>
-      
+
       {/* Secondary gradient bloom */}
       <div
         ref={bloom2Ref}
@@ -61,7 +61,7 @@ const BloomBackground = () => {
       >
         <div className="w-full h-full rounded-full bg-gradient-to-bl from-[#4fe0e0] via-[#026490] to-transparent" />
       </div>
-      
+
       {/* Accent bloom */}
       <div
         ref={bloom3Ref}
@@ -70,7 +70,7 @@ const BloomBackground = () => {
       >
         <div className="w-full h-full rounded-full bg-gradient-to-br from-[#22d3ee] to-transparent" />
       </div>
-      
+
       {/* Logo and title */}
       <div className="flex items-end space-x-4 relative z-10">
         <Logo className="w-16 h-16" />

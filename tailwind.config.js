@@ -1,12 +1,12 @@
 /** @type {import('tailwindcss').Config} */
-export const content = ['./index.html', './src/**/*.{js,jsx,ts,tsx}'];
-
-export const theme = {
-  extend: {
-    fontFamily: {
-      sans: ['Satoshi', 'Helvetica', 'Arial', 'sans-serif'],
+export default {
+  content: ['./index.html', './src/**/*.{js,jsx,ts,tsx}'],
+  theme: {
+    extend: {
+      fontFamily: {
+        sans: ['Satoshi', 'Helvetica', 'Arial', 'sans-serif'],
+      },
     },
   },
+  plugins: [],
 };
-
-export const plugins = [];

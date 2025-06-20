@@ -47,7 +47,7 @@ export const useRegisterUser = () => {
         queryKey: queryKeys.auth(),
       });
     },
-    onSettled: () => { },
+    onSettled: () => {},
   });
 };
 
@@ -77,8 +77,7 @@ export const useLoginUser = () => {
         queryKey: queryKeys.auth(),
       });
     },
-    onSettled: () => {
-    },
+    onSettled: () => {},
   });
 };
 

@@ -29,7 +29,10 @@ export const riskAnalysisPromptsItems: PromptsProps['items'] = [
   },
 ];
 
-export const getRiskAnalysisPromptClasses = (windowWidth: number, isSidebarOpen: boolean = false): Partial<Record<SemanticType, string>> => {
+export const getRiskAnalysisPromptClasses = (
+  windowWidth: number,
+  isSidebarOpen: boolean = false
+): Partial<Record<SemanticType, string>> => {
   const sidebarWidth = isSidebarOpen ? 256 : 0;
   const availableWidth = windowWidth - sidebarWidth;
 

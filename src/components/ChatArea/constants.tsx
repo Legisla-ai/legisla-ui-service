@@ -24,20 +24,23 @@ export const promptsItems: PromptsProps['items'] = [
   },
 ];
 
-export const getPromptClasses = (windowWidth: number, isSidebarOpen: boolean = false): Partial<Record<SemanticType, string>> => {
+export const getPromptClasses = (
+  windowWidth: number,
+  isSidebarOpen: boolean = false
+): Partial<Record<SemanticType, string>> => {
   const sidebarWidth = isSidebarOpen ? 256 : 0; // 256px = w-64
   const availableWidth = windowWidth - sidebarWidth;
-  
+
   // Adjust breakpoint based on available width
   const shouldUseVerticalLayout = availableWidth < 1000 || windowWidth < 768;
-  
+
   return {
     title: 'text-center font-bold mb-4 text-lg',
-    list: shouldUseVerticalLayout 
-      ? 'flex items-center! flex-col gap-3 w-full max-w-full' 
+    list: shouldUseVerticalLayout
+      ? 'flex items-center! flex-col gap-3 w-full max-w-full'
       : 'flex flex-row items-center gap-4 justify-center flex-wrap',
-    item: shouldUseVerticalLayout 
-      ? 'w-full max-w-[90%] shadow-md m-1 select-none' 
+    item: shouldUseVerticalLayout
+      ? 'w-full max-w-[90%] shadow-md m-1 select-none'
       : 'w-[280px] max-w-[300px] shadow-md my-4 mx-2 select-none flex-shrink-0',
   };
 };

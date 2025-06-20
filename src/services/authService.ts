@@ -1,7 +1,5 @@
-// src/services/authService.ts
 import api from './api';
-import { User } from '@/interfaces/auth';
-import { LoginResponse, RegisterResponse, RegisterUser } from '@/interfaces/auth';
+import { LoginResponse, RegisterResponse, RegisterUser, User } from '@/interfaces/auth';
 
 const LOGIN_URL = '/persona/auth/login';
 const REGISTER_URL = '/persona/auth/register';

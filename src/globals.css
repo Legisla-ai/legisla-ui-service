@@ -1,10 +1,5 @@
 @import 'tailwindcss';
 
-@plugin 'tailwindcss-animate';
-
-@custom-variant dark (&:is(.dark *));
-@tailwind utilities;
-
 :root {
   --background: #ffffff;
   --foreground: #f9f9f9;
@@ -19,7 +14,13 @@
   --whatsapp-hover: #0a7d2d;
   --legisla-turquoise-1: #4fe0e0;
   --legisla-turquoise-2: #026490;
-  
+
+  /* Font paths */
+  --font-satoshi-regular: url('/fonts/Satoshi-Regular.otf');
+  --font-satoshi-bold: url('/fonts/Satoshi-Bold.otf');
+  --font-satoshi-italic: url('/fonts/Satoshi-Italic.otf');
+  --font-satoshi-bolditalic: url('/fonts/Satoshi-BoldItalic.otf');
+
   /* Animation timing for consistent minimalist feel */
   --transition-fast: 0.15s ease;
   --transition-normal: 0.2s ease;
@@ -32,15 +33,15 @@
 }
 
 /* Subtle hover states for interactive elements */
-button, 
+button,
 .clickable,
-a[role="button"] {
+a[role='button'] {
   transition: all var(--transition-fast);
 }
 
 button:hover:not(:disabled),
 .clickable:hover,
-a[role="button"]:hover {
+a[role='button']:hover {
   transform: translateY(-1px);
 }
 
@@ -96,29 +97,33 @@ select:focus {
 
 /* Animation keyframes */
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes slideUp {
-  from { 
-    opacity: 0; 
-    transform: translateY(8px); 
+  from {
+    opacity: 0;
+    transform: translateY(8px);
   }
-  to { 
-    opacity: 1; 
-    transform: translateY(0); 
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
 @keyframes slideDown {
-  from { 
-    opacity: 0; 
-    transform: translateY(-8px); 
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
   }
-  to { 
-    opacity: 1; 
-    transform: translateY(0); 
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
@@ -145,32 +150,4 @@ select:focus {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
-}
-
-@font-face {
-  font-family: 'Satoshi';
-  src: url(var(--font-satoshi-regular)) format('opentype');
-  font-weight: normal;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'Satoshi';
-  src: url(var(--font-satoshi-bold)) format('opentype');
-  font-weight: bold;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'Satoshi';
-  src: url(var(--font-satoshi-italic)) format('opentype');
-  font-weight: normal;
-  font-style: italic;
-}
-
-@font-face {
-  font-family: 'Satoshi';
-  src: url(var(--font-satoshi-bolditalic)) format('opentype');
-  font-weight: bold;
-  font-style: italic;
 }

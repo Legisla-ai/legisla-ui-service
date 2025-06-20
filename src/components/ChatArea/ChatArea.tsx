@@ -7,8 +7,16 @@ import { Upload } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { analyzeDocument } from '../../services/documentAnalysisService';
 import { getPromptClasses, promptClassNames, promptsItems } from './constants';
-import { completeAnalysisPromptsItems, getCompleteAnalysisPromptClasses, completeAnalysisPromptClassNames } from './completeAnalysisConstants';
-import { riskAnalysisPromptsItems, getRiskAnalysisPromptClasses, riskAnalysisPromptClassNames } from './riskAnalysisConstants';
+import {
+  completeAnalysisPromptsItems,
+  getCompleteAnalysisPromptClasses,
+  completeAnalysisPromptClassNames,
+} from './completeAnalysisConstants';
+import {
+  riskAnalysisPromptsItems,
+  getRiskAnalysisPromptClasses,
+  riskAnalysisPromptClassNames,
+} from './riskAnalysisConstants';
 import { defaultInlinePlaceholder, getPlaceholderFn } from './helpers';
 
 interface ChatAreaProps {
@@ -93,7 +101,7 @@ export function ChatArea({ mode, isSidebarOpen = false }: ChatAreaProps) {
 
   const handlePromptSubmit = async (promptKey: string) => {
     setIsSubmitting(true);
-    
+
     if (!items || items.length === 0) {
       console.error('Nenhum arquivo foi enviado');
       return;
@@ -133,7 +141,10 @@ export function ChatArea({ mode, isSidebarOpen = false }: ChatAreaProps) {
             <div className="flex flex-row items-center gap-4 relative mb-4">
               <Attachments.FileCard item={items[0]} />
               <Tooltip title="Substituir documento">
-                <button onClick={handleReplace} className="p-1 text-[#2f2f2f]/50 hover:text-[var(--muted-foreground)] cursor-pointer">
+                <button
+                  onClick={handleReplace}
+                  className="p-1 text-[#2f2f2f]/50 hover:text-[var(--muted-foreground)] cursor-pointer"
+                >
                   <Upload style={{ fontSize: '24px' }} />
                 </button>
               </Tooltip>

@@ -12,12 +12,12 @@ interface FeatureCardProps {
   mostUsed?: boolean;
 }
 
-export function FeatureCard({ title, description, buttonText, link, icon, mostUsed }: FeatureCardProps) {
+export function FeatureCard({ title, description, buttonText, link, icon, mostUsed }: Readonly<FeatureCardProps>) {
   return (
     <div className={styles.featureCard}>
       {mostUsed && (
         <Tag color="volcano" className={styles.mostUsedTag}>
-          <FireOutlined/>
+          <FireOutlined />
           <p className={styles.mostUsedTagText}>Mais usado</p>
         </Tag>
       )}

@@ -2,8 +2,8 @@ import { User, Bot } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface ChatMessageProps {
-  message: string;
-  isUser?: boolean;
+  readonly message: string;
+  readonly isUser?: boolean;
 }
 
 export function ChatMessage({ message, isUser = false }: ChatMessageProps) {

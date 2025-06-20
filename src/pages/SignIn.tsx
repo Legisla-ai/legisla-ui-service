@@ -45,8 +45,7 @@ export default function SignIn() {
 
     try {
       const loginResponse = await loginUser(data.email, data.password);
-      login(loginResponse); // isso já salva tokens e dispara fetchCurrentUser no AuthContext
-      // O useEffect acima detectará `isAuthenticated=true` e fará navigate('/')
+      login(loginResponse);
     } catch {
       setError('Usuário ou senha inválidos.');
     } finally {
@@ -157,12 +156,11 @@ export default function SignIn() {
             Ao entrar, você concorda com nossos{' '}
             <a href="/terms" className="text-[#026490] hover:underline">
               Termos de uso
-            </a>{' '}
+            </a>
             e{' '}
             <a href="/privacy" className="text-[#026490] hover:underline">
               Política de Privacidade
-            </a>
-            .
+            </a>.
           </p>
         </div>
       </div>

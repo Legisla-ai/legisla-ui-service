@@ -23,11 +23,12 @@ export default function Repository() {
 
   return (
     <div className="flex h-full relative">
-      <div className={`transition-all duration-300 ${isSidebarOpen ? 'w-64' : 'w-0'} ${isMobile ? 'absolute z-20' : ''}`}>
+      <div
+        className={`transition-all duration-300 ${isSidebarOpen ? 'w-64' : 'w-0'} ${isMobile ? 'absolute z-20' : ''}`}
+      >
         <Sidebar isOpen={isSidebarOpen} onClose={toggleSidebar} />
       </div>
       <div className="flex flex-col flex-1 relative">
-        {/* Botão Menu com estilo similar ao da Sidebar */}
         {!isSidebarOpen && (
           <div className="absolute top-2 left-2 z-30">
             <Button type="text" onClick={toggleSidebar} className="hover:bg-[var(--muted)]! px-2! py-3! m-2">

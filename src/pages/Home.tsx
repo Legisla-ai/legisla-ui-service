@@ -2,7 +2,16 @@ import { useState } from 'react';
 import { Input } from 'antd';
 import { FeatureCard } from '@/components/FeatureCard/FeatureCard';
 import { FutureFeatureCard } from '@/components/FutureFeatureCard/FutureFeatureCard.tsx';
-import { FileText, Scale, FileSpreadsheet, ReceiptText, SearchIcon, UserSearch } from 'lucide-react';
+import {
+  FileText,
+  Scale,
+  FileSpreadsheet,
+  ReceiptText,
+  SearchIcon,
+  UserSearch,
+  FileCheck,
+  ShieldAlert,
+} from 'lucide-react';
 import styles from '@/styles/Home.module.css';
 
 export default function Home() {
@@ -18,6 +27,20 @@ export default function Home() {
       icon: <FileText size={24} />,
     },
     {
+      title: 'Análise Completa',
+      description: 'Realize uma análise detalhada e abrangente dos seus documentos jurídicos com IA.',
+      buttonText: 'Iniciar análise completa',
+      link: '/analise-completa',
+      icon: <FileCheck size={24} />,
+    },
+    {
+      title: 'Análise de Riscos',
+      description: 'Identifique potenciais riscos e vulnerabilidades nos seus documentos jurídicos.',
+      buttonText: 'Analisar riscos',
+      link: '/analise-riscos',
+      icon: <ShieldAlert size={24} />,
+    },
+    {
       title: 'Resumo de documentos',
       description: 'Obtenha um resumo claro e objetivo dos seus documentos jurídicos em poucos segundos.',
       buttonText: 'Resuma seu documento',
@@ -28,7 +51,7 @@ export default function Home() {
       title: 'Jurisprudência',
       description: 'Encontre jurisprudências relevantes para o seu caso com rapidez e eficiência.',
       buttonText: 'Buscar jurisprudências',
-      link: '/repositorio',
+      link: '/jurisprudencias',
       icon: <Scale size={24} />,
     },
   ];
@@ -93,9 +116,9 @@ export default function Home() {
         )}
 
         <div className={`${styles.featuresGrid} slide-up`}>
-          {filteredFeatures.map((feature, index) => (
+          {filteredFeatures.map((feature) => (
             <FeatureCard
-              key={index}
+              key={feature.title}
               title={feature.title}
               description={feature.description}
               buttonText={feature.buttonText}
@@ -111,9 +134,9 @@ export default function Home() {
           <>
             <h2 className="text-3xl mt-6 mb-6">Em breve</h2>
             <div className={`${styles.featuresGrid} slide-up`}>
-              {filteredFutureFeatures.map((feature, index) => (
+              {filteredFutureFeatures.map((feature) => (
                 <FutureFeatureCard
-                  key={index}
+                  key={feature.title}
                   title={feature.title}
                   description={feature.description}
                   icon={feature.icon}

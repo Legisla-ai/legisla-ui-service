@@ -8,7 +8,7 @@ interface FeatureCardProps {
   badge?: 'most-used' | 'coming-soon';
 }
 
-export function FutureFeatureCard({ title, description, icon }: FeatureCardProps) {
+export function FutureFeatureCard({ title, description, icon }: Readonly<FeatureCardProps>) {
   return (
     <div className={styles.featureCard}>
       <div className={styles.title}>

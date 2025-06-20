@@ -153,8 +153,8 @@ const SignUp: React.FC = () => {
                       Força da senha: <strong className={strengthColor}>{strengthLabel}</strong>
                     </p>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-1 text-xs">
-                      {getPasswordRequirements(pwd).map((r, i) => (
-                        <div key={i} className="flex items-center">
+                      {getPasswordRequirements(pwd).map((r) => (
+                        <div key={r.label} className="flex items-center">
                           <span className={`mr-2 ${r.isValid ? 'text-green-600' : 'text-red-600'}`}>
                             {r.isValid ? '✓' : '✗'}
                           </span>
@@ -203,7 +203,7 @@ const SignUp: React.FC = () => {
 
             {isError && (
               <div className="bg-red-50 border border-red-200 rounded p-3">
-                <p className="text-red-600 text-sm">{(error as Error).message}</p>
+                <p className="text-red-600 text-sm">{error?.message}</p>
               </div>
             )}
 
@@ -220,8 +220,7 @@ const SignUp: React.FC = () => {
             Ao se inscrever, você concorda com os{' '}
             <a href="/terms" className="text-[#026490] hover:underline">
               Termos de uso
-            </a>
-            .
+            </a>.
           </p>
         </div>
       </div>
