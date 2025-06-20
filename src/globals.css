@@ -15,129 +15,207 @@
   --legisla-turquoise-1: #4fe0e0;
   --legisla-turquoise-2: #026490;
 
-  /* Font paths */
-  --font-satoshi-regular: url('/fonts/Satoshi-Regular.otf');
-  --font-satoshi-bold: url('/fonts/Satoshi-Bold.otf');
-  --font-satoshi-italic: url('/fonts/Satoshi-Italic.otf');
-  --font-satoshi-bolditalic: url('/fonts/Satoshi-BoldItalic.otf');
-
   /* Animation timing for consistent minimalist feel */
   --transition-fast: 0.15s ease;
   --transition-normal: 0.2s ease;
   --transition-slow: 0.3s ease;
 }
 
-/* Global minimalist animations */
+/* Global minimalist setup */
 * {
   box-sizing: border-box;
 }
 
-/* Subtle hover states for interactive elements */
-button,
-.clickable,
-a[role='button'] {
-  transition: all var(--transition-fast);
+/* Ant Design Button override for feature cards */
+.ant-btn-primary {
+  box-shadow: 0 2px 8px rgba(2, 100, 144, 0.2) !important;
 }
 
-button:hover:not(:disabled),
-.clickable:hover,
-a[role='button']:hover {
-  transform: translateY(-1px);
+.ant-btn-primary:hover {
+  box-shadow: 0 6px 20px rgba(2, 100, 144, 0.3) !important;
 }
 
-/* Card and interactive elements */
-.card-hover {
-  transition: all var(--transition-fast);
+/* WhatsApp Button specific styles */
+.ant-btn-primary[style*="background-color: rgb(12, 168, 59)"],
+.ant-btn-primary[style*="backgroundColor: #0ca83b"] {
+  background-color: #0ca83b !important;
+  border-color: #0ca83b !important;
 }
 
-.card-hover:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  transform: translateY(-1px);
+.ant-btn-primary[style*="background-color: rgb(12, 168, 59)"]:hover,
+.ant-btn-primary[style*="backgroundColor: #0ca83b"]:hover {
+  background-color: #0a7d2d !important;
+  border-color: #0a7d2d !important;
 }
 
-/* Input focus states */
-input:focus,
-textarea:focus,
-select:focus {
-  outline: 2px solid var(--primary);
-  outline-offset: 2px;
-  transition: outline var(--transition-fast);
+/* Float Button specific styles */
+.ant-btn-circle[style*="backgroundColor: #0ca83b"] {
+  background-color: #0ca83b !important;
+  border-color: #0ca83b !important;
+  color: white !important;
 }
 
-/* Button variants */
-.btn-primary {
-  background: #3b82f6;
-  color: white;
-  border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: 8px;
-  font-weight: 500;
-  transition: all var(--transition-fast);
+.ant-btn-circle[style*="backgroundColor: #0ca83b"]:hover {
+  background-color: #0a7d2d !important;
+  border-color: #0a7d2d !important;
+  color: white !important;
 }
 
-.btn-primary:hover {
-  background: #2563eb;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+/* Tailwind border radius utilities */
+.rounded-12 {
+  border-radius: 12px !important;
 }
 
-.btn-ghost {
+.rounded-16 {
+  border-radius: 16px !important;
+}
+
+.rounded-10 {
+  border-radius: 10px !important;
+}
+
+/* Float Button garantido */
+.float-button-whatsapp {
+  position: fixed !important;
+  bottom: 24px !important;
+  right: 24px !important;
+  z-index: 99999 !important;
+  background-color: #0ca83b !important;
+  border: none !important;
+  border-radius: 16px !important;
+  width: 56px !important;
+  height: 56px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: white !important;
+  font-size: 24px !important;
+  cursor: pointer !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  box-shadow: 0 4px 16px rgba(12, 168, 59, 0.25) !important;
+  backdrop-filter: blur(10px) !important;
+  pointer-events: auto !important;
+  outline: none !important;
+  font-family: inherit !important;
+}
+
+.float-button-whatsapp:hover {
+  background-color: #0a7d2d !important;
+  transform: translateY(-2px) scale(1.05) !important;
+  box-shadow: 0 6px 20px rgba(12, 168, 59, 0.35) !important;
+}
+
+.float-button-whatsapp:focus {
+  outline: 2px solid rgba(12, 168, 59, 0.5) !important;
+  outline-offset: 2px !important;
+}
+
+.float-button-whatsapp:active {
+  transform: translateY(0) scale(1.02) !important;
+  box-shadow: 0 2px 8px rgba(12, 168, 59, 0.3) !important;
+}
+
+/* Efeito de pulso sutil para chamar atenção */
+.float-button-whatsapp::after {
+  content: '' !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  border-radius: 16px !important;
+  background-color: rgba(12, 168, 59, 0.3) !important;
+  animation: whatsapp-pulse 3s ease-in-out infinite !important;
+  pointer-events: none !important;
+}
+
+@keyframes whatsapp-pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.3;
+  }
+}
+
+/* Scrollbar customizada */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(2, 100, 144, 0.3) transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
   background: transparent;
-  color: #6b7280;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 6px;
-  transition: all var(--transition-fast);
 }
 
-.btn-ghost:hover {
-  background: rgba(0, 0, 0, 0.05);
-  color: #374151;
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(2, 100, 144, 0.3);
+  border-radius: 3px;
+  transition: background 0.2s ease;
 }
 
-/* Animation keyframes */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(2, 100, 144, 0.5);
 }
 
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
+/* Animações extras */
+@keyframes shimmer-bg {
+  0% {
+    background-position: -200% 0;
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+  100% {
+    background-position: 200% 0;
   }
 }
 
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-8px);
+.animate-shimmer-bg {
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  background-size: 200% 100%;
+  animation: shimmer-bg 2s infinite;
+}
+
+/* Sombras customizadas para glassmorphism */
+.shadow-glass {
+  box-shadow: 
+    0 8px 32px rgba(31, 38, 135, 0.37),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+.shadow-glass-hover {
+  box-shadow: 
+    0 12px 40px rgba(31, 38, 135, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22);
+}
+
+/* Efeitos de hover melhorados */
+.hover-lift {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hover-lift:hover {
+  transform: translateY(-2px);
+}
+
+/* Responsividade para mobile */
+@media (max-width: 768px) {
+  .float-button-whatsapp {
+    bottom: 20px !important;
+    right: 20px !important;
+    width: 52px !important;
+    height: 52px !important;
+    font-size: 22px !important;
+    border-radius: 14px !important;
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+  
+  .float-button-whatsapp::after {
+    border-radius: 14px !important;
   }
-}
-
-/* Animation utility classes */
-.fade-in {
-  animation: fadeIn var(--transition-normal) ease-out;
-}
-
-.slide-up {
-  animation: slideUp var(--transition-normal) ease-out;
-}
-
-.slide-down {
-  animation: slideDown var(--transition-normal) ease-out;
 }
 
 /* Accessibility - reduced motion */

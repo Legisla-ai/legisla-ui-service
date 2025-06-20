@@ -5,12 +5,12 @@ import { Menu } from 'lucide-react';
 import { Button } from 'antd';
 
 export default function Repository() {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(window.innerWidth >= 700);
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 700);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(window.innerWidth >= 768);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
   useEffect(() => {
     const handleResize = () => {
-      const mobile = window.innerWidth < 700;
+      const mobile = window.innerWidth < 768;
       setIsMobile(mobile);
       setIsSidebarOpen(!mobile);
     };
@@ -22,21 +22,46 @@ export default function Repository() {
   const toggleSidebar = () => setIsSidebarOpen((prev) => !prev);
 
   return (
-    <div className="flex h-full relative">
+    <div className="flex h-full relative overflow-hidden">
+      {/* Overlay para mobile */}
+      {isMobile && isSidebarOpen && (
+        <button 
+          className="absolute inset-0 bg-black/20 backdrop-blur-sm z-10 transition-opacity duration-300 cursor-default"
+          onClick={toggleSidebar}
+          aria-label="Fechar sidebar"
+        />
+      )}
+      
+      {/* Sidebar Container */}
       <div
-        className={`transition-all duration-300 ${isSidebarOpen ? 'w-64' : 'w-0'} ${isMobile ? 'absolute z-20' : ''}`}
+        className={`transition-all duration-300 ease-out flex-shrink-0 ${
+          isSidebarOpen ? 'w-72' : 'w-0'
+        } ${
+          isMobile ? 'absolute z-20 h-full' : 'relative'
+        }`}
       >
         <Sidebar isOpen={isSidebarOpen} onClose={toggleSidebar} />
       </div>
-      <div className="flex flex-col flex-1 relative">
+      
+      {/* Main Content Area */}
+      <div className="flex flex-col flex-1 relative min-w-0 overflow-hidden">
+        {/* Menu Button quando sidebar está fechada */}
         {!isSidebarOpen && (
-          <div className="absolute top-2 left-2 z-30">
-            <Button type="text" onClick={toggleSidebar} className="hover:bg-[var(--muted)]! px-2! py-3! m-2">
-              <Menu className="h-5 w-5" />
+          <div className="absolute top-4 left-4 z-30">
+            <Button 
+              type="text" 
+              onClick={toggleSidebar} 
+              className="!p-2 hover:!bg-white/80 !rounded-xl !backdrop-blur-sm !border !border-white/20 !shadow-md transition-all duration-200 hover:scale-105"
+            >
+              <Menu className="h-5 w-5 text-gray-700" />
             </Button>
           </div>
         )}
-        <ChatArea mode="repository" isSidebarOpen={isSidebarOpen} />
+        
+        {/* Chat Area */}
+        <div className="flex-1 overflow-hidden">
+          <ChatArea mode="repository" isSidebarOpen={isSidebarOpen} />
+        </div>
       </div>
     </div>
   );

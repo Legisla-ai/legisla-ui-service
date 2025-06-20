@@ -3,6 +3,34 @@ import { FileTextOutlined, EditOutlined, FormOutlined } from '@ant-design/icons'
 import type { PromptsProps } from '@ant-design/x';
 import { SemanticType } from '@ant-design/x/es/prompts';
 
+export interface AnalysisOption {
+  title: string;
+  description: string;
+  icon: string;
+  action: string;
+}
+
+export const ANALYSIS_OPTIONS: AnalysisOption[] = [
+  {
+    title: 'Resumir Documento',
+    description: 'Obtenha um resumo claro e conciso dos pontos principais',
+    icon: '📄',
+    action: 'summarize'
+  },
+  {
+    title: 'Análise de Riscos',
+    description: 'Identifique possíveis riscos jurídicos e pontos de atenção',
+    icon: '⚠️',
+    action: 'riskAnalysis'
+  },
+  {
+    title: 'Análise Completa',
+    description: 'Análise jurídica detalhada e abrangente do documento',
+    icon: '📊',
+    action: 'fullAnalysis'
+  }
+];
+
 export const promptsItems: PromptsProps['items'] = [
   {
     key: 'summarize',

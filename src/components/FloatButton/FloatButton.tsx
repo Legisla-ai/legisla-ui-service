@@ -1,6 +1,4 @@
-import { Button } from 'antd';
-import { FC } from 'react';
-import styles from './FloatButton.module.css';
+import { FC, useEffect, useState } from 'react';
 
 interface FloatButtonProps {
   icon: React.ReactNode;
@@ -9,13 +7,23 @@ interface FloatButtonProps {
 }
 
 export const FloatButton: FC<FloatButtonProps> = ({ icon, onClick, className = '' }) => {
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    // Pequeno delay para animação de entrada
+    const timer = setTimeout(() => setIsVisible(true), 500);
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
-    <Button
-      type="primary"
-      shape="circle"
-      icon={icon}
+    <button
+      type="button"
+      className={`float-button-whatsapp ${isVisible ? 'animate-slideUp' : 'opacity-0'} ${className}`}
       onClick={onClick}
-      className={`${styles.floatButton} ${className}`}
-    />
+      aria-label="Abrir WhatsApp para falar com um especialista"
+      title="Fale conosco no WhatsApp"
+    >
+      {icon}
+    </button>
   );
 };

@@ -12,7 +12,6 @@ import {
   FileCheck,
   ShieldAlert,
 } from 'lucide-react';
-import styles from '@/styles/Home.module.css';
 
 export default function Home() {
   const [search, setSearch] = useState('');
@@ -81,23 +80,23 @@ export default function Home() {
   );
 
   return (
-    <div className={`${styles.container} fade-in`}>
-      <main className={styles.mainContent}>
+    <div className="bg-gradient-to-b from-cyan-50/5 to-white flex flex-col min-h-[calc(100vh-4rem)] font-sans animate-fadeIn">
+      <main className="overflow-y-auto flex flex-col py-8 px-12 items-center justify-start gap-8">
         {/* Seção Hero */}
-        <div className="max-w mx-auto text-center slide-down">
-          <h1 className="text-4x4 md:text-5xl mb-4">
+        <div className="text-center max-w-4xl animate-slideDown">
+          <h1 className="text-5xl md:text-6xl font-bold mb-6 text-gray-800">
             Seu assistente jurídico{' '}
             <span className="bg-gradient-to-l from-teal-300 to-cyan-600 bg-clip-text text-transparent">
               potencializado por IA
             </span>
           </h1>
-          <p className="text-xl text-gray-600 dark:text-gray-700 leading-relaxed ">
+          <p className="text-xl text-gray-600 leading-relaxed">
             Crie, analise e gerencie documentos jurídicos com eficiência e precisão inigualáveis
           </p>
         </div>
 
         {/* Seção Search */}
-        <div className={`${styles.searchInput} slide-up`}>
+        <div className="w-full max-w-2xl mb-6 animate-slideUp">
           <Input
             id="search-input"
             placeholder="Busque por tipo de documento, área do direito ou palavras-chave..."
@@ -105,17 +104,18 @@ export default function Home() {
             value={search}
             maxLength={50}
             prefix={<SearchIcon size={16} />}
-            style={{ padding: '0.5rem' }}
+            style={{ padding: '0.75rem', fontSize: '1.1rem' }}
             allowClear
+            className="!text-lg !rounded-xl !border-gray-200 focus:!border-cyan-400 focus:!shadow-lg"
           />
         </div>
 
         {/* Seção Features */}
         {filteredFeatures.length === 0 && filteredFutureFeatures.length === 0 && (
-          <p className={styles.noResults}>Nenhum recurso encontrado.</p>
+          <p className="text-base text-gray-400 mb-4">Nenhum recurso encontrado.</p>
         )}
 
-        <div className={`${styles.featuresGrid} slide-up`}>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6 animate-fadeInUp">
           {filteredFeatures.map((feature) => (
             <FeatureCard
               key={feature.title}
@@ -132,8 +132,8 @@ export default function Home() {
         {/* Seção Features Futuras */}
         {filteredFutureFeatures.length > 0 && (
           <>
-            <h2 className="text-3xl mt-6 mb-6">Em breve</h2>
-            <div className={`${styles.featuresGrid} slide-up`}>
+            <h2 className="text-3xl font-semibold text-gray-800 mt-6 mb-6">Em breve</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6 animate-fadeInUp">
               {filteredFutureFeatures.map((feature) => (
                 <FutureFeatureCard
                   key={feature.title}

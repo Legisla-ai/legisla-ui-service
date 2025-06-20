@@ -93,7 +93,7 @@ export default function JurisprudenceSearch() {
   };
 
   return (
-    <div className="min-h-[calc(100vh-4rem)] flex flex-col font-satoshi bg-gradient-to-t from-[#00ffe51b] to-white">
+    <div className="min-h-[calc(100vh-4rem)] flex flex-col bg-gradient-to-t from-[#00ffe51b] to-white">
       <div className="flex-1">
         <main className="overflow-y-auto flex flex-col p-12 items-center justify-evenly gap-8">
           {/* Título e Subtítulo sem box */}

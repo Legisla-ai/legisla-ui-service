@@ -2,7 +2,7 @@
 import { useAuth } from '@/context/AuthContext';
 import { LoginResponse, RegisterResponse, RegisterUser, User } from '@/interfaces/auth';
 import { queryKeys } from '@/query/queryKeys';
-import { loginUser, registerUser } from '@/services/authService';
+import { loginUser, registerUser, logoutUser } from '@/services/authService';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 type AuthContextReturn = {
@@ -86,9 +86,7 @@ export const useLogoutUser = () => {
   const { logout } = useAuth();
 
   return useMutation<void, Error, void>({
-    mutationFn: () => {
-      return import('@/services/authService').then((mod) => mod.logoutUser());
-    },
+    mutationFn: () => logoutUser(),
     onSuccess: () => {
       logout();
       queryClient.removeQueries({
