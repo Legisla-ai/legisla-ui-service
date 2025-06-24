@@ -13,8 +13,10 @@ export interface AnalysisRequest {
 
 export interface AnalysisResponse {
   analysisId?: string;
-  result?: any;
-  [key: string]: any;
+  result?: unknown;
+  content?: string;
+  analysis?: string;
+  [key: string]: unknown;
 }
 
 export const analyzeDocument = async (request: AnalysisRequest): Promise<AnalysisResponse> => {
@@ -37,20 +39,7 @@ export const analyzeDocument = async (request: AnalysisRequest): Promise<Analysi
   // Garantir que o arquivo seja anexado corretamente
   formData.append('file', request.file, request.file.name);
 
-  // Log detalhado para debugging
-  console.log('Enviando requisição de análise:', {
-    fileName: request.file.name,
-    fileSize: request.file.size,
-    fileType: request.file.type,
-    promptType: request.promptType,
-    endpoint: `/minerva/document/${request.promptType}`,
-    formDataEntries: Array.from(formData.entries()).map(([key, value]) => ({
-      key,
-      valueType: typeof value,
-      isFile: value instanceof File,
-      fileName: value instanceof File ? value.name : null
-    }))
-  });
+
 
   try {
     const response = await api.post<AnalysisResponse>(`/minerva/document/${request.promptType}`, formData, {
@@ -58,45 +47,41 @@ export const analyzeDocument = async (request: AnalysisRequest): Promise<Analysi
         'Content-Type': 'multipart/form-data',
       },
       timeout: 60000, // 60 segundos
-      onUploadProgress: (progressEvent) => {
-        if (progressEvent.total) {
-          const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-          console.log('Progress do upload:', percentCompleted + '%');
-        }
-      },
+      // Upload progress tracking removed to eliminate unused code
     });
 
-    console.log('Resposta da análise recebida:', {
-      status: response.status,
-      hasData: !!response.data,
-      dataKeys: response.data ? Object.keys(response.data) : []
-    });
+
     
     return response.data;
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Erro na requisição de análise:', {
-      message: error.message,
-      status: error.response?.status,
-      statusText: error.response?.statusText,
-      data: error.response?.data,
+      message: error instanceof Error ? error.message : 'Unknown error',
+      status: isAxiosError(error) ? error.response?.status : undefined,
+      statusText: isAxiosError(error) ? error.response?.statusText : undefined,
+      data: isAxiosError(error) ? error.response?.data : undefined,
       config: {
-        url: error.config?.url,
-        method: error.config?.method,
-        headers: error.config?.headers
+        url: isAxiosError(error) ? error.config?.url : undefined,
+        method: isAxiosError(error) ? error.config?.method : undefined,
+        headers: isAxiosError(error) ? error.config?.headers : undefined
       }
     });
 
     // Melhorar as mensagens de erro para o usuário
-    if (error.response?.status === 400) {
+    if (isAxiosError(error) && error.response?.status === 400) {
       throw new Error('Formato de arquivo não suportado ou dados inválidos');
-    } else if (error.response?.status === 413) {
+    } else if (isAxiosError(error) && error.response?.status === 413) {
       throw new Error('Arquivo muito grande. Tente um arquivo menor');
-    } else if (error.response?.status === 500) {
+    } else if (isAxiosError(error) && error.response?.status === 500) {
       throw new Error('Erro interno do servidor. Tente novamente em alguns instantes');
-    } else if (error.code === 'ECONNABORTED') {
+    } else if (error instanceof Error && error.name === 'AbortError') {
       throw new Error('Tempo limite excedido. Tente novamente com um arquivo menor');
     }
     
     throw error;
   }
 };
+
+// Helper function to check if error is AxiosError
+function isAxiosError(error: unknown): error is import('axios').AxiosError {
+  return error !== null && typeof error === 'object' && 'response' in error;
+}

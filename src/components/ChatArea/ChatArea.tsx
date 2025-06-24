@@ -1,25 +1,25 @@
 // src/components/ChatArea/ChatArea.tsx
-// DEVELOPMENT MODE: Using mock responses to avoid API costs during testing
-// Remove mockAnalyzeDocument function and restore real API calls before production
 import { FileUploadArea } from './FileUploadArea';
 import { FileDisplayCard } from './FileDisplayCard';
 import { AnalysisPrompt } from './AnalysisPrompt';
 import { ChatView } from './ChatView';
 import { LoadingSteps } from './LoadingSteps';
 import { AnalysisOptions } from './AnalysisOptions';
-import type { ChatAreaProps } from './types';
 import { useChatState } from './hooks/useChatState';
 import { useAnalysisHandler } from './hooks/useAnalysisHandler';
 
-export function ChatArea({ mode: _mode = 'repository', isSidebarOpen: _isSidebarOpen = false }: Readonly<ChatAreaProps>) {
+export function ChatArea() {
   const {
     currentFile,
     loadingStep,
     isSubmitting,
+    isCreatingRepository,
     chatStarted,
     messages,
     usedAnalyses,
     hiddenInputRef,
+    isLoadingHistory,
+    historyError,
     addMessage,
     processFile,
     resetAllStates,
@@ -32,16 +32,14 @@ export function ChatArea({ mode: _mode = 'repository', isSidebarOpen: _isSidebar
 
   const { handleAnalysisRequest } = useAnalysisHandler();
 
-  // Handle file selection from hidden input
-  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      processFile(file);
+      await processFile(file);
     }
     e.target.value = '';
   };
 
-  // Wrapper for analysis request to pass all required parameters
   const onAnalysisRequest = async (promptKey: string) => {
     await handleAnalysisRequest(promptKey, {
       currentFile,
@@ -57,7 +55,7 @@ export function ChatArea({ mode: _mode = 'repository', isSidebarOpen: _isSidebar
   };
 
   const renderAnalysisArea = () => {
-    if (isSubmitting) {
+    if (isSubmitting || isCreatingRepository) {
       return <LoadingSteps currentStep={loadingStep} isWaitingForResponse={loadingStep === 3} />;
     }
     
@@ -65,13 +63,13 @@ export function ChatArea({ mode: _mode = 'repository', isSidebarOpen: _isSidebar
       <AnalysisOptions 
         onAnalysisRequest={onAnalysisRequest}
         usedAnalyses={usedAnalyses}
-        isSubmitting={isSubmitting}
+        isSubmitting={isSubmitting || isCreatingRepository}
       />
     );
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-50 w-full overflow-hidden relative">
+    <div className="flex items-center justify-center h-full bg-gray-50 w-full overflow-hidden relative">
       {/* Decorative background elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-cyan-700/5 rounded-full blur-3xl opacity-30"></div>
@@ -87,38 +85,60 @@ export function ChatArea({ mode: _mode = 'repository', isSidebarOpen: _isSidebar
         accept=".pdf,.doc,.docx,.txt,.rtf,.odt"
       />
 
-      {!chatStarted ? (
-        // Initial screen - file upload and analysis selection
-        <div className="flex flex-col items-center transition-all duration-700 ease-out w-full max-w-5xl px-8 relative z-10">
-          {!currentFile ? (
-            <FileUploadArea 
-              onFileSelect={processFile}
-              isSubmitting={isSubmitting}
-            />
-          ) : (
-            <>
-              <FileDisplayCard
-                file={currentFile}
-                onReplace={handleReplace}
-                onRemove={resetAllStates}
-              />
-
-              <AnalysisPrompt fileName={currentFile.name}>
-                {renderAnalysisArea()}
-              </AnalysisPrompt>
-            </>
-          )}
+      {/* **Indicador de Carregamento de Histórico**: Feedback visual quando histórico está sendo carregado */}
+      {/* **Benefício**: Usuário sabe que sistema está carregando dados do repositório selecionado */}
+      {isLoadingHistory && (
+        <div className="flex flex-col items-center justify-center space-y-4 relative">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-cyan-600"></div>
+          <p className="text-gray-600 text-sm">Carregando histórico do repositório...</p>
         </div>
-      ) : (
-        <ChatView
-          currentFile={currentFile}
-          messages={messages}
-          usedAnalyses={usedAnalyses}
-          isSubmitting={isSubmitting}
-          onAnalysisRequest={onAnalysisRequest}
-          onNewDocument={handleReplace}
-          onClose={resetAllStates}
-        />
+      )}
+
+      {/* **Indicador de Erro**: Feedback em caso de falha no carregamento */}
+      {historyError && !isLoadingHistory && (
+        <div className="flex flex-col items-center justify-center space-y-4 relative">
+          <div className="bg-red-50 border border-red-200 rounded-lg p-4 max-w-md">
+            <p className="text-red-700 text-sm text-center">
+              Erro ao carregar histórico: {historyError.message}
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* **Conteúdo Principal**: Só renderiza quando não está carregando histórico */}
+      {!isLoadingHistory && !historyError && (
+        <>
+          {!chatStarted ? (
+            // Initial screen - file upload and analysis selection
+            <div className="flex flex-col items-center transition-all duration-700 ease-out w-full max-w-5xl px-8 relative">
+              {!currentFile ? (
+                <FileUploadArea 
+                  onFileSelect={processFile}
+                  isSubmitting={isSubmitting || isCreatingRepository}
+                />
+              ) : (
+                <>
+                  <FileDisplayCard
+                    file={currentFile}
+                    onReplace={handleReplace}
+                    onRemove={resetAllStates}
+                  />
+
+                  <AnalysisPrompt fileName={currentFile.name}>
+                    {renderAnalysisArea()}
+                  </AnalysisPrompt>
+                </>
+              )}
+            </div>
+          ) : (
+            <ChatView
+              messages={messages}
+              usedAnalyses={usedAnalyses}
+              isSubmitting={isSubmitting || isCreatingRepository}
+              onAnalysisRequest={onAnalysisRequest}
+            />
+          )}
+        </>
       )}
     </div>
   );

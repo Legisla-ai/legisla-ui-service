@@ -20,12 +20,12 @@ export const AnalysisOptions: React.FC<AnalysisOptionsProps> = ({
     if (isSubmitting) {
       return 'border-gray-200 bg-gray-50 cursor-not-allowed';
     }
-    return 'border-gray-200 bg-white hover:border-cyan-400 hover:bg-gray-50 cursor-pointer';
+    return 'border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50 cursor-pointer';
   };
 
   return (
-    <div className="w-full bg-white rounded-lg border border-gray-200 shadow-sm p-6">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <div className="w-full bg-white rounded-md border border-gray-100 p-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
         {ANALYSIS_OPTIONS.map((option) => {
           const isUsed = usedAnalyses.has(option.action);
           const isDisabled = isSubmitting || isUsed;
@@ -36,7 +36,7 @@ export const AnalysisOptions: React.FC<AnalysisOptionsProps> = ({
               onClick={() => !isDisabled && onAnalysisRequest(option.action)}
               disabled={isDisabled}
               className={`
-                relative p-4 rounded-lg border-2 transition-all duration-300 text-left
+                relative p-4 rounded-lg border transition-all duration-200 text-left
                 ${getButtonClasses(isUsed, isSubmitting)}
               `}
             >

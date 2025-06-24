@@ -18,7 +18,7 @@ const formatPhone = (value: string) => {
 
 interface PhoneInputProps {
   name: string;
-  control: Control<any>;
+  control: Control<any>; // eslint-disable-line @typescript-eslint/no-explicit-any
   placeholder?: string;
   className?: string;
 }
@@ -38,7 +38,7 @@ const PhoneInput: React.FC<PhoneInputProps> = ({ name, control, placeholder = 'T
           const formatted = formatPhone(e.target.value);
           field.onChange(formatted);
         }}
-        value={formatPhone(field.value)}
+        value={formatPhone(field.value ?? '')}
       />
     )}
   />

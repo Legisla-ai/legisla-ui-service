@@ -15,14 +15,14 @@ export const useRegisterUser = () => {
 
   return useMutation<RegisterResponse, Error, RegisterUser, AuthContextReturn>({
     mutationFn: (user: RegisterUser) => registerUser(user),
-    onMutate: async (_newUser: RegisterUser) => {
+    onMutate: async () => {
       await queryClient.cancelQueries({
         queryKey: queryKeys.auth(),
       });
       const previousUserData = queryClient.getQueryData(queryKeys.auth());
       return { previousUserData };
     },
-    onError: (error, _newUser, context) => {
+    onError: (error, _, context) => {
       console.error('Erro ao registrar usuário:', error);
       if (context?.previousUserData) {
         queryClient.setQueryData(queryKeys.auth(), context.previousUserData);
@@ -57,14 +57,14 @@ export const useLoginUser = () => {
 
   return useMutation<LoginResponse, Error, { email: string; password: string }, AuthContextReturn>({
     mutationFn: ({ email, password }) => loginUser(email, password),
-    onMutate: async (_credentials) => {
+    onMutate: async () => {
       await queryClient.cancelQueries({
         queryKey: queryKeys.auth(),
       });
       const previousUserData = queryClient.getQueryData(queryKeys.auth());
       return { previousUserData };
     },
-    onError: (error, _credentials, context) => {
+    onError: (error, _, context) => {
       console.error('Erro ao fazer login:', error);
       if (context?.previousUserData) {
         queryClient.setQueryData(queryKeys.auth(), context.previousUserData);

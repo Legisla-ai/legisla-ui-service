@@ -26,7 +26,7 @@ export function ChatActionsArea({ usedAnalyses, isSubmitting, onAnalysisRequest 
             className={`inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 group ${
               usedAnalyses.has(option.action)
                 ? 'text-green-700 bg-green-50 border border-green-200 cursor-default'
-                : 'text-cyan-400 bg-cyan-400/5 border border-cyan-400/20 hover:bg-cyan-400/10 hover:border-cyan-400/30 focus:outline-none focus:ring-2 focus:ring-cyan-700 disabled:opacity-50 disabled:cursor-not-allowed'
+                : 'text-gray-700 bg-white border border-gray-200 hover:bg-gray-50 hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 disabled:opacity-50 disabled:cursor-not-allowed'
             }`}
           >
             <span className="text-lg group-hover:scale-110 transition-transform">

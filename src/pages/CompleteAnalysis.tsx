@@ -3,7 +3,7 @@ import { ChatArea } from '@/components/ChatArea/ChatArea';
 export default function CompleteAnalysis() {
   return (
     <div className="h-full">
-      <ChatArea mode="completeAnalysis" isSidebarOpen={false} />
+      <ChatArea />
     </div>
   );
 }

@@ -51,7 +51,7 @@ export const Header: React.FC = () => {
   ];
 
   return (
-    <header className="relative w-screen h-18 bg-white/95 backdrop-blur-20 border-b border-gray-200/80 flex justify-between items-center px-4 lg:px-16 shadow-header font-sans z-[9999] transition-all duration-300 ease-in-out">
+    <header className="relative w-screen h-16 bg-white/95 backdrop-blur-20 border-b border-gray-200/80 flex justify-between items-center px-4 lg:px-16 shadow-header font-sans z-50 transition-all duration-300 ease-in-out">
       <Link to="/">
         <div className="flex items-end gap-2 transition-opacity duration-15 ease-in-out p-1 rounded-lg hover:opacity-80">
           <div className="flex items-center justify-center text-cyan-500 transition-transform duration-15 ease-in-out hover:scale-105">
@@ -109,7 +109,7 @@ export const Header: React.FC = () => {
               type="text"
               icon={isMenuOpen ? <CloseOutlined /> : <MenuOutlined />}
               onClick={toggleMenu}
-              className={`p-2 border-none bg-transparent text-xl text-gray-600 flex items-center justify-center rounded-lg transition-all duration-15 ease-in-out z-[1001] min-w-11 h-11 ${
+              className={`p-2 border-none bg-transparent text-xl text-gray-600 flex items-center justify-center rounded-lg transition-all duration-15 ease-in-out z-[51] min-w-11 h-11 ${
                 isMenuOpen 
                   ? 'bg-black/8 text-gray-800' 
                   : 'hover:bg-black/5 hover:text-gray-700'
@@ -118,7 +118,7 @@ export const Header: React.FC = () => {
 
             {/* Mobile Dropdown Menu */}
             {isMenuOpen && (
-              <div className="absolute top-full right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-dropdown z-[1000] min-w-50 overflow-hidden animate-dropdownSlideIn">
+              <div className="absolute top-full right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-dropdown z-[51] min-w-50 overflow-hidden animate-dropdownSlideIn">
                 <div className="flex flex-col p-2 gap-1">
                   {navItems.map((item) => (
                     <Link key={item.to} to={item.to} onClick={() => setIsMenuOpen(false)}>

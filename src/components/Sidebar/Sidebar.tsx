@@ -1,68 +1,25 @@
 import { useState } from 'react';
-import { Menu, Plus, FileText, Clock, Star, Trash2, MoreHorizontal, RefreshCw, AlertCircle } from 'lucide-react';
-import { Button, Dropdown, Spin, Alert } from 'antd';
+import { Menu, Plus, FileText, Clock, Trash2, MoreHorizontal, RefreshCw, AlertCircle } from 'lucide-react';
+import { Button, Dropdown, Spin, Alert, Modal, message } from 'antd';
 import { cn } from '@/lib/utils';
-import { useRepositoryHistory } from '@/hooks/useRepositoryHistory';
+import { useRepositoryHistory, useDeleteRepository } from '@/hooks/useRepositoryHistory';
 import { DocumentItem } from '@/interfaces/repositoryHistory';
+import { useRepository } from '@/context/RepositoryContext';
 
 interface SidebarProps {
   readonly isOpen: boolean;
   readonly onClose: () => void;
-  readonly repositoryId?: number; // ID do repositório atual
 }
 
-export function Sidebar({ isOpen, onClose, repositoryId = 1 }: SidebarProps) {
-  const [selectedChat, setSelectedChat] = useState<string | null>(null);
+export function Sidebar({ isOpen, onClose }: SidebarProps) {
   const [hoveredChat, setHoveredChat] = useState<string | null>(null);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [repositoryToDelete, setRepositoryToDelete] = useState<DocumentItem | null>(null);
+  const { selectedRepositoryId, setSelectedRepositoryId } = useRepository();
+  const { data: documentItems = [], isLoading, isError, error, refetch } = useRepositoryHistory();
+  const deleteRepositoryMutation = useDeleteRepository();
 
-  // Hook para buscar histórico da API
-  const {
-    data: documentItems = [],
-    isLoading,
-    isError,
-    error,
-    refetch,
-  } = useRepositoryHistory({
-    repositoryId,
-    enabled: repositoryId !== null,
-    staleTime: 2 * 60 * 1000, // 2 minutos
-  });
-
-  // Fallback para dados simulados se não houver repositoryId ou erro
-  const fallbackItems: DocumentItem[] = [
-    { 
-      id: 'fallback-1', 
-      title: 'Contrato de Locação - Apartamento', 
-      date: '2 horas atrás', 
-      starred: true, 
-      type: 'pdf',
-      originalData: {
-        repositoryId: 0,
-        message: 'Contrato de Locação - Apartamento',
-        sender: 'USER',
-        interactionType: 'DOCUMENT_UPLOAD',
-        createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
-        updatedAt: new Date().toISOString()
-      }
-    },
-    { 
-      id: 'fallback-2', 
-      title: 'Análise de Riscos - Projeto Alpha', 
-      date: 'Ontem', 
-      starred: false, 
-      type: 'doc',
-      originalData: {
-        repositoryId: 0,
-        message: 'Análise de Riscos - Projeto Alpha',
-        sender: 'AI',
-        interactionType: 'ANALYSIS_COMPLETE',
-        createdAt: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
-        updatedAt: new Date().toISOString()
-      }
-    },
-  ];
-
-  const chatItems = isError ? fallbackItems : documentItems;
+  const chatItems = documentItems;
 
   const getFileIcon = (type: string) => {
     switch (type) {
@@ -79,11 +36,56 @@ export function Sidebar({ isOpen, onClose, repositoryId = 1 }: SidebarProps) {
     }
   };
 
-  const handleChatAction = (action: string, chatId: string) => {
-    console.log(`${action} chat ${chatId}`);
+  const handleSelectRepository = (chat: DocumentItem) => {
+    const repositoryId = chat.originalData.id;
+    setSelectedRepositoryId(repositoryId);
+  };
+
+  const handleNewDocument = () => {
+    setSelectedRepositoryId(null);
+  };
+
+  const isSelected = (chatId: string) => {
+    const repositoryId = chatItems.find((item) => item.id === chatId)?.originalData.id;
+    return selectedRepositoryId === repositoryId;
+  };
+
+  const handleChatAction = async (action: string, chat: DocumentItem) => {
     if (action === 'refresh') {
       refetch();
+    } else if (action === 'delete') {
+      setRepositoryToDelete(chat);
+      setDeleteModalOpen(true);
     }
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!repositoryToDelete) return;
+
+    const repositoryId = repositoryToDelete.originalData.id;
+
+    try {
+      await deleteRepositoryMutation.mutateAsync(repositoryId);
+      message.success('Repositório excluído com sucesso');
+
+      // Se o repositório excluído estava selecionado, limpa a seleção
+      if (selectedRepositoryId === repositoryId) {
+        setSelectedRepositoryId(null);
+      }
+
+      // Fecha o modal e limpa o estado
+      setDeleteModalOpen(false);
+      setRepositoryToDelete(null);
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Erro desconhecido ao excluir repositório';
+      message.error(errorMessage);
+      console.error('Erro ao excluir repositório:', error);
+    }
+  };
+
+  const handleCancelDelete = () => {
+    setDeleteModalOpen(false);
+    setRepositoryToDelete(null);
   };
 
   return (
@@ -106,9 +108,10 @@ export function Sidebar({ isOpen, onClose, repositoryId = 1 }: SidebarProps) {
               <Menu className="h-4 w-4 text-gray-600" />
             </Button>
           </div>
-          
+
           {/* Botão Criar Novo Documento */}
-          <Button 
+          <Button
+            onClick={handleNewDocument}
             className="w-full !h-10 !border-none !text-white font-semibold !rounded-lg transition-all duration-300 hover:scale-[1.02] hover:shadow-lg group relative overflow-hidden"
             style={{
               background: 'linear-gradient(135deg, #026490, #22d3ee)',
@@ -169,105 +172,99 @@ export function Sidebar({ isOpen, onClose, repositoryId = 1 }: SidebarProps) {
 
             {/* Documents List */}
             {!isLoading && (
-              <div className="space-y-2">
+              <ul className="space-y-2">
                 {chatItems.length === 0 ? (
-                  <div className="flex flex-col items-center justify-center py-8 text-center text-gray-500">
+                  <li className="flex flex-col items-center justify-center py-8 text-center text-gray-500">
                     <AlertCircle className="w-8 h-8 mb-2 text-gray-400" />
                     <p className="text-sm">Nenhum documento encontrado</p>
-                    <Button 
-                      size="small" 
-                      type="text" 
+                    <Button
+                      size="small"
+                      type="text"
                       icon={<RefreshCw className="w-3 h-3" />}
                       onClick={() => refetch()}
                       className="mt-2"
                     >
                       Atualizar
                     </Button>
-                  </div>
+                  </li>
                 ) : (
                   chatItems.map((chat) => (
-                <button
-                  key={chat.id}
-                  type="button"
-                  className={cn(
-                    'group relative rounded-lg transition-all duration-300 border w-full text-left',
-                    selectedChat === chat.id
-                      ? 'bg-gradient-to-r from-cyan-400/10 to-cyan-700/10 border-cyan-700/30 shadow-md'
-                      : 'bg-white/70 hover:bg-white/90 border-gray-200/60 hover:border-cyan-700/20 hover:shadow-md'
-                  )}
-                  onMouseEnter={() => setHoveredChat(chat.id)}
-                  onMouseLeave={() => setHoveredChat(null)}
-                  onClick={() => setSelectedChat(chat.id)}
-                >
-                  {/* Linha de brilho sutil */}
-                  <div className={cn(
-                    'absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-400/40 to-transparent transition-opacity duration-300',
-                    hoveredChat === chat.id || selectedChat === chat.id ? 'opacity-100' : 'opacity-0'
-                  )}></div>
-
-                  <div className="flex items-start justify-between p-3">
-                    <button
-                      type="button"
-                      className="flex items-start gap-3 flex-1 min-w-0 text-left bg-transparent border-none cursor-pointer hover:outline-none focus:outline-none"
-                      onClick={() => setSelectedChat(chat.id)}
-                      aria-label={`Selecionar documento ${chat.title}`}
+                    <li
+                      key={chat.id}
+                      className={cn(
+                        'group relative rounded-lg transition-all duration-300 border w-full',
+                        isSelected(chat.id)
+                          ? 'bg-gradient-to-r from-cyan-400/10 to-cyan-700/10 border-cyan-700/30 shadow-md'
+                          : 'bg-white/70 hover:bg-white/90 border-gray-200/60 hover:border-cyan-700/20 hover:shadow-md'
+                      )}
+                      onMouseEnter={() => setHoveredChat(chat.id)}
+                      onMouseLeave={() => setHoveredChat(null)}
                     >
-                      <div className="flex-shrink-0 mt-0.5">
-                        {getFileIcon(chat.type)}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <h4 className="text-sm font-semibold text-gray-800 truncate mb-1 group-hover:text-cyan-700 transition-colors duration-200">
-                          {chat.title}
-                        </h4>
-                        <div className="flex items-center gap-2">
-                          <span className="text-xs text-gray-500">{chat.date}</span>
-                          {chat.starred && (
-                            <Star className="w-3 h-3 text-yellow-400 fill-current" />
-                          )}
-                        </div>
-                      </div>
-                    </button>
+                      {/* Linha de brilho sutil */}
+                      <div
+                        className={cn(
+                          'absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-400/40 to-transparent transition-opacity duration-300',
+                          hoveredChat === chat.id || isSelected(chat.id) ? 'opacity-100' : 'opacity-0'
+                        )}
+                      ></div>
 
-                    {/* Menu de ações */}
-                    <div className={cn(
-                      'opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex-shrink-0',
-                      selectedChat === chat.id && 'opacity-100'
-                    )}>
-                      <Dropdown
-                        menu={{
-                          items: [
-                            {
-                              key: 'star',
-                              label: chat.starred ? 'Remover estrela' : 'Adicionar estrela',
-                              icon: <Star className="w-4 h-4" />,
-                              onClick: () => handleChatAction('star', chat.id),
-                            },
-                            {
-                              key: 'delete',
-                              label: 'Excluir',
-                              icon: <Trash2 className="w-4 h-4" />,
-                              onClick: () => handleChatAction('delete', chat.id),
-                              danger: true,
-                            },
-                          ],
-                        }}
-                        trigger={['click']}
-                        placement="bottomRight"
-                      >
+                      <div className="flex items-start justify-between p-3">
                         <button
                           type="button"
-                          className="p-1 hover:bg-gray-100 rounded-md transition-all duration-200 border-none bg-transparent cursor-pointer"
-                          onClick={(e) => e.stopPropagation()}
-                          aria-label="Mais opções"
+                          className="flex items-start gap-3 flex-1 min-w-0 text-left bg-transparent border-none cursor-pointer hover:outline-none focus:outline-none p-0"
+                          onClick={() => handleSelectRepository(chat)}
+                          aria-label={`Selecionar documento ${chat.title}`}
                         >
-                          <MoreHorizontal className="w-3 h-3 text-gray-500" />
+                          <div className="flex-shrink-0 mt-0.5">{getFileIcon(chat.type)}</div>
+                          <div className="flex-1 min-w-0">
+                            <h4 className="text-sm font-semibold text-gray-800 truncate mb-1 group-hover:text-cyan-700 transition-colors duration-200">
+                              {chat.title}
+                            </h4>
+                            <div className="flex items-center gap-2">
+                              <span className="text-xs text-gray-500">{chat.date}</span>
+                            </div>
+                          </div>
                         </button>
-                      </Dropdown>
-                    </div>                    </div>
-                  </button>
+
+                        {/* Menu de ações */}
+                        <div
+                          className={cn(
+                            'opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex-shrink-0',
+                            isSelected(chat.id) && 'opacity-100'
+                          )}
+                        >
+                          <Dropdown
+                            menu={{
+                              items: [
+                                {
+                                  key: 'delete',
+                                  label: 'Excluir',
+                                  icon: <Trash2 className="w-4 h-4" />,
+                                  onClick: () => {
+                                    handleChatAction('delete', chat).catch(console.error);
+                                  },
+                                  danger: true,
+                                },
+                              ],
+                            }}
+                            trigger={['click']}
+                            placement="bottomRight"
+                          >
+                            <button
+                              type="button"
+                              className="p-1 hover:bg-gray-100 rounded-md transition-all duration-200 border-none bg-transparent cursor-pointer"
+                              onClick={(e) => e.stopPropagation()}
+                              aria-label="Mais opções"
+                            >
+                              <MoreHorizontal className="w-3 h-3 text-gray-500" />
+                            </button>
+                          </Dropdown>
+                        </div>
+                      </div>
+                    </li>
                   ))
                 )}
-              </div>
+              </ul>
             )}
           </div>
         </div>
@@ -275,12 +272,37 @@ export function Sidebar({ isOpen, onClose, repositoryId = 1 }: SidebarProps) {
         {/* Footer com informações */}
         <div className="flex-shrink-0 p-4 border-t border-gray-200/60 bg-white/80 backdrop-blur-sm">
           <div className="text-center">
-            <p className="text-xs text-gray-500">
-              {chatItems.length} documentos no repositório
-            </p>
+            <p className="text-xs text-gray-500">{chatItems.length} documentos no repositório</p>
           </div>
         </div>
       </div>
+
+      {/* Modal de confirmação de exclusão */}
+      <Modal
+        title={
+          <div className="flex items-center gap-2">
+            <Trash2 className="text-red-500 w-5 h-5" />
+            <span>Confirmar exclusão</span>
+          </div>
+        }
+        open={deleteModalOpen}
+        onOk={handleConfirmDelete}
+        onCancel={handleCancelDelete}
+        okText="Sim, excluir"
+        cancelText="Cancelar"
+        okType="danger"
+        confirmLoading={deleteRepositoryMutation.isPending}
+      >
+        {repositoryToDelete && (
+          <div>
+            <p>Tem certeza que deseja excluir o repositório:</p>
+            <p className="font-semibold text-gray-800 mt-2">"{repositoryToDelete.title}"</p>
+            <p className="text-red-600 text-sm mt-2">
+              Esta ação não pode ser desfeita e todos os dados relacionados serão perdidos.
+            </p>
+          </div>
+        )}
+      </Modal>
     </div>
   );
 }

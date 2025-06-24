@@ -12,79 +12,16 @@ interface Jurisprudence {
   judge: string;
 }
 
-const mockJurisprudences: Jurisprudence[] = [
-  {
-    id: 1,
-    title: 'Recurso Especial nº 1.234.567/SP',
-    summary:
-      'DIREITO CIVIL. RESPONSABILIDADE CIVIL. DANOS MORAIS. PUBLICAÇÃO DE MATÉRIA JORNALÍSTICA. LIBERDADE DE IMPRENSA. LIMITES. OFENSA À HONRA E IMAGEM. QUANTUM INDENIZATÓRIO. RAZOABILIDADE E PROPORCIONALIDADE.',
-    fullText:
-      'DIREITO CIVIL. RESPONSABILIDADE CIVIL. DANOS MORAIS. PUBLICAÇÃO DE MATÉRIA JORNALÍSTICA. LIBERDADE DE IMPRENSA. LIMITES. OFENSA À HONRA E À IMAGEM. 1. A liberdade de imprensa, garantia constitucional, não é absoluta, encontrando limites nos direitos da personalidade, notadamente no direito à honra e à imagem. 2. A publicação de matéria jornalística que extrapola o animus narrandi, com a imputação de condutas ofensivas à honra e à imagem do autor, enseja a responsabilização civil do veículo de comunicação. 3. O valor da indenização por danos morais deve ser fixado com moderação, considerando a gravidade do ato, o potencial econômico do ofensor e a extensão do dano. 4. Recurso especial parcialmente provido.',
-    date: '15/03/2023',
-    court: 'Superior Tribunal de Justiça',
-    judge: 'Min. João Silva',
-  },
-  {
-    id: 2,
-    title: 'Agravo em Recurso Especial nº 987.654/RJ',
-    summary:
-      'PROCESSUAL CIVIL. AGRAVO EM RECURSO ESPECIAL. AÇÃO DE COBRANÇA. CONTRATO DE PRESTAÇÃO DE SERVIÇOS. INADIMPLEMENTO. CORREÇÃO MONETÁRIA. TERMO INICIAL. DATA DO VENCIMENTO DA OBRIGAÇÃO.',
-    fullText:
-      'PROCESSUAL CIVIL. AGRAVO EM RECURSO ESPECIAL. AÇÃO DE COBRANÇA. CONTRATO DE PRESTAÇÃO DE SERVIÇOS. INADIMPLEMENTO. CORREÇÃO MONETÁRIA. TERMO INICIAL. DATA DO VENCIMENTO DA OBRIGAÇÃO. 1. Nos termos da jurisprudência desta Corte, o termo inicial da correção monetária em casos de inadimplemento contratual é a data do vencimento da obrigação. 2. A correção monetária não constitui um plus, mas mera recomposição do poder aquisitivo da moeda corroído pela inflação. 3. Agravo em recurso especial conhecido para negar provimento ao recurso especial.',
-    date: '22/05/2023',
-    court: 'Superior Tribunal de Justiça',
-    judge: 'Min. Maria Oliveira',
-  },
-  {
-    id: 3,
-    title: 'Recurso Extraordinário nº 123.456/MG',
-    summary:
-      'DIREITO CONSTITUCIONAL. RECURSO EXTRAORDINÁRIO. REPERCUSSÃO GERAL. DIREITO À SAÚDE. FORNECIMENTO DE MEDICAMENTOS DE ALTO CUSTO NÃO DISPONÍVEIS NA LISTA DO SUS. REQUISITOS.',
-    fullText:
-      'DIREITO CONSTITUCIONAL. RECURSO EXTRAORDINÁRIO. REPERCUSSÃO GERAL. DIREITO À SAÚDE. FORNECIMENTO DE MEDICAMENTOS DE ALTO CUSTO NÃO DISPONÍVEIS NA LISTA DO SUS. REQUISITOS. 1. O Estado não pode ser obrigado a fornecer medicamentos experimentais, sem registro na ANVISA ou não recomendados pelos Protocolos Clínicos do SUS. 2. É possível, excepcionalmente, a concessão judicial de medicamento sem registro sanitário, em caso de mora irrazoável da ANVISA em apreciar o pedido de registro. 3. É necessária a demonstração da incapacidade financeira do paciente e da ineficácia dos fármacos fornecidos pelo SUS. 4. Recurso extraordinário a que se dá parcial provimento.',
-    date: '10/04/2023',
-    court: 'Supremo Tribunal Federal',
-    judge: 'Min. Carlos Mendes',
-  },
-  {
-    id: 4,
-    title: 'Habeas Corpus nº 654.321/DF',
-    summary:
-      'DIREITO PENAL E PROCESSUAL PENAL. HABEAS CORPUS. TRÁFICO DE DROGAS. PRISÃO PREVENTIVA. FUNDAMENTAÇÃO IDÔNEA. GARANTIA DA ORDEM PÚBLICA. REITERAÇÃO DELITIVA. QUANTIDADE E NATUREZA DA DROGA APREENDIDA.',
-    fullText:
-      'DIREITO PENAL E PROCESSUAL PENAL. HABEAS CORPUS. TRÁFICO DE DROGAS. PRISÃO PREVENTIVA. FUNDAMENTAÇÃO IDÔNEA. GARANTIA DA ORDEM PÚBLICA. REITERAÇÃO DELITIVA. QUANTIDADE E NATUREZA DA DROGA APREENDIDA. 1. A prisão preventiva foi devidamente fundamentada na garantia da ordem pública, considerando a quantidade e natureza da droga apreendida (5kg de cocaína), bem como o risco concreto de reiteração delitiva, evidenciado pelos antecedentes criminais do paciente. 2. A periculosidade do agente, evidenciada pelo modus operandi do crime e pela reincidência específica, constitui fundamento idôneo para a decretação da prisão preventiva. 3. Ordem de habeas corpus denegada.',
-    date: '18/06/2023',
-    court: 'Superior Tribunal de Justiça',
-    judge: 'Min. Pedro Santos',
-  },
-  {
-    id: 5,
-    title: 'Apelação Cível nº 0001234-56.2022.8.26.0100',
-    summary:
-      'DIREITO DO CONSUMIDOR. APELAÇÃO CÍVEL. AÇÃO DE INDENIZAÇÃO POR DANOS MATERIAIS E MORAIS. FALHA NA PRESTAÇÃO DE SERVIÇO. CANCELAMENTO DE VOO. REACOMODAÇÃO TARDIA. DANOS MORAIS CONFIGURADOS.',
-    fullText:
-      'DIREITO DO CONSUMIDOR. APELAÇÃO CÍVEL. AÇÃO DE INDENIZAÇÃO POR DANOS MATERIAIS E MORAIS. FALHA NA PRESTAÇÃO DE SERVIÇO. CANCELAMENTO DE VOO. REACOMODAÇÃO TARDIA. DANOS MORAIS CONFIGURADOS. 1. O cancelamento de voo, com reacomodação do passageiro somente após 24 horas, configura falha na prestação do serviço e gera o dever de indenizar. 2. Os transtornos sofridos pelo consumidor, que teve que pernoitar em local diverso do contratado, ultrapassam o mero dissabor cotidiano e caracterizam dano moral indenizável. 3. O valor da indenização por danos morais deve ser fixado considerando as circunstâncias do caso concreto, a capacidade econômica das partes e o caráter pedagógico da medida. 4. Recurso de apelação parcialmente provido para majorar o valor da indenização por danos morais.',
-    date: '05/07/2023',
-    court: 'Tribunal de Justiça de São Paulo',
-    judge: 'Des. Ana Costa',
-  },
-];
-
 export default function JurisprudenceSearch() {
   const [searchTerm, setSearchTerm] = useState('');
-  const [results, setResults] = useState<Jurisprudence[]>(mockJurisprudences);
+  const [results, setResults] = useState<Jurisprudence[]>([]);
   const [selectedItem, setSelectedItem] = useState<Jurisprudence | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
 
   const handleSearch = (value: string) => {
     setSearchTerm(value);
-    const filteredResults = mockJurisprudences.filter(
-      (item) =>
-        item.title.toLowerCase().includes(value.toLowerCase()) ||
-        item.summary.toLowerCase().includes(value.toLowerCase()) ||
-        item.fullText.toLowerCase().includes(value.toLowerCase())
-    );
-    setResults(filteredResults);
+    // Jurisprudence search functionality will be implemented when backend API is available
+    setResults([]);
   };
 
   const openModal = (item: Jurisprudence) => {

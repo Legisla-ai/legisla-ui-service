@@ -1,5 +1,6 @@
 import { ChatArea } from '@/components/ChatArea/ChatArea';
 import { Sidebar } from '@/components/Sidebar/Sidebar';
+import { RepositoryProvider } from '@/context/RepositoryContext';
 import { useState, useEffect } from 'react';
 import { Menu } from 'lucide-react';
 import { Button } from 'antd';
@@ -8,9 +9,7 @@ export default function Repository() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(window.innerWidth >= 768);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   
-  // Para fins de demonstração, usando repositoryId = 1
-  // Em implementação real, viria de context/route params
-  const repositoryId = 1;
+  // RepositoryId removido pois agora buscamos todos os repositórios do usuário
 
   useEffect(() => {
     const handleResize = () => {
@@ -26,15 +25,16 @@ export default function Repository() {
   const toggleSidebar = () => setIsSidebarOpen((prev) => !prev);
 
   return (
-    <div className="flex h-full relative overflow-hidden">
-      {/* Overlay para mobile */}
-      {isMobile && isSidebarOpen && (
-        <button 
-          className="absolute inset-0 bg-black/20 backdrop-blur-sm z-10 transition-opacity duration-300 cursor-default"
-          onClick={toggleSidebar}
-          aria-label="Fechar sidebar"
-        />
-      )}
+    <RepositoryProvider>
+      <div className="flex h-full relative overflow-hidden">
+        {/* Overlay para mobile */}
+        {isMobile && isSidebarOpen && (
+          <button 
+            className="absolute inset-0 bg-black/20 backdrop-blur-sm z-10 transition-opacity duration-300 cursor-default"
+            onClick={toggleSidebar}
+            aria-label="Fechar sidebar"
+          />
+        )}
       
       {/* Sidebar Container */}
       <div
@@ -44,14 +44,14 @@ export default function Repository() {
           isMobile ? 'absolute z-20 h-full' : 'relative'
         }`}
       >
-        <Sidebar isOpen={isSidebarOpen} onClose={toggleSidebar} repositoryId={repositoryId} />
+        <Sidebar isOpen={isSidebarOpen} onClose={toggleSidebar} />
       </div>
       
       {/* Main Content Area */}
       <div className="flex flex-col flex-1 relative min-w-0 overflow-hidden">
         {/* Menu Button quando sidebar está fechada */}
         {!isSidebarOpen && (
-          <div className="absolute top-4 left-4 z-30">
+          <div className="absolute top-4 left-4 z-20">
             <Button 
               type="text" 
               onClick={toggleSidebar} 
@@ -64,9 +64,10 @@ export default function Repository() {
         
         {/* Chat Area */}
         <div className="flex-1 overflow-hidden">
-          <ChatArea mode="repository" isSidebarOpen={isSidebarOpen} />
+          <ChatArea />
         </div>
       </div>
-    </div>
+      </div>
+    </RepositoryProvider>
   );
 }

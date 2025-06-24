@@ -1,4 +1,5 @@
 // src/components/ChatArea/hooks/useAnalysisHandler.ts
+import { analyzeDocument } from '@/services/documentAnalysisService';
 import { getActionTitle } from '../utils';
 
 /**
@@ -9,81 +10,10 @@ import { getActionTitle } from '../utils';
  * - Reutilizável: pode ser usado em diferentes contextos
  * - Testabilidade: lógica de análise isolada e testável
  * - Error handling: tratamento centralizado de erros
+ * - Integração com API real: removidos dados mockados
  */
 export function useAnalysisHandler() {
-  // Mock function to simulate backend response (remove this when going to production)
-  const mockAnalyzeDocument = async (promptKey: string): Promise<string> => {
-    // Simulate ~12 seconds backend processing time
-    await new Promise(resolve => setTimeout(resolve, 120000));
-    
-    const mockResponses = {
-      'complete_analysis': `## Análise Completa do Documento
-
-**Resumo Executivo:**
-Este documento apresenta aspectos jurídicos relevantes que foram analisados detalhadamente. A análise identificou pontos de atenção importantes para consideração.
-
-**Principais Conclusões:**
-• O documento está estruturado de forma adequada
-• Existem cláusulas que merecem atenção especial
-• Recomenda-se revisão de alguns termos específicos
-
-**Recomendações:**
-1. Revisar as cláusulas contratuais mencionadas
-2. Verificar conformidade com a legislação atual
-3. Considerar ajustes nos termos identificados
-
-*Esta é uma análise mockada para fins de demonstração.*`,
-
-      'risk_analysis': `## Análise de Riscos Jurídicos
-
-**Nível de Risco: MÉDIO**
-
-**Riscos Identificados:**
-🔴 **Alto Risco:**
-• Cláusulas com redação ambígua que podem gerar interpretações conflitantes
-
-🟡 **Médio Risco:**
-• Termos que podem não estar alinhados com regulamentação recente
-• Ausência de algumas proteções contratuais recomendadas
-
-🟢 **Baixo Risco:**
-• Estrutura geral do documento adequada
-• Aspectos formais em conformidade
-
-**Mitigação Sugerida:**
-- Esclarecer redação das cláusulas ambíguas
-- Atualizar termos conforme legislação vigente
-- Incluir cláusulas de proteção adicionais
-
-*Esta é uma análise mockada para fins de demonstração.*`,
-
-      'jurisprudence_search': `## Busca Jurisprudencial
-
-**Precedentes Encontrados:**
-
-**STJ - Superior Tribunal de Justiça**
-• REsp nº 1.234.567/SP - Caso similar com interpretação favorável
-• AgInt no AREsp nº 987.654/RJ - Precedente relevante sobre o tema
-
-**TJSP - Tribunal de Justiça de São Paulo**
-• Apelação nº 1234567-89.2020.8.26.0100 - Jurisprudência consolidada
-• AI nº 9876543-21.2021.8.26.0000 - Entendimento recente
-
-**Súmulas Aplicáveis:**
-• Súmula 123 do STJ: "Entendimento consolidado sobre a matéria..."
-• Súmula 456 do STF: "Interpretação constitucional relevante..."
-
-**Análise dos Precedentes:**
-A jurisprudência demonstra tendência favorável à interpretação que beneficia a parte contratante, especialmente nos casos mais recentes.
-
-*Esta é uma análise mockada para fins de demonstração.*`
-    };
-
-    return mockResponses[promptKey as keyof typeof mockResponses] || 
-           `Análise realizada com sucesso para: ${promptKey}\n\nEsta é uma resposta mockada do sistema de análise jurídica. O documento foi processado e analisado conforme solicitado.\n\n*Esta é uma análise mockada para fins de demonstração.*`;
-  };
-
-  // Analysis request handler with loading steps and mock response
+  // Analysis request handler using real API
   const handleAnalysisRequest = async (
     promptKey: string,
     params: {
@@ -119,21 +49,19 @@ A jurisprudência demonstra tendência favorável à interpretação que benefic
     // Add user message
     addMessage(`${actionTitle} do documento`, true);
 
-    // Simulate progressive steps during analysis with slower timing for better visual feedback
-    setTimeout(() => setLoadingStep(2), 3000);
-    setTimeout(() => setLoadingStep(3), 5500);
+    // Progressive loading steps with realistic timing
+    setTimeout(() => setLoadingStep(2), 2000);
+    setTimeout(() => setLoadingStep(3), 4000);
 
     try {
-      // MOCK: Using mock function instead of real API to avoid costs during development
-      // To restore real API: uncomment import, uncomment lines below, remove mockAnalyzeDocument
-      // const response = await analyzeDocument({
-      //   file: currentFile,
-      //   promptType: promptKey,
-      // });
-      // const formattedResponse = formatAnalysisResponse(response);
+      // Real API call to document analysis service
+      const response = await analyzeDocument({
+        file: currentFile,
+        promptType: promptKey,
+      });
       
-      const mockResponse = await mockAnalyzeDocument(promptKey);
-      addMessage(mockResponse, false);
+      // Format and add the response
+      addMessage(response.content ?? response.analysis ?? 'Análise concluída com sucesso.', false);
       
       setUsedAnalyses(prev => new Set([...prev, promptKey]));
       
@@ -146,12 +74,11 @@ A jurisprudência demonstra tendência favorável à interpretação que benefic
       addMessage(`Erro: ${errorMessage}. Tente novamente.`, false);
     } finally {
       setIsSubmitting(false);
-      setLoadingStep(1); // Reset for next analysis
+      setLoadingStep(1);
     }
   };
 
   return {
     handleAnalysisRequest,
-    mockAnalyzeDocument, // Export for potential reuse
   };
 }

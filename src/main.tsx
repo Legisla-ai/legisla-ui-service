@@ -18,8 +18,6 @@ if (!rootElement) {
 
 const root = ReactDOM.createRoot(rootElement);
 
-console.log(process.env.NODE_ENV);
-
 root.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
