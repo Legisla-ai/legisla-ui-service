@@ -29,7 +29,7 @@ export function FeatureCard({ title, description, buttonText, link, icon, mostUs
         </div>
       )}
       <div className="text-xl font-semibold text-gray-900 flex items-center gap-2">
-        <div className="text-legisla-turquoise-2 text-3xl p-3"
+        <div className="text-cyan-700 text-3xl p-3"
              style={{ 
                background: 'linear-gradient(135deg, rgba(34, 211, 238, 0.1), rgba(2, 100, 144, 0.1))',
                borderRadius: '12px'

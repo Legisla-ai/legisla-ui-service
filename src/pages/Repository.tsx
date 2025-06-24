@@ -7,6 +7,10 @@ import { Button } from 'antd';
 export default function Repository() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(window.innerWidth >= 768);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  
+  // Para fins de demonstração, usando repositoryId = 1
+  // Em implementação real, viria de context/route params
+  const repositoryId = 1;
 
   useEffect(() => {
     const handleResize = () => {
@@ -40,7 +44,7 @@ export default function Repository() {
           isMobile ? 'absolute z-20 h-full' : 'relative'
         }`}
       >
-        <Sidebar isOpen={isSidebarOpen} onClose={toggleSidebar} />
+        <Sidebar isOpen={isSidebarOpen} onClose={toggleSidebar} repositoryId={repositoryId} />
       </div>
       
       {/* Main Content Area */}

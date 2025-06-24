@@ -17,7 +17,7 @@ const SignUp = lazy(() => import('@/pages/SignUp'));
 const PageLoader = () => (
   <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-slate-50 via-white to-sky-50/40">
     <div className="flex flex-col items-center gap-4">
-      <div className="w-8 h-8 border-2 border-legisla-turquoise-2/30 border-t-legisla-turquoise-2 rounded-full animate-spin"></div>
+      <div className="w-8 h-8 border-2 border-cyan-700/30 border-t-cyan-700 rounded-full animate-spin"></div>
       <p className="text-sm text-gray-600 font-medium">Carregando página...</p>
     </div>
   </div>

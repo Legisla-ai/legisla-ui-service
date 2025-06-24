@@ -12,8 +12,6 @@
   --accent-foreground: #212121;
   --whatsapp: #0ca83b;
   --whatsapp-hover: #0a7d2d;
-  --legisla-turquoise-1: #4fe0e0;
-  --legisla-turquoise-2: #026490;
 
   /* Animation timing for consistent minimalist feel */
   --transition-fast: 0.15s ease;
@@ -200,6 +198,20 @@
 
 .hover-lift:hover {
   transform: translateY(-2px);
+}
+
+/* Loading steps breathe animation */
+@keyframes breathe {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(34, 197, 204, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(34, 197, 204, 0);
+  }
+}
+
+.breathe-step {
+  animation: breathe 2.5s ease-in-out infinite;
 }
 
 /* Responsividade para mobile */

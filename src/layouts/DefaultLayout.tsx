@@ -7,6 +7,9 @@ import { whatsappLink } from '@/lib/utils';
 export function DefaultLayout() {
   const location = useLocation();
 
+  const hiddenFloatButtonPages = ['/chat', '/repositorio', '/analise-completa', '/analise-riscos'];
+  const shouldHideFloatButton = hiddenFloatButtonPages.includes(location.pathname);
+
   return (
     <div className="flex flex-col h-screen">
       {/* Header com altura fixa (64px = h-16) */}
@@ -17,7 +20,7 @@ export function DefaultLayout() {
       {/* Conteúdo que ocupa o restante da tela */}
       <main className="flex-1 overflow-y-auto relative">
         <Outlet />
-        {location.pathname !== '/chat' && (
+        {!shouldHideFloatButton && (
           <FloatButton icon={<WhatsAppOutlined />} onClick={() => window.open(whatsappLink, '_blank')} />
         )}
       </main>

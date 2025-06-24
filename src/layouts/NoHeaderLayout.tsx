@@ -6,11 +6,15 @@ import { whatsappLink } from '@/lib/utils';
 export function NoHeaderLayout() {
   const location = useLocation();
 
+  // Páginas onde o botão flutuante não deve aparecer
+  const hiddenFloatButtonPages = ['/chat', '/repositorio', '/analise-completa', '/analise-riscos'];
+  const shouldHideFloatButton = hiddenFloatButtonPages.includes(location.pathname);
+
   return (
     <div className="flex flex-col h-screen">
       <main className="flex-1 overflow-y-auto relative">
         <Outlet />
-        {location.pathname !== '/chat' && (
+        {!shouldHideFloatButton && (
           <FloatButton icon={<WhatsAppOutlined />} onClick={() => window.open(whatsappLink, '_blank')} />
         )}
       </main>

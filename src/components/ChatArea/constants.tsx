@@ -8,24 +8,28 @@ export interface AnalysisOption {
   description: string;
   icon: string;
   action: string;
+  shortDescription?: string;
 }
 
 export const ANALYSIS_OPTIONS: AnalysisOption[] = [
   {
     title: 'Resumir Documento',
     description: 'Obtenha um resumo claro e conciso dos pontos principais',
+    shortDescription: 'Resumo executivo',
     icon: '📄',
     action: 'summarize'
   },
   {
     title: 'Análise de Riscos',
     description: 'Identifique possíveis riscos jurídicos e pontos de atenção',
+    shortDescription: 'Identificação de riscos',
     icon: '⚠️',
     action: 'riskAnalysis'
   },
   {
     title: 'Análise Completa',
     description: 'Análise jurídica detalhada e abrangente do documento',
+    shortDescription: 'Análise detalhada',
     icon: '📊',
     action: 'fullAnalysis'
   }
@@ -74,3 +78,16 @@ export const getPromptClasses = (
 };
 
 export const promptClassNames: Partial<Record<SemanticType, string>> = {};
+
+// Mensagens motivacionais para o loading (mais simples)
+export const LOADING_MESSAGES = [
+  "Processando seu documento com cuidado...",
+  "Analisando aspectos jurídicos relevantes...",
+  "Preparando insights personalizados...",
+] as const;
+
+// Função para obter mensagem aleatória
+export const getRandomLoadingMessage = (): string => {
+  const randomIndex = Math.floor(Math.random() * LOADING_MESSAGES.length);
+  return LOADING_MESSAGES[randomIndex];
+};

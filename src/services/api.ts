@@ -42,6 +42,13 @@ api.interceptors.request.use(
         localStorage.removeItem('auth_tokens');
       }
     }
+
+    // Não sobrescrever Content-Type para requisições multipart/form-data
+    // Isso permite que o browser defina automaticamente o boundary
+    if (config.headers && config.headers['Content-Type'] === 'multipart/form-data') {
+      delete config.headers['Content-Type'];
+    }
+
     return config;
   },
   (err) => Promise.reject(err instanceof Error ? err : new Error(String(err)))
