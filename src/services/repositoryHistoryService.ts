@@ -47,23 +47,80 @@ export class RepositoryHistoryService {
     }
 
     private static formatRelativeDate(dateString: string): string {
-        const date = new Date(dateString);
-        
+        const normalizedDateString = dateString.includes('Z') || dateString.includes('+') || dateString.includes('T') && dateString.split('T')[1].includes('-')
+            ? dateString
+            : `${dateString}Z`;
+
+        const date = new Date(normalizedDateString);
+
         if (isNaN(date.getTime())) {
             return 'Data inválida';
         }
 
-        const diffInMinutes = Math.floor((Date.now() - date.getTime()) / (1000 * 60));
+        const now = new Date();
+        const diffInMs = now.getTime() - date.getTime();
+        const diffInMinutes = Math.floor(diffInMs / (1000 * 60));
 
-        if (diffInMinutes <= 0) return 'Agora';
+        if (diffInMinutes < 1 || diffInMinutes < 0) return 'Agora';
         if (diffInMinutes < 60) return `${diffInMinutes} min atrás`;
-        if (diffInMinutes < 1440) return `${Math.floor(diffInMinutes / 60)}h atrás`;
-        if (diffInMinutes < 10080) return `${Math.floor(diffInMinutes / 1440)}d atrás`;
+
+        const diffInHours = Math.floor(diffInMinutes / 60);
+        if (diffInHours < 24) return `${diffInHours}h atrás`;
+
+        const diffInDays = Math.floor(diffInHours / 24);
+        if (diffInDays < 7) return `${diffInDays}d atrás`;
 
         return date.toLocaleDateString('pt-BR', {
             day: '2-digit',
             month: '2-digit',
             year: '2-digit'
         });
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    static onRepositoryCreated(_repositoryData: { id: number; name?: string }): void {
+        // Hook para futura implementação de notificações ou cache invalidation
+    }
+
+    static async checkForDuplicateFile(file: File): Promise<{ isDuplicate: boolean; existingRepository?: RepositoryResponse; suggestion?: string }> {
+        try {
+            const repositories = await this.getRepositoryHistory();
+
+            const fileName = file.name.toLowerCase().trim();
+
+            // Procura por arquivos com nome idêntico ou muito similar
+            const exactNameMatch = repositories.find(repo =>
+                repo.name?.toLowerCase().trim() === fileName
+            );
+
+            if (exactNameMatch) {
+                return {
+                    isDuplicate: true,
+                    existingRepository: exactNameMatch,
+                    suggestion: `Você já enviou um arquivo chamado "${file.name}" em ${this.formatRelativeDate(exactNameMatch.createdAt)}.`
+                };
+            }
+
+            const baseFileName = fileName.replace(/\.[^/.]+$/, '');
+            const similarNameMatch = repositories.find(repo => {
+                if (!repo.name) return false;
+                const repoBaseName = repo.name.toLowerCase().trim().replace(/\.[^/.]+$/, '');
+                return repoBaseName === baseFileName && repoBaseName.length > 3;
+            });
+
+            if (similarNameMatch) {
+                return {
+                    isDuplicate: true,
+                    existingRepository: similarNameMatch,
+                    suggestion: `Encontramos um arquivo similar "${similarNameMatch.name}" que você enviou em ${this.formatRelativeDate(similarNameMatch.createdAt)}.`
+                };
+            }
+
+            return { isDuplicate: false };
+
+        } catch (error) {
+            console.warn('[RepositoryHistoryService] Erro ao verificar duplicatas:', error);
+            return { isDuplicate: false };
+        }
     }
 }

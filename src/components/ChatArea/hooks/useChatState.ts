@@ -3,8 +3,10 @@ import { useState, useRef, useEffect } from 'react';
 import type { ChatMessageType } from '../types';
 import { createMessage } from '../utils';
 import { RepositoryService } from '@/services/repositoryService';
+import { RepositoryHistoryService } from '@/services/repositoryHistoryService';
 import { useRepositoryOptional } from '@/context/useRepositoryHooks';
-import { useRepositoryChatHistory } from '@/hooks/useRepositoryHistory';
+import { useRepositoryChatHistory, useInvalidateRepositoryHistory } from '@/hooks/useRepositoryHistory';
+import { useDuplicateFileCheck } from '@/hooks/useDuplicateFileCheck';
 
 
 export function useChatState() {
@@ -19,6 +21,8 @@ export function useChatState() {
   const hiddenInputRef = useRef<HTMLInputElement>(null);
   
   const repositoryContext = useRepositoryOptional();
+  const invalidateRepositoryHistory = useInvalidateRepositoryHistory();
+  const duplicateCheck = useDuplicateFileCheck();
 
   const { 
     data: chatHistory = [], 
@@ -28,11 +32,21 @@ export function useChatState() {
     repositoryId: repositoryContext?.selectedRepositoryId ?? null 
   });
 
+  // Função para criar um arquivo virtual quando um repositório é selecionado
+  const createVirtualFile = (repositoryName: string): File => {
+    const blob = new Blob(['Virtual file for repository analysis'], { type: 'text/plain' });
+    return new File([blob], repositoryName, { type: 'text/plain' });
+  };
+
   useEffect(() => {
     const selectedId = repositoryContext?.selectedRepositoryId;
     
     if (selectedId && chatHistory.length > 0 && currentRepositoryId !== selectedId) {
-      setCurrentFile(null);
+      // Criar arquivo virtual baseado no nome do repositório para permitir análises
+      const repositoryName = repositoryContext?.repositoryName ?? `repository-${selectedId}`;
+      const virtualFile = createVirtualFile(repositoryName);
+      
+      setCurrentFile(virtualFile);
       setCurrentRepositoryId(selectedId);
       setMessages(chatHistory);
       setChatStarted(true);
@@ -51,7 +65,11 @@ export function useChatState() {
         !isLoadingHistory && 
         !historyError && 
         currentRepositoryId !== selectedId) {
-      setCurrentFile(null);
+      // Criar arquivo virtual baseado no nome do repositório para permitir análises
+      const repositoryName = repositoryContext?.repositoryName ?? `repository-${selectedId}`;
+      const virtualFile = createVirtualFile(repositoryName);
+      
+      setCurrentFile(virtualFile);
       setCurrentRepositoryId(selectedId);
       setMessages([]);
       setChatStarted(true);
@@ -112,10 +130,21 @@ export function useChatState() {
     setMessages(prev => [...prev, newMessage]);
   };
 
- 
-  const processFile = async (file: File) => {
+  const processFile = async (file: File, skipDuplicateCheck: boolean = false) => {
     if (isSubmitting || isCreatingRepository) {
       return;
+    }
+
+    if (!skipDuplicateCheck) {
+      try {
+        const duplicateResult = await duplicateCheck.checkDuplicate(file);
+        
+        if (duplicateResult.isDuplicate) {
+          return;
+        }
+      } catch (error) {
+        console.warn('Erro na verificação de duplicatas, prosseguindo com upload:', error);
+      }
     }
     
     setChatStarted(false);
@@ -125,9 +154,6 @@ export function useChatState() {
     setCurrentRepositoryId(null);
     setIsCreatingRepository(true);
 
-    // **Correção**: Não resetar selectedRepositoryId aqui para evitar conflitos com useEffect
-    // O contexto será atualizado após o sucesso da criação do repositório
-
     try {
       const repository = await RepositoryService.createRepository(file);
       setCurrentRepositoryId(repository.id);
@@ -135,13 +161,16 @@ export function useChatState() {
       if (repositoryContext) {
         repositoryContext.setCurrentRepositoryId(repository.id);
         repositoryContext.setRepositoryName(repository.name ?? file.name);
-        // Definir o selectedRepositoryId apenas após sucesso
         repositoryContext.setSelectedRepositoryId(repository.id);
       }
       
-      // Após processar o arquivo com sucesso, mantém na tela de seleção de análise
-      // O chatStarted permanece false para mostrar as opções de análise
+      invalidateRepositoryHistory();
+      RepositoryHistoryService.onRepositoryCreated({
+        id: repository.id,
+        name: repository.name ?? file.name
+      });
       
+      duplicateCheck.resetCheck();
     } catch (error) {
       console.error('Erro ao criar repositório:', error);
       setCurrentFile(null);
@@ -167,10 +196,16 @@ export function useChatState() {
     setMessages([]);
     setUsedAnalyses(new Set());
     
+    duplicateCheck.resetCheck();
+    
     if (repositoryContext) {
       repositoryContext.setCurrentRepositoryId(null);
       repositoryContext.setRepositoryName('');
     }
+  };
+
+  const forceUpload = async (file: File) => {
+    await processFile(file, true);
   };
 
   const handleReplace = () => {
@@ -199,12 +234,25 @@ export function useChatState() {
     isLoadingHistory,
     historyError,
     
+    duplicateCheck: {
+      isChecking: duplicateCheck.isChecking,
+      hasDuplicate: duplicateCheck.hasDuplicate,
+      canProceed: duplicateCheck.canProceed,
+      isReady: duplicateCheck.isReady,
+      suggestion: duplicateCheck.duplicateResult?.suggestion,
+      existingRepository: duplicateCheck.duplicateResult?.existingRepository,
+      error: duplicateCheck.error,
+    },
+    
     // Actions
     addMessage,
     processFile,
+    forceUpload,
     resetAllStates,
     resetIncludingSidebar,
     handleReplace,
+    resetDuplicateCheck: duplicateCheck.resetCheck,
+    confirmDuplicateUpload: duplicateCheck.confirmDuplicateUpload,
     
     // Setters (for external control)
     setLoadingStep,

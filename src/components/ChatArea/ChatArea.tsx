@@ -5,12 +5,14 @@ import { AnalysisPrompt } from './AnalysisPrompt';
 import { ChatView } from './ChatView';
 import { LoadingSteps } from './LoadingSteps';
 import { AnalysisOptions } from './AnalysisOptions';
+import { DuplicateFileModal } from './DuplicateFileModal';
 import { useChatState } from './hooks/useChatState';
 import { useAnalysisHandler } from './hooks/useAnalysisHandler';
 
 export function ChatArea() {
   const {
     currentFile,
+    currentRepositoryId,
     loadingStep,
     isSubmitting,
     isCreatingRepository,
@@ -20,9 +22,12 @@ export function ChatArea() {
     hiddenInputRef,
     isLoadingHistory,
     historyError,
+    duplicateCheck,
     addMessage,
     processFile,
+    forceUpload,
     resetAllStates,
+    resetDuplicateCheck,
     handleReplace,
     setLoadingStep,
     setIsSubmitting,
@@ -30,7 +35,7 @@ export function ChatArea() {
     setUsedAnalyses,
   } = useChatState();
 
-  const { handleAnalysisRequest } = useAnalysisHandler();
+  const { handleAnalysisRequest, retryState } = useAnalysisHandler();
 
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -43,6 +48,7 @@ export function ChatArea() {
   const onAnalysisRequest = async (promptKey: string) => {
     await handleAnalysisRequest(promptKey, {
       currentFile,
+      currentRepositoryId,
       usedAnalyses,
       isSubmitting,
       setIsSubmitting,
@@ -56,7 +62,15 @@ export function ChatArea() {
 
   const renderAnalysisArea = () => {
     if (isSubmitting || isCreatingRepository) {
-      return <LoadingSteps currentStep={loadingStep} isWaitingForResponse={loadingStep === 3} />;
+      return (
+        <LoadingSteps 
+          currentStep={loadingStep} 
+          isWaitingForResponse={loadingStep === 3}
+          isRetrying={retryState.isRetrying}
+          retryCount={retryState.count}
+          maxRetries={retryState.maxRetries}
+        />
+      );
     }
     
     return (
@@ -85,8 +99,6 @@ export function ChatArea() {
         accept=".pdf,.doc,.docx,.txt,.rtf,.odt"
       />
 
-      {/* **Indicador de Carregamento de Histórico**: Feedback visual quando histórico está sendo carregado */}
-      {/* **Benefício**: Usuário sabe que sistema está carregando dados do repositório selecionado */}
       {isLoadingHistory && (
         <div className="flex flex-col items-center justify-center space-y-4 relative">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-cyan-600"></div>
@@ -140,6 +152,21 @@ export function ChatArea() {
           )}
         </>
       )}
+
+      <DuplicateFileModal
+        isOpen={duplicateCheck.hasDuplicate}
+        suggestion={duplicateCheck.suggestion ?? ''}
+        onConfirm={() => {
+          if (currentFile) {
+            forceUpload(currentFile);
+          }
+        }}
+        onCancel={() => {
+          resetDuplicateCheck();
+          resetAllStates();
+        }}
+        isLoading={isCreatingRepository}
+      />
     </div>
   );
 }

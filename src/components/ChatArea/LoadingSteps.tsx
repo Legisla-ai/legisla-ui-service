@@ -4,11 +4,17 @@ import React from 'react';
 interface LoadingStepsProps {
   currentStep: number;
   isWaitingForResponse?: boolean;
+  isRetrying?: boolean;
+  retryCount?: number;
+  maxRetries?: number;
 }
 
 export const LoadingSteps: React.FC<LoadingStepsProps> = ({ 
   currentStep, 
-  isWaitingForResponse = false 
+  isWaitingForResponse = false,
+  isRetrying = false,
+  retryCount = 0,
+  maxRetries = 3
 }) => {
   const steps = [
     { id: 1, title: 'Lendo documento', description: 'Extraindo e processando conteúdo' },
@@ -113,6 +119,18 @@ export const LoadingSteps: React.FC<LoadingStepsProps> = ({
             );
           })}
         </div>
+        
+        {/* Retry Information */}
+        {isRetrying && retryCount > 0 && (
+          <div className="mt-8 text-center">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-amber-50 border border-amber-200 rounded-lg">
+              <div className="w-4 h-4 border-2 border-amber-400 border-t-transparent rounded-full animate-spin"></div>
+              <span className="text-sm text-amber-700 font-medium">
+                Tentativa {retryCount} de {maxRetries}
+              </span>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

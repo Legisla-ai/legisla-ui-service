@@ -23,6 +23,14 @@ export const AnalysisOptions: React.FC<AnalysisOptionsProps> = ({
     return 'border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50 cursor-pointer';
   };
 
+  const handleOptionClick = (action: string, isDisabled: boolean) => {
+    if (isDisabled) {
+      return;
+    }
+
+    onAnalysisRequest(action);
+  };
+
   return (
     <div className="w-full bg-white rounded-md border border-gray-100 p-4">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
@@ -33,7 +41,7 @@ export const AnalysisOptions: React.FC<AnalysisOptionsProps> = ({
           return (
             <button
               key={option.action}
-              onClick={() => !isDisabled && onAnalysisRequest(option.action)}
+              onClick={() => handleOptionClick(option.action, isDisabled)}
               disabled={isDisabled}
               className={`
                 relative p-4 rounded-lg border transition-all duration-200 text-left
