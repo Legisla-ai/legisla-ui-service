@@ -35,7 +35,7 @@ export function ChatArea() {
     setUsedAnalyses,
   } = useChatState();
 
-  const { handleAnalysisRequest, retryState } = useAnalysisHandler();
+  const { handleAnalysisRequest } = useAnalysisHandler();
 
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -66,9 +66,6 @@ export function ChatArea() {
         <LoadingSteps 
           currentStep={loadingStep} 
           isWaitingForResponse={loadingStep === 3}
-          isRetrying={retryState.isRetrying}
-          retryCount={retryState.count}
-          maxRetries={retryState.maxRetries}
         />
       );
     }
@@ -80,6 +77,45 @@ export function ChatArea() {
         isSubmitting={isSubmitting || isCreatingRepository}
       />
     );
+  };
+
+  const renderInitialInterface = () => {
+    // Cenário 1: Nenhum arquivo ou repositório - mostrar upload
+    if (!currentFile && !currentRepositoryId) {
+      return (
+        <FileUploadArea 
+          onFileSelect={processFile}
+          isSubmitting={isSubmitting || isCreatingRepository}
+        />
+      );
+    }
+
+    // Cenário 2: Arquivo selecionado - mostrar card do arquivo + opções
+    if (currentFile) {
+      return (
+        <>
+          <FileDisplayCard
+            file={currentFile}
+            onReplace={handleReplace}
+            onRemove={resetAllStates}
+          />
+          <AnalysisPrompt fileName={currentFile.name}>
+            {renderAnalysisArea()}
+          </AnalysisPrompt>
+        </>
+      );
+    }
+
+    // Cenário 3: Repositório sem arquivo - só mostrar opções de análise
+    if (currentRepositoryId) {
+      return (
+        <AnalysisPrompt fileName={`Repositório ${currentRepositoryId}`}>
+          {renderAnalysisArea()}
+        </AnalysisPrompt>
+      );
+    }
+
+    return null;
   };
 
   return (
@@ -123,24 +159,7 @@ export function ChatArea() {
           {!chatStarted ? (
             // Initial screen - file upload and analysis selection
             <div className="flex flex-col items-center transition-all duration-700 ease-out w-full max-w-5xl px-8 relative">
-              {!currentFile ? (
-                <FileUploadArea 
-                  onFileSelect={processFile}
-                  isSubmitting={isSubmitting || isCreatingRepository}
-                />
-              ) : (
-                <>
-                  <FileDisplayCard
-                    file={currentFile}
-                    onReplace={handleReplace}
-                    onRemove={resetAllStates}
-                  />
-
-                  <AnalysisPrompt fileName={currentFile.name}>
-                    {renderAnalysisArea()}
-                  </AnalysisPrompt>
-                </>
-              )}
+              {renderInitialInterface()}
             </div>
           ) : (
             <ChatView

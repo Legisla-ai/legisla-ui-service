@@ -9,25 +9,6 @@ interface DuplicateFileModalProps {
   readonly isLoading?: boolean;
 }
 
-/**
- * Modal user-friendly para confirmar upload de arquivo duplicado
- * 
- * **Melhorias User-Friendly Implementadas:**
- * - Título informativo: "Arquivo Similar Encontrado" 
- * - Ícone amigável: Documento com checkmark ao invés de warning
- * - Linguagem clara: Texto direto explicando a situação
- * - Botões específicos: "Enviar Mesmo Assim" e "Cancelar"
- * - Visual convidativo: Azul suave para informação, sem tons alarmantes
- * - Suporte completo a teclado: ESC/Enter + foco automático
- * - Prevenção de scroll e click-outside para fechar
- * 
- * **Benefícios UX:**
- * - Linguagem menos técnica, mais conversacional
- * - Não trata como erro, mas como informação útil
- * - Visual amigável que não assusta o usuário
- * - Ações claras sobre o que vai acontecer
- * - Experiência fluida e não intrusiva
- */
 export function DuplicateFileModal({
   isOpen,
   suggestion,
@@ -35,7 +16,6 @@ export function DuplicateFileModal({
   onCancel,
   isLoading = false,
 }: DuplicateFileModalProps) {
-  // **Melhor acessibilidade**: Auto-foco no botão principal quando modal abre
   useEffect(() => {
     if (isOpen && !isLoading) {
       // Foca no botão de confirmar após um pequeno delay para permitir animação
@@ -48,8 +28,6 @@ export function DuplicateFileModal({
     }
   }, [isOpen, isLoading]);
 
-  // **Suporte a eventos de teclado**: ESC cancela globalmente
-  // **Benefício**: Melhor acessibilidade e experiência para usuários avançados
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (!isOpen || isLoading) return;
@@ -62,7 +40,6 @@ export function DuplicateFileModal({
 
     if (isOpen) {
       document.addEventListener('keydown', handleKeyDown);
-      // **Previne scroll da página**: Melhora foco na modal
       document.body.style.overflow = 'hidden';
     }
 
@@ -82,14 +59,12 @@ export function DuplicateFileModal({
         backdropFilter: 'blur(4px)',
       }}
     >
-      {/* **Modal acessível**: Usar dialog nativo para melhor acessibilidade */}
       <dialog 
         open
         className="bg-white rounded-xl shadow-2xl max-w-lg w-full mx-4 p-6 border border-gray-200 animate-in slide-in-from-bottom-4 duration-300 m-0"
         aria-labelledby="modal-title"
         aria-describedby="modal-description"
       >
-        {/* **Header mais amigável**: Ícone de documento com visual convidativo */}
         <div className="flex items-center gap-4 mb-6">
           <div className="flex-shrink-0 w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center">
             <svg
@@ -117,7 +92,6 @@ export function DuplicateFileModal({
           </div>
         </div>
 
-        {/* **Content mais claro**: Explicação direta e amigável */}
         <div className="mb-6" id="modal-description">
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
             <p className="text-gray-800 text-sm leading-relaxed">{suggestion}</p>
@@ -128,7 +102,6 @@ export function DuplicateFileModal({
           </p>
         </div>
 
-        {/* **Actions mais claras**: Botões com linguagem específica */}
         <div className="flex gap-3 justify-end">
           <button
             onClick={onCancel}

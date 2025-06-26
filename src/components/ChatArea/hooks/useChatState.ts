@@ -32,21 +32,14 @@ export function useChatState() {
     repositoryId: repositoryContext?.selectedRepositoryId ?? null 
   });
 
-  // Função para criar um arquivo virtual quando um repositório é selecionado
-  const createVirtualFile = (repositoryName: string): File => {
-    const blob = new Blob(['Virtual file for repository analysis'], { type: 'text/plain' });
-    return new File([blob], repositoryName, { type: 'text/plain' });
-  };
-
   useEffect(() => {
     const selectedId = repositoryContext?.selectedRepositoryId;
     
     if (selectedId && chatHistory.length > 0 && currentRepositoryId !== selectedId) {
-      // Criar arquivo virtual baseado no nome do repositório para permitir análises
-      const repositoryName = repositoryContext?.repositoryName ?? `repository-${selectedId}`;
-      const virtualFile = createVirtualFile(repositoryName);
-      
-      setCurrentFile(virtualFile);
+      // **Melhoria**: Não precisamos mais criar arquivo virtual
+      // A análise agora usa diretamente o repositoryId via API GET
+      // **Benefícios**: Menos overhead, melhor performance, código mais limpo
+      setCurrentFile(null); // Removemos arquivo virtual desnecessário
       setCurrentRepositoryId(selectedId);
       setMessages(chatHistory);
       setChatStarted(true);
@@ -65,11 +58,10 @@ export function useChatState() {
         !isLoadingHistory && 
         !historyError && 
         currentRepositoryId !== selectedId) {
-      // Criar arquivo virtual baseado no nome do repositório para permitir análises
-      const repositoryName = repositoryContext?.repositoryName ?? `repository-${selectedId}`;
-      const virtualFile = createVirtualFile(repositoryName);
-      
-      setCurrentFile(virtualFile);
+      // **Melhoria**: Não precisamos mais criar arquivo virtual
+      // A análise agora usa diretamente o repositoryId via API GET
+      // **Benefícios**: Menos overhead, melhor performance, código mais limpo
+      setCurrentFile(null); // Removemos arquivo virtual desnecessário
       setCurrentRepositoryId(selectedId);
       setMessages([]);
       setChatStarted(true);

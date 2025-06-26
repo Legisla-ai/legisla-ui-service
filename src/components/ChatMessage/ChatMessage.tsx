@@ -42,7 +42,6 @@ export function ChatMessage({ message, isUser = false }: ChatMessageProps) {
   };
 
   const formatMessage = (content: any) => {
-    // Garantir que temos uma string para processar
     let text: string;
     
     if (typeof content === 'string') {

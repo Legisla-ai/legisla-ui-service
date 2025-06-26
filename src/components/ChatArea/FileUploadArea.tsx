@@ -9,7 +9,7 @@ interface FileUploadAreaProps {
 }
 
 export function FileUploadArea({ onFileSelect, isSubmitting }: FileUploadAreaProps) {
-  // Configuração para o componente Attachments do Ant Design
+  // Configuração pro componente Attachments do Ant Design
   const attachmentProps: AttachmentsProps = {
     beforeUpload: () => false,
     items: [],

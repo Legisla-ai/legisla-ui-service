@@ -1,6 +1,6 @@
 // src/components/ChatArea/hooks/useAnalysisHandler.ts
 import { useState, useCallback } from 'react';
-import { analyzeDocument } from '@/services/documentAnalysisService';
+import { analyzeDocument, analyzeRepositoryDocument } from '@/services/documentAnalysisService';
 import { getActionTitle } from '../utils';
 
 interface RetryState {
@@ -68,30 +68,6 @@ export function useAnalysisHandler() {
     return { step2Timer, step3Timer };
   }, []);
 
-  // Função para lidar com retry
-  const handleRetry = useCallback((
-    error: unknown,
-    retryState: RetryState,
-    isRetry: boolean,
-    promptKey: string,
-    params: any,
-    addMessage: (content: string, isUser?: boolean) => void,
-    handleAnalysisRequest: any
-  ) => {
-    const errorMessage = error instanceof Error ? error.message : 'Erro desconhecido';
-    
-    if (retryState.count < retryState.maxRetries && !isRetry) {
-      setRetryState(prev => ({ ...prev, count: prev.count + 1 }));
-      setTimeout(() => {
-        handleAnalysisRequest(promptKey, params, true);
-      }, 3000);
-      addMessage(`Erro temporário: ${errorMessage}. Tentando novamente automaticamente...`, false);
-    } else {
-      addMessage(`Erro: ${errorMessage}. Tente novamente.`, false);
-      resetRetryState();
-    }
-  }, [resetRetryState]);
-
   const handleAnalysisRequest = async (
     promptKey: string,
     params: {
@@ -143,20 +119,35 @@ export function useAnalysisHandler() {
       addMessage(actionTitle, true);
     } else {
       setRetryState(prev => ({ ...prev, isRetrying: true }));
-      addMessage(`🔄 Tentativa ${retryState.count + 1} de ${retryState.maxRetries}...`, false);
+      // **Melhoria UX**: Removida mensagem de retry que polui a interface
+      // O LoadingSteps já indica visualmente que está reprocessando
     }
 
     // Configurar timers de loading
     const { step2Timer, step3Timer } = setupLoadingTimers(setLoadingStep);
 
     try {
-      // Criar arquivo para análise
-      const fileToAnalyze = currentFile ?? new File([''], `repository-${currentRepositoryId}`, { type: 'text/plain' });
+      let response;
       
-      const response = await analyzeDocument({
-        file: fileToAnalyze,
-        promptType: promptKey,
-      });
+      // **Decisão Inteligente da API**: 
+      // - Se temos repositoryId: usa API GET (documento já existe na base)
+      // - Se temos arquivo: usa API POST (novo upload)
+      // **Benefícios**: Evita re-upload, melhor performance, UX mais fluida
+      if (currentRepositoryId && !currentFile) {
+        // Cenário: documento já existe no repositório
+        response = await analyzeRepositoryDocument({
+          repositoryId: currentRepositoryId,
+          promptType: promptKey,
+        });
+      } else if (currentFile) {
+        // Cenário: novo arquivo sendo analisado
+        response = await analyzeDocument({
+          file: currentFile,
+          promptType: promptKey,
+        });
+      } else {
+        throw new Error('Contexto de análise inválido: arquivo ou repositório necessário');
+      }
       
       // Extrair e adicionar conteúdo da resposta
       const responseContent = extractResponseContent(response);
@@ -169,7 +160,20 @@ export function useAnalysisHandler() {
         setChatStarted(true);
       }
     } catch (error) {
-      handleRetry(error, retryState, isRetry, promptKey, params, addMessage, handleAnalysisRequest);
+      // **Melhoria UX**: Tratamento de erro simplificado e direto
+      console.error('Erro na análise:', error);
+      
+      if (retryState.count < retryState.maxRetries && !isRetry) {
+        // Tentativa automática silenciosa
+        setRetryState(prev => ({ ...prev, count: prev.count + 1 }));
+        setTimeout(() => {
+          handleAnalysisRequest(promptKey, params, true);
+        }, 3000);
+      } else {
+        // Erro final com mensagem limpa
+        addMessage('Ocorreu um erro ao processar sua solicitação. Tente novamente.', false);
+        resetRetryState();
+      }
     } finally {
       clearTimeout(step2Timer);
       clearTimeout(step3Timer);
