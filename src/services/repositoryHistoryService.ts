@@ -28,12 +28,14 @@ export class RepositoryHistoryService {
     }
 
     static transformChatHistoryToMessages(chatHistory: RepositoryChatHistoryResponse[]): ChatMessageType[] {
-        return chatHistory.map(item => ({
-            id: `${item.repositoryId}-${item.createdAt}-${Math.random().toString(36).substring(2, 11)}`,
-            content: item.message,
-            isUser: item.sender.toLowerCase() === 'user',
-            timestamp: new Date(item.createdAt)
-        }));
+        return chatHistory
+            .map(item => ({
+                id: `${item.repositoryId}-${item.createdAt}-${Math.random().toString(36).substring(2, 11)}`,
+                content: item.message,
+                isUser: item.sender.toLowerCase() === 'user',
+                timestamp: new Date(item.createdAt)
+            }))
+            .sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime()); // Ordena por timestamp crescente
     }
 
     private static getFileType(name: string): 'chat' | 'pdf' | 'doc' | 'txt' {

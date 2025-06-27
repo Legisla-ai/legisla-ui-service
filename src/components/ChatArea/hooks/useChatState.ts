@@ -1,4 +1,3 @@
-// src/components/ChatArea/hooks/useChatState.ts
 import { useState, useRef, useEffect } from 'react';
 import type { ChatMessageType } from '../types';
 import { createMessage } from '../utils';
@@ -35,45 +34,27 @@ export function useChatState() {
   useEffect(() => {
     const selectedId = repositoryContext?.selectedRepositoryId;
     
-    if (selectedId && chatHistory.length > 0 && currentRepositoryId !== selectedId) {
-      // **Melhoria**: Não precisamos mais criar arquivo virtual
-      // A análise agora usa diretamente o repositoryId via API GET
-      // **Benefícios**: Menos overhead, melhor performance, código mais limpo
-      setCurrentFile(null); // Removemos arquivo virtual desnecessário
+    if (selectedId && !isLoadingHistory && currentRepositoryId !== selectedId) {
+      setCurrentFile(null);
       setCurrentRepositoryId(selectedId);
-      setMessages(chatHistory);
-      setChatStarted(true);
       setUsedAnalyses(new Set());
       setLoadingStep(1);
       setIsSubmitting(false);
       setIsCreatingRepository(false);
+      
+      if (chatHistory.length > 0) {
+        setMessages(chatHistory);
+        setChatStarted(true);
+      } else {
+        setMessages([]);
+        setChatStarted(true);
+      }
     }
-  }, [chatHistory, repositoryContext?.selectedRepositoryId, currentRepositoryId]);
+  }, [chatHistory, repositoryContext?.selectedRepositoryId, currentRepositoryId, isLoadingHistory]);
 
   useEffect(() => {
     const selectedId = repositoryContext?.selectedRepositoryId;
     
-    if (selectedId && 
-        chatHistory.length === 0 && 
-        !isLoadingHistory && 
-        !historyError && 
-        currentRepositoryId !== selectedId) {
-      // **Melhoria**: Não precisamos mais criar arquivo virtual
-      // A análise agora usa diretamente o repositoryId via API GET
-      // **Benefícios**: Menos overhead, melhor performance, código mais limpo
-      setCurrentFile(null); // Removemos arquivo virtual desnecessário
-      setCurrentRepositoryId(selectedId);
-      setMessages([]);
-      setChatStarted(true);
-      setUsedAnalyses(new Set());
-    }
-  }, [repositoryContext?.selectedRepositoryId, chatHistory.length, isLoadingHistory, historyError, currentRepositoryId]);
-
-  useEffect(() => {
-    const selectedId = repositoryContext?.selectedRepositoryId;
-    
-    // Só reseta se explicitamente o selectedRepositoryId for null 
-    // E tivermos um repositório atual (evita reset durante upload de novo arquivo)
     if (selectedId === null && currentRepositoryId !== null && !isCreatingRepository) {
       setCurrentFile(null);
       setCurrentRepositoryId(null);
@@ -92,12 +73,10 @@ export function useChatState() {
     const selectedId = repositoryContext.selectedRepositoryId;
     
     if (selectedId && selectedId === currentRepositoryId) {
-      // Atualizar contexto global com dados do repositório selecionado
       if (repositoryContext.currentRepositoryId !== selectedId) {
         repositoryContext.setCurrentRepositoryId(selectedId);
       }
     } else if (selectedId === null && currentRepositoryId === null) {
-      // Limpar contexto quando necessário
       if (repositoryContext.currentRepositoryId !== null) {
         repositoryContext.setCurrentRepositoryId(null);
       }
@@ -213,7 +192,6 @@ export function useChatState() {
   };
 
   return {
-    // States
     currentFile,
     currentRepositoryId,
     loadingStep,
@@ -236,7 +214,6 @@ export function useChatState() {
       error: duplicateCheck.error,
     },
     
-    // Actions
     addMessage,
     processFile,
     forceUpload,
@@ -246,7 +223,6 @@ export function useChatState() {
     resetDuplicateCheck: duplicateCheck.resetCheck,
     confirmDuplicateUpload: duplicateCheck.confirmDuplicateUpload,
     
-    // Setters (for external control)
     setLoadingStep,
     setIsSubmitting,
     setChatStarted,
