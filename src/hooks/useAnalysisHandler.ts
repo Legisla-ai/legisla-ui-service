@@ -1,7 +1,7 @@
-// src/components/ChatArea/hooks/useAnalysisHandler.ts
+// src/hooks/useAnalysisHandler.ts
 import { useState, useCallback } from 'react';
 import { analyzeDocument, analyzeRepositoryDocument } from '@/services/documentAnalysisService';
-import { getActionTitle } from '../utils';
+import { getActionTitle } from '@/components/ChatArea/utils';
 
 interface RetryState {
   count: number;

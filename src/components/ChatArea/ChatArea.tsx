@@ -6,8 +6,8 @@ import { ChatView } from './ChatView';
 import { LoadingSteps } from './LoadingSteps';
 import { AnalysisOptions } from './AnalysisOptions';
 import { DuplicateFileModal } from './DuplicateFileModal';
-import { useChatState } from './hooks/useChatState';
-import { useAnalysisHandler } from './hooks/useAnalysisHandler';
+import { useChatState } from '@/hooks/useChatState';
+import { useAnalysisHandler } from '@/hooks/useAnalysisHandler';
 
 export function ChatArea() {
   const {

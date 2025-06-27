@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
-import type { ChatMessageType } from '../types';
-import { createMessage } from '../utils';
+import type { ChatMessageType } from '@/components/ChatArea/types';
+import { createMessage } from '@/components/ChatArea/utils';
 import { RepositoryService } from '@/services/repositoryService';
 import { RepositoryHistoryService } from '@/services/repositoryHistoryService';
 import { useRepositoryOptional } from '@/context/useRepositoryHooks';
