@@ -66,8 +66,8 @@ export default function JurisprudenceSearch() {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6 animate-fadeInUp">
             {results.map((item) => (
-              <div 
-                key={item.id} 
+              <div
+                key={item.id}
                 className="relative p-6 bg-white transition-all duration-300 ease-in-out flex flex-col gap-4 h-full backdrop-blur-10 shadow-legisla-sm hover:shadow-legisla-lg group"
                 style={{
                   borderRadius: '12px',
@@ -76,11 +76,13 @@ export default function JurisprudenceSearch() {
               >
                 {/* Ícone e título */}
                 <div className="flex items-start gap-3">
-                  <div className="text-cyan-700 text-2xl p-3 flex-shrink-0"
-                       style={{ 
-                         background: 'linear-gradient(135deg, rgba(34, 211, 238, 0.1), rgba(2, 100, 144, 0.1))',
-                         borderRadius: '12px'
-                       }}>
+                  <div
+                    className="text-cyan-700 text-2xl p-3 flex-shrink-0"
+                    style={{
+                      background: 'linear-gradient(135deg, rgba(34, 211, 238, 0.1), rgba(2, 100, 144, 0.1))',
+                      borderRadius: '12px',
+                    }}
+                  >
                     <Scale size={24} />
                   </div>
                   <div className="flex-1 min-w-0">
@@ -109,8 +111,8 @@ export default function JurisprudenceSearch() {
                 <p className="text-base mb-4 text-gray-700 line-clamp-4 flex-grow">{item.summary}</p>
 
                 {/* Button */}
-                <AntdButton 
-                  onClick={() => openModal(item)} 
+                <AntdButton
+                  onClick={() => openModal(item)}
                   type="primary"
                   className="w-full !text-white text-base font-semibold !border-none py-4 px-6 transition-all duration-300 ease-in-out mt-auto"
                   style={{
@@ -131,11 +133,13 @@ export default function JurisprudenceSearch() {
         <Modal
           title={
             <div className="flex items-center gap-3 pb-4 border-b border-gray-200">
-              <div className="text-cyan-700 p-2"
-                   style={{ 
-                     background: 'linear-gradient(135deg, rgba(34, 211, 238, 0.1), rgba(2, 100, 144, 0.1))',
-                     borderRadius: '8px'
-                   }}>
+              <div
+                className="text-cyan-700 p-2"
+                style={{
+                  background: 'linear-gradient(135deg, rgba(34, 211, 238, 0.1), rgba(2, 100, 144, 0.1))',
+                  borderRadius: '8px',
+                }}
+              >
                 <Scale size={20} />
               </div>
               <div className="flex-1">
@@ -155,8 +159,8 @@ export default function JurisprudenceSearch() {
           width={800}
           onCancel={() => setModalVisible(false)}
           footer={[
-            <AntdButton 
-              key="close" 
+            <AntdButton
+              key="close"
               onClick={() => setModalVisible(false)}
               type="primary"
               style={{
@@ -180,7 +184,7 @@ export default function JurisprudenceSearch() {
                   <p className="text-gray-700 whitespace-pre-line leading-relaxed">{selectedItem.summary}</p>
                 </div>
               </div>
-              
+
               <div>
                 <h4 className="font-semibold mb-3 text-gray-800 text-lg">Texto Completo:</h4>
                 <div className="p-4 bg-gray-50 rounded-lg max-h-96 overflow-y-auto">

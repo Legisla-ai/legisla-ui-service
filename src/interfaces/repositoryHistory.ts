@@ -1,4 +1,3 @@
-
 export interface RepositoryResponse {
   readonly id: number;
   readonly documentId: number;
@@ -48,11 +47,11 @@ export enum InteractionType {
   ANALYSIS_REQUEST = 'ANALYSIS_REQUEST',
   ANALYSIS_COMPLETE = 'ANALYSIS_COMPLETE',
   CHAT_MESSAGE = 'CHAT_MESSAGE',
-  ERROR = 'ERROR'
+  ERROR = 'ERROR',
 }
 
 export enum SenderType {
   USER = 'USER',
   AI = 'AI',
-  SYSTEM = 'SYSTEM'
+  SYSTEM = 'SYSTEM',
 }

@@ -62,16 +62,11 @@ export function ChatArea() {
 
   const renderAnalysisArea = () => {
     if (isSubmitting || isCreatingRepository) {
-      return (
-        <LoadingSteps 
-          currentStep={loadingStep} 
-          isWaitingForResponse={loadingStep === 3}
-        />
-      );
+      return <LoadingSteps currentStep={loadingStep} isWaitingForResponse={loadingStep === 3} />;
     }
-    
+
     return (
-      <AnalysisOptions 
+      <AnalysisOptions
         onAnalysisRequest={onAnalysisRequest}
         usedAnalyses={usedAnalyses}
         isSubmitting={isSubmitting || isCreatingRepository}
@@ -82,37 +77,22 @@ export function ChatArea() {
   const renderInitialInterface = () => {
     // Cenário 1: Nenhum arquivo ou repositório - mostrar upload
     if (!currentFile && !currentRepositoryId) {
-      return (
-        <FileUploadArea 
-          onFileSelect={processFile}
-          isSubmitting={isSubmitting || isCreatingRepository}
-        />
-      );
+      return <FileUploadArea onFileSelect={processFile} isSubmitting={isSubmitting || isCreatingRepository} />;
     }
 
     // Cenário 2: Arquivo selecionado - mostrar card do arquivo + opções
     if (currentFile) {
       return (
         <>
-          <FileDisplayCard
-            file={currentFile}
-            onReplace={handleReplace}
-            onRemove={resetAllStates}
-          />
-          <AnalysisPrompt fileName={currentFile.name}>
-            {renderAnalysisArea()}
-          </AnalysisPrompt>
+          <FileDisplayCard file={currentFile} onReplace={handleReplace} onRemove={resetAllStates} />
+          <AnalysisPrompt fileName={currentFile.name}>{renderAnalysisArea()}</AnalysisPrompt>
         </>
       );
     }
 
     // Cenário 3: Repositório sem arquivo - só mostrar opções de análise
     if (currentRepositoryId) {
-      return (
-        <AnalysisPrompt fileName={`Repositório ${currentRepositoryId}`}>
-          {renderAnalysisArea()}
-        </AnalysisPrompt>
-      );
+      return <AnalysisPrompt fileName={`Repositório ${currentRepositoryId}`}>{renderAnalysisArea()}</AnalysisPrompt>;
     }
 
     return null;
@@ -146,9 +126,7 @@ export function ChatArea() {
       {historyError && !isLoadingHistory && (
         <div className="flex flex-col items-center justify-center space-y-4 relative">
           <div className="bg-red-50 border border-red-200 rounded-lg p-4 max-w-md">
-            <p className="text-red-700 text-sm text-center">
-              Erro ao carregar histórico: {historyError.message}
-            </p>
+            <p className="text-red-700 text-sm text-center">Erro ao carregar histórico: {historyError.message}</p>
           </div>
         </div>
       )}
@@ -189,5 +167,3 @@ export function ChatArea() {
     </div>
   );
 }
-
-

@@ -1,7 +1,7 @@
 // src/components/ChatArea/FileDisplayCard.tsx
 import { Upload } from 'lucide-react';
 import { FileInfo } from './FileInfo';
-import { getFileSize } from './utils';
+import { getFileSize } from '@/utils/chat';
 
 interface FileDisplayCardProps {
   readonly file: File;
@@ -13,10 +13,7 @@ export function FileDisplayCard({ file, onReplace, onRemove }: FileDisplayCardPr
   return (
     <div className="w-full max-w-4xl mx-auto mb-8 bg-white rounded-lg border border-gray-200 shadow-sm p-6 relative">
       <div className="flex items-center justify-between">
-        <FileInfo 
-          fileName={file.name}
-          fileSize={getFileSize(file)}
-        />
+        <FileInfo fileName={file.name} fileSize={getFileSize(file)} />
         <div className="flex items-center gap-2 ml-4">
           <button
             onClick={onReplace}

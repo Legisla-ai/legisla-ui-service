@@ -28,10 +28,7 @@ export function FileUploadArea({ onFileSelect, isSubmitting }: FileUploadAreaPro
     <div className="w-full max-w-4xl px-6 relative z-10">
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8 relative overflow-hidden">
         <div className="relative z-10">
-          <Attachments 
-            {...attachmentProps} 
-            placeholder={getPlaceholderFn(defaultInlinePlaceholder)} 
-          />
+          <Attachments {...attachmentProps} placeholder={getPlaceholderFn(defaultInlinePlaceholder)} />
         </div>
       </div>
     </div>

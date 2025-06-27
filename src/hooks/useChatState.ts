@@ -1,12 +1,11 @@
 import { useState, useRef, useEffect } from 'react';
-import type { ChatMessageType } from '@/components/ChatArea/types';
-import { createMessage } from '@/components/ChatArea/utils';
+import type { ChatMessageType } from '@/interfaces/chat';
+import { createMessage } from '@/utils/chat';
 import { RepositoryService } from '@/services/repositoryService';
 import { RepositoryHistoryService } from '@/services/repositoryHistoryService';
-import { useRepositoryOptional } from '@/context/useRepositoryHooks';
+import { useRepositoryOptional } from '@/hooks/useRepositoryHooks';
 import { useRepositoryChatHistory, useInvalidateRepositoryHistory } from '@/hooks/useRepositoryHistory';
 import { useDuplicateFileCheck } from '@/hooks/useDuplicateFileCheck';
-
 
 export function useChatState() {
   const [currentFile, setCurrentFile] = useState<File | null>(null);
@@ -18,22 +17,22 @@ export function useChatState() {
   const [messages, setMessages] = useState<ChatMessageType[]>([]);
   const [usedAnalyses, setUsedAnalyses] = useState<Set<string>>(new Set());
   const hiddenInputRef = useRef<HTMLInputElement>(null);
-  
+
   const repositoryContext = useRepositoryOptional();
   const invalidateRepositoryHistory = useInvalidateRepositoryHistory();
   const duplicateCheck = useDuplicateFileCheck();
 
-  const { 
-    data: chatHistory = [], 
+  const {
+    data: chatHistory = [],
     isLoading: isLoadingHistory,
-    error: historyError 
-  } = useRepositoryChatHistory({ 
-    repositoryId: repositoryContext?.selectedRepositoryId ?? null 
+    error: historyError,
+  } = useRepositoryChatHistory({
+    repositoryId: repositoryContext?.selectedRepositoryId ?? null,
   });
 
   useEffect(() => {
     const selectedId = repositoryContext?.selectedRepositoryId;
-    
+
     if (selectedId && !isLoadingHistory && currentRepositoryId !== selectedId) {
       setCurrentFile(null);
       setCurrentRepositoryId(selectedId);
@@ -41,7 +40,7 @@ export function useChatState() {
       setLoadingStep(1);
       setIsSubmitting(false);
       setIsCreatingRepository(false);
-      
+
       if (chatHistory.length > 0) {
         setMessages(chatHistory);
         setChatStarted(true);
@@ -54,7 +53,7 @@ export function useChatState() {
 
   useEffect(() => {
     const selectedId = repositoryContext?.selectedRepositoryId;
-    
+
     if (selectedId === null && currentRepositoryId !== null && !isCreatingRepository) {
       setCurrentFile(null);
       setCurrentRepositoryId(null);
@@ -69,9 +68,9 @@ export function useChatState() {
 
   useEffect(() => {
     if (!repositoryContext) return;
-    
+
     const selectedId = repositoryContext.selectedRepositoryId;
-    
+
     if (selectedId && selectedId === currentRepositoryId) {
       if (repositoryContext.currentRepositoryId !== selectedId) {
         repositoryContext.setCurrentRepositoryId(selectedId);
@@ -84,21 +83,18 @@ export function useChatState() {
         repositoryContext.setRepositoryName('');
       }
     }
-  }, [repositoryContext?.selectedRepositoryId, currentRepositoryId]);
+  }, [repositoryContext?.selectedRepositoryId, currentRepositoryId, repositoryContext]);
 
   useEffect(() => {
     if (historyError) {
-      const errorMessage = createMessage(
-        'Erro ao carregar histórico do chat. Tentando novamente...',
-        false
-      );
-      setMessages(prev => [...prev, errorMessage]);
+      const errorMessage = createMessage('Erro ao carregar histórico do chat. Tentando novamente...', false);
+      setMessages((prev) => [...prev, errorMessage]);
     }
   }, [historyError]);
 
   const addMessage = (content: string, isUser: boolean = false) => {
     const newMessage = createMessage(content, isUser);
-    setMessages(prev => [...prev, newMessage]);
+    setMessages((prev) => [...prev, newMessage]);
   };
 
   const processFile = async (file: File, skipDuplicateCheck: boolean = false) => {
@@ -109,7 +105,7 @@ export function useChatState() {
     if (!skipDuplicateCheck) {
       try {
         const duplicateResult = await duplicateCheck.checkDuplicate(file);
-        
+
         if (duplicateResult.isDuplicate) {
           return;
         }
@@ -117,7 +113,7 @@ export function useChatState() {
         console.warn('Erro na verificação de duplicatas, prosseguindo com upload:', error);
       }
     }
-    
+
     setChatStarted(false);
     setMessages([]);
     setUsedAnalyses(new Set());
@@ -134,23 +130,23 @@ export function useChatState() {
         repositoryContext.setRepositoryName(repository.name ?? file.name);
         repositoryContext.setSelectedRepositoryId(repository.id);
       }
-      
+
       invalidateRepositoryHistory();
       RepositoryHistoryService.onRepositoryCreated({
         id: repository.id,
-        name: repository.name ?? file.name
+        name: repository.name ?? file.name,
       });
-      
+
       duplicateCheck.resetCheck();
     } catch (error) {
       console.error('Erro ao criar repositório:', error);
       setCurrentFile(null);
-      
+
       if (repositoryContext) {
         repositoryContext.setCurrentRepositoryId(null);
         repositoryContext.setRepositoryName('');
       }
-      
+
       addMessage('Erro ao processar o arquivo. Tente novamente.', false);
     } finally {
       setIsCreatingRepository(false);
@@ -166,9 +162,9 @@ export function useChatState() {
     setChatStarted(false);
     setMessages([]);
     setUsedAnalyses(new Set());
-    
+
     duplicateCheck.resetCheck();
-    
+
     if (repositoryContext) {
       repositoryContext.setCurrentRepositoryId(null);
       repositoryContext.setRepositoryName('');
@@ -203,7 +199,7 @@ export function useChatState() {
     hiddenInputRef,
     isLoadingHistory,
     historyError,
-    
+
     duplicateCheck: {
       isChecking: duplicateCheck.isChecking,
       hasDuplicate: duplicateCheck.hasDuplicate,
@@ -213,7 +209,7 @@ export function useChatState() {
       existingRepository: duplicateCheck.duplicateResult?.existingRepository,
       error: duplicateCheck.error,
     },
-    
+
     addMessage,
     processFile,
     forceUpload,
@@ -222,7 +218,7 @@ export function useChatState() {
     handleReplace,
     resetDuplicateCheck: duplicateCheck.resetCheck,
     confirmDuplicateUpload: duplicateCheck.confirmDuplicateUpload,
-    
+
     setLoadingStep,
     setIsSubmitting,
     setChatStarted,

@@ -1,7 +1,7 @@
 import { Outlet, useLocation } from 'react-router-dom';
 import { FloatButton } from '@/components/FloatButton/FloatButton';
 import { WhatsAppOutlined } from '@ant-design/icons';
-import { whatsappLink } from '@/lib/utils';
+import { whatsappLink } from '@/utils';
 
 export function NoHeaderLayout() {
   const location = useLocation();

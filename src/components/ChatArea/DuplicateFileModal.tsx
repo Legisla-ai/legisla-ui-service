@@ -23,7 +23,7 @@ export function DuplicateFileModal({
         const confirmButton = document.querySelector('[data-modal-confirm]') as HTMLButtonElement;
         confirmButton?.focus();
       }, 300);
-      
+
       return () => clearTimeout(timer);
     }
   }, [isOpen, isLoading]);
@@ -31,7 +31,7 @@ export function DuplicateFileModal({
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (!isOpen || isLoading) return;
-      
+
       if (event.key === 'Escape') {
         event.preventDefault();
         onCancel();
@@ -59,7 +59,7 @@ export function DuplicateFileModal({
         backdropFilter: 'blur(4px)',
       }}
     >
-      <dialog 
+      <dialog
         open
         className="bg-white rounded-xl shadow-2xl max-w-lg w-full mx-4 p-6 border border-gray-200 animate-in slide-in-from-bottom-4 duration-300 m-0"
         aria-labelledby="modal-title"
@@ -86,9 +86,7 @@ export function DuplicateFileModal({
             <h3 className="text-xl font-semibold text-gray-900" id="modal-title">
               Arquivo Similar Encontrado
             </h3>
-            <p className="text-sm text-gray-600 mt-1">
-              Detectamos um arquivo parecido no seu histórico
-            </p>
+            <p className="text-sm text-gray-600 mt-1">Detectamos um arquivo parecido no seu histórico</p>
           </div>
         </div>
 

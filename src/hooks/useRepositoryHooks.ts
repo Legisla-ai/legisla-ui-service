@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { RepositoryContext } from './RepositoryContext';
+import { RepositoryContext } from '@/context/RepositoryContext';
 
 export function useRepositoryOptional() {
   const context = useContext(RepositoryContext);

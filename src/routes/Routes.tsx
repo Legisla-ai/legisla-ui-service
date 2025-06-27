@@ -7,8 +7,7 @@ import ProtectedRoute from './ProtectedRoute';
 // Lazy loading dos componentes principais
 const Home = lazy(() => import('@/pages/Home'));
 const Repository = lazy(() => import('@/pages/Repository'));
-const CompleteAnalysis = lazy(() => import('@/pages/CompleteAnalysis'));
-const RiskAnalysis = lazy(() => import('@/pages/RiskAnalysis'));
+const AnalysisPage = lazy(() => import('@/pages/AnalysisPage'));
 const JurisprudenceSearch = lazy(() => import('@/pages/JurisprudenceSearch'));
 const SignIn = lazy(() => import('@/pages/SignIn'));
 const SignUp = lazy(() => import('@/pages/SignUp'));
@@ -48,7 +47,7 @@ const AppRoutes = () => {
             path="/analise-completa"
             element={
               <ProtectedRoute>
-                <CompleteAnalysis />
+                <AnalysisPage />
               </ProtectedRoute>
             }
           />
@@ -56,7 +55,7 @@ const AppRoutes = () => {
             path="/analise-riscos"
             element={
               <ProtectedRoute>
-                <RiskAnalysis />
+                <AnalysisPage />
               </ProtectedRoute>
             }
           />

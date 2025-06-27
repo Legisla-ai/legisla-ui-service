@@ -1,19 +1,11 @@
-import { createContext, useContext, useState, useMemo, type ReactNode } from 'react';
-
-interface RepositoryContextType {
-  currentRepositoryId: number | null;
-  setCurrentRepositoryId: (id: number | null) => void;
-  repositoryName?: string;
-  setRepositoryName: (name: string) => void;
-  selectedRepositoryId: number | null;
-  setSelectedRepositoryId: (id: number | null) => void;
-}
-
-export const RepositoryContext = createContext<RepositoryContextType | undefined>(undefined);
+import { useState, useMemo, type ReactNode } from 'react';
+import { RepositoryContext, RepositoryContextType } from './repository-context';
 
 interface RepositoryProviderProps {
   readonly children: ReactNode;
 }
+
+export { RepositoryContext };
 
 export function RepositoryProvider({ children }: RepositoryProviderProps) {
   const [currentRepositoryId, setCurrentRepositoryId] = useState<number | null>(null);
@@ -33,14 +25,4 @@ export function RepositoryProvider({ children }: RepositoryProviderProps) {
   );
 
   return <RepositoryContext.Provider value={value}>{children}</RepositoryContext.Provider>;
-}
-
-export function useRepository() {
-  const context = useContext(RepositoryContext);
-
-  if (context === undefined) {
-    throw new Error('useRepository deve ser usado dentro de um RepositoryProvider');
-  }
-
-  return context;
 }

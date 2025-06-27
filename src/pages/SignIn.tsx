@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { LoadingOutlined } from '@ant-design/icons';
-import { useAuth } from '@/context/AuthContext';
+import { useAuth } from '@/context/use-auth';
 import { loginUser } from '@/services/authService';
 import BloomBackground from '@/components/BloomBackground/BloomBackground';
 import { Button } from '@/components/ui/button';

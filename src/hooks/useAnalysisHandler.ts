@@ -1,7 +1,7 @@
 // src/hooks/useAnalysisHandler.ts
 import { useState, useCallback } from 'react';
 import { analyzeDocument, analyzeRepositoryDocument } from '@/services/documentAnalysisService';
-import { getActionTitle } from '@/components/ChatArea/utils';
+import { getActionTitle } from '@/utils/chat';
 
 interface RetryState {
   count: number;
@@ -13,53 +13,70 @@ export function useAnalysisHandler() {
   const [retryState, setRetryState] = useState<RetryState>({
     count: 0,
     maxRetries: 3,
-    isRetrying: false
+    isRetrying: false,
   });
 
   const resetRetryState = useCallback(() => {
-    setRetryState(prev => ({ ...prev, count: 0, isRetrying: false }));
+    setRetryState((prev) => ({ ...prev, count: 0, isRetrying: false }));
   }, []);
 
   // Função para extrair conteúdo da resposta da API
-  const extractResponseContent = useCallback((response: any): string => {
-    if (response.content && Array.isArray(response.content) && response.content[0]?.text) {
-      return response.content[0].text;
+  const extractResponseContent = useCallback((response: unknown): string => {
+    // Type guard para verificar se é um objeto
+    if (typeof response === 'object' && response !== null) {
+      const apiResponse = response as Record<string, unknown>;
+
+      // Verificar se tem content como array com text
+      if (Array.isArray(apiResponse.content) && apiResponse.content[0]) {
+        const firstContent = apiResponse.content[0] as Record<string, unknown>;
+        if (firstContent.text && typeof firstContent.text === 'string') {
+          return firstContent.text;
+        }
+      }
+
+      // Verificar se content é string diretamente
+      if (typeof apiResponse.content === 'string') {
+        return apiResponse.content;
+      }
+
+      // Verificar se tem analysis
+      if (typeof apiResponse.analysis === 'string') {
+        return apiResponse.analysis;
+      }
     }
-    if (response.content && typeof response.content === 'string') {
-      return response.content;
-    }
-    if (response.analysis) {
-      return response.analysis;
-    }
+
     return 'Análise concluída com sucesso.';
   }, []);
 
   // Função para validar pré-requisitos da análise
-  const validateAnalysisRequest = useCallback((
-    currentFile: File | null,
-    currentRepositoryId: number | null,
-    usedAnalyses: Set<string>,
-    promptKey: string,
-    isSubmitting: boolean,
-    isRetry: boolean,
-    addMessage: (content: string, isUser?: boolean) => void
-  ): boolean => {
-    if (!currentFile && !currentRepositoryId) {
-      addMessage('Erro: Nenhum arquivo ou repositório foi selecionado para análise.', false);
-      return false;
-    }
+  const validateAnalysisRequest = useCallback(
+    (
+      currentFile: File | null,
+      currentRepositoryId: number | null,
+      usedAnalyses: Set<string>,
+      promptKey: string,
+      isSubmitting: boolean,
+      isRetry: boolean,
+      addMessage: (content: string, isUser?: boolean) => void
+    ): boolean => {
+      if (!currentFile && !currentRepositoryId) {
+        addMessage('Erro: Nenhum arquivo ou repositório foi selecionado para análise.', false);
+        return false;
+      }
 
-    if (usedAnalyses.has(promptKey)) {
-      addMessage('Esta análise já foi realizada anteriormente.', false);
-      return false;
-    }
+      if (usedAnalyses.has(promptKey)) {
+        addMessage('Esta análise já foi realizada anteriormente.', false);
+        return false;
+      }
 
-    if (isSubmitting && !isRetry) {
-      return false;
-    }
+      if (isSubmitting && !isRetry) {
+        return false;
+      }
 
-    return true;
-  }, []);
+      return true;
+    },
+    []
+  );
 
   // Função para configurar timers de loading
   const setupLoadingTimers = useCallback((setLoadingStep: (step: number) => void) => {
@@ -94,31 +111,33 @@ export function useAnalysisHandler() {
       addMessage,
       setUsedAnalyses,
       setChatStarted,
-      chatStarted
+      chatStarted,
     } = params;
 
     // Validar pré-requisitos
-    if (!validateAnalysisRequest(
-      currentFile,
-      currentRepositoryId ?? null,
-      usedAnalyses,
-      promptKey,
-      isSubmitting,
-      isRetry,
-      addMessage
-    )) {
+    if (
+      !validateAnalysisRequest(
+        currentFile,
+        currentRepositoryId ?? null,
+        usedAnalyses,
+        promptKey,
+        isSubmitting,
+        isRetry,
+        addMessage
+      )
+    ) {
       return;
     }
 
     setIsSubmitting(true);
     setLoadingStep(1);
-    
+
     if (!isRetry) {
       resetRetryState();
       const actionTitle = getActionTitle(promptKey);
       addMessage(actionTitle, true);
     } else {
-      setRetryState(prev => ({ ...prev, isRetrying: true }));
+      setRetryState((prev) => ({ ...prev, isRetrying: true }));
       // **Melhoria UX**: Removida mensagem de retry que polui a interface
       // O LoadingSteps já indica visualmente que está reprocessando
     }
@@ -128,8 +147,8 @@ export function useAnalysisHandler() {
 
     try {
       let response;
-      
-      // **Decisão Inteligente da API**: 
+
+      // **Decisão Inteligente da API**:
       // - Se temos repositoryId: usa API GET (documento já existe na base)
       // - Se temos arquivo: usa API POST (novo upload)
       // **Benefícios**: Evita re-upload, melhor performance, UX mais fluida
@@ -148,24 +167,24 @@ export function useAnalysisHandler() {
       } else {
         throw new Error('Contexto de análise inválido: arquivo ou repositório necessário');
       }
-      
+
       // Extrair e adicionar conteúdo da resposta
       const responseContent = extractResponseContent(response);
       addMessage(responseContent, false);
-      
-      setUsedAnalyses(prev => new Set([...prev, promptKey]));
+
+      setUsedAnalyses((prev) => new Set([...prev, promptKey]));
       resetRetryState();
-      
+
       if (!chatStarted) {
         setChatStarted(true);
       }
     } catch (error) {
       // **Melhoria UX**: Tratamento de erro simplificado e direto
       console.error('Erro na análise:', error);
-      
+
       if (retryState.count < retryState.maxRetries && !isRetry) {
         // Tentativa automática silenciosa
-        setRetryState(prev => ({ ...prev, count: prev.count + 1 }));
+        setRetryState((prev) => ({ ...prev, count: prev.count + 1 }));
         setTimeout(() => {
           handleAnalysisRequest(promptKey, params, true);
         }, 3000);
@@ -179,7 +198,7 @@ export function useAnalysisHandler() {
       clearTimeout(step3Timer);
       setIsSubmitting(false);
       setLoadingStep(1);
-      setRetryState(prev => ({ ...prev, isRetrying: false }));
+      setRetryState((prev) => ({ ...prev, isRetrying: false }));
     }
   };
 

@@ -17,22 +17,22 @@ export const ANALYSIS_OPTIONS: AnalysisOption[] = [
     description: 'Obtenha um resumo claro e conciso dos pontos principais',
     shortDescription: 'Resumo executivo',
     icon: '📄',
-    action: 'summarize'
+    action: 'summarize',
   },
   {
     title: 'Análise de Riscos',
     description: 'Identifique possíveis riscos jurídicos e pontos de atenção',
     shortDescription: 'Identificação de riscos',
     icon: '⚠️',
-    action: 'riskAnalysis'
+    action: 'riskAnalysis',
   },
   {
     title: 'Análise Completa',
     description: 'Análise jurídica detalhada e abrangente do documento',
     shortDescription: 'Análise detalhada',
     icon: '📊',
-    action: 'fullAnalysis'
-  }
+    action: 'fullAnalysis',
+  },
 ];
 
 export const promptsItems: PromptsProps['items'] = [
@@ -81,9 +81,9 @@ export const promptClassNames: Partial<Record<SemanticType, string>> = {};
 
 // Mensagens motivacionais para o loading (mais simples)
 export const LOADING_MESSAGES = [
-  "Processando seu documento com cuidado...",
-  "Analisando aspectos jurídicos relevantes...",
-  "Preparando insights personalizados...",
+  'Processando seu documento com cuidado...',
+  'Analisando aspectos jurídicos relevantes...',
+  'Preparando insights personalizados...',
 ] as const;
 
 // Função para obter mensagem aleatória

@@ -1,6 +1,6 @@
 // src/components/ChatArea/AnalysisOptions.tsx
 import React from 'react';
-import { ANALYSIS_OPTIONS } from './constants';
+import { ANALYSIS_OPTIONS } from '@/constants/analysisOptions';
 
 interface AnalysisOptionsProps {
   onAnalysisRequest: (action: string) => void;
@@ -8,11 +8,7 @@ interface AnalysisOptionsProps {
   isSubmitting: boolean;
 }
 
-export const AnalysisOptions: React.FC<AnalysisOptionsProps> = ({ 
-  onAnalysisRequest, 
-  usedAnalyses, 
-  isSubmitting 
-}) => {
+export const AnalysisOptions: React.FC<AnalysisOptionsProps> = ({ onAnalysisRequest, usedAnalyses, isSubmitting }) => {
   const getButtonClasses = (isUsed: boolean, isSubmitting: boolean) => {
     if (isUsed) {
       return 'border-green-200 bg-green-50 cursor-not-allowed';
@@ -37,7 +33,7 @@ export const AnalysisOptions: React.FC<AnalysisOptionsProps> = ({
         {ANALYSIS_OPTIONS.map((option) => {
           const isUsed = usedAnalyses.has(option.action);
           const isDisabled = isSubmitting || isUsed;
-          
+
           return (
             <button
               key={option.action}
@@ -57,7 +53,7 @@ export const AnalysisOptions: React.FC<AnalysisOptionsProps> = ({
                   </div>
                 </div>
               )}
-              
+
               <div className="flex items-start gap-3">
                 <span className="text-2xl flex-shrink-0">{option.icon}</span>
                 <div className="flex-1">
@@ -67,11 +63,7 @@ export const AnalysisOptions: React.FC<AnalysisOptionsProps> = ({
                   <p className={`text-xs leading-relaxed ${isUsed ? 'text-green-600' : 'text-gray-600'}`}>
                     {option.description}
                   </p>
-                  {isUsed && (
-                    <p className="text-xs text-green-600 font-medium mt-2">
-                      ✓ Análise concluída
-                    </p>
-                  )}
+                  {isUsed && <p className="text-xs text-green-600 font-medium mt-2">✓ Análise concluída</p>}
                 </div>
               </div>
             </button>

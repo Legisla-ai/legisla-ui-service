@@ -9,7 +9,7 @@ import BloomBackground from '@/components/BloomBackground/BloomBackground';
 import { signUpSchema, SignUpSchemaType } from '@/schemas/signUpSchema';
 import { useRegisterUser } from '@/hooks/useAuth';
 import PhoneInput from '@/components/PhoneInput/PhoneInput';
-import { useAuth } from '@/context/AuthContext';
+import { useAuth } from '@/context/use-auth';
 
 interface PasswordRequirement {
   label: string;

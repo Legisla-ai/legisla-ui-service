@@ -1,5 +1,5 @@
 // src/components/ChatArea/ChatActionsArea.tsx
-import { ANALYSIS_OPTIONS } from './constants';
+import { ANALYSIS_OPTIONS } from '@/constants/analysisOptions';
 
 interface ChatActionsAreaProps {
   readonly usedAnalyses: Set<string>;
@@ -16,7 +16,7 @@ export function ChatActionsArea({ usedAnalyses, isSubmitting, onAnalysisRequest 
           {usedAnalyses.size} de {ANALYSIS_OPTIONS.length} realizadas
         </span>
       </div>
-      
+
       <div className="flex flex-wrap gap-3">
         {ANALYSIS_OPTIONS.map((option) => (
           <button
@@ -29,19 +29,13 @@ export function ChatActionsArea({ usedAnalyses, isSubmitting, onAnalysisRequest 
                 : 'text-gray-700 bg-white border border-gray-200 hover:bg-gray-50 hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 disabled:opacity-50 disabled:cursor-not-allowed'
             }`}
           >
-            <span className="text-lg group-hover:scale-110 transition-transform">
-              {option.icon}
-            </span>
-            <span className="font-medium">
-              {option.title}
-            </span>
-            {usedAnalyses.has(option.action) && (
-              <span className="text-xs opacity-75">• Concluído</span>
-            )}
+            <span className="text-lg group-hover:scale-110 transition-transform">{option.icon}</span>
+            <span className="font-medium">{option.title}</span>
+            {usedAnalyses.has(option.action) && <span className="text-xs opacity-75">• Concluído</span>}
           </button>
         ))}
       </div>
-      
+
       {usedAnalyses.size === ANALYSIS_OPTIONS.length && (
         <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg">
           <div className="flex items-center gap-2">

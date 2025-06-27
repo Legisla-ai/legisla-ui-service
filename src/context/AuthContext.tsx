@@ -1,23 +1,8 @@
 // src/context/AuthContext.tsx
-import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
-import { User, LoginResponse } from '@/interfaces/auth';
+import React, { useEffect, useState, ReactNode, useCallback, useMemo } from 'react';
+import { User, LoginResponse, AuthContextType } from '@/interfaces/auth';
 import { fetchCurrentUser } from '@/services/authService';
-
-interface AuthContextType {
-  user: User | null;
-  tokens: {
-    accessToken: string;
-    refreshToken: string;
-    idToken: string;
-  } | null;
-  isAuthenticated: boolean;
-  isLoading: boolean;
-  login: (response: LoginResponse, userData?: User) => void;
-  logout: () => void;
-  updateTokens: (tokens: { accessToken: string; refreshToken: string; idToken: string }) => void;
-}
-
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+import { AuthContext } from './auth-context';
 
 const TOKEN_STORAGE_KEY = 'auth_tokens';
 const USER_STORAGE_KEY = 'auth_user';
@@ -46,6 +31,13 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   }, []);
 
+  const logout = useCallback(() => {
+    setUser(null);
+    setTokens(null);
+    localStorage.removeItem(TOKEN_STORAGE_KEY);
+    localStorage.removeItem(USER_STORAGE_KEY);
+  }, []);
+
   useEffect(() => {
     const verifyAuth = async () => {
       if (tokens?.accessToken && !user) {
@@ -62,9 +54,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     if (!isLoading && tokens) {
       verifyAuth();
     }
-  }, [tokens, user, isLoading]);
+  }, [tokens, user, isLoading, logout]);
 
-  const login = (response: LoginResponse, userData?: User) => {
+  const login = useCallback((response: LoginResponse, userData?: User) => {
     const newTokens = {
       accessToken: response.accessToken,
       refreshToken: response.refreshToken,
@@ -77,23 +69,16 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       setUser(userData);
       localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(userData));
     }
-  };
+  }, []);
 
-  const logout = () => {
-    setUser(null);
-    setTokens(null);
-    localStorage.removeItem(TOKEN_STORAGE_KEY);
-    localStorage.removeItem(USER_STORAGE_KEY);
-  };
-
-  const updateTokens = (newTokens: { accessToken: string; refreshToken: string; idToken: string }) => {
+  const updateTokens = useCallback((newTokens: { accessToken: string; refreshToken: string; idToken: string }) => {
     setTokens(newTokens);
     localStorage.setItem(TOKEN_STORAGE_KEY, JSON.stringify(newTokens));
-  };
+  }, []);
 
   const isAuthenticated = !!tokens?.accessToken && !!user;
 
-  const value = React.useMemo<AuthContextType>(
+  const value = useMemo<AuthContextType>(
     () => ({
       user,
       tokens,
@@ -107,12 +92,4 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
-};
-
-export const useAuth = (): AuthContextType => {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuth deve ser usado dentro de um AuthProvider');
-  }
-  return context;
 };

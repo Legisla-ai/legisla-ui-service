@@ -1,4 +1,4 @@
-// src/components/ChatArea/types.ts
+// src/interfaces/chat.ts
 export interface ChatMessageType {
   id: string;
   content: string;

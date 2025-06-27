@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Button } from 'antd';
 import { WhatsAppOutlined, MenuOutlined, CloseOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
-import { whatsappLink } from '@/lib/utils';
+import { whatsappLink } from '@/utils';
 
 export const Header: React.FC = () => {
   const [isMobile, setIsMobile] = useState(false);
@@ -66,8 +66,8 @@ export const Header: React.FC = () => {
         <div className="flex gap-2 items-center">
           {navItems.map((item) => (
             <Link key={item.to} to={item.to}>
-              <Button 
-                type="text" 
+              <Button
+                type="text"
                 className="inline-block gap-4 text-base font-sans font-semibold text-gray-600 rounded-lg transition-all duration-15 ease-in-out relative hover:bg-blue-500/8 hover:text-blue-500 hover:-translate-y-px"
               >
                 {item.label}
@@ -110,9 +110,7 @@ export const Header: React.FC = () => {
               icon={isMenuOpen ? <CloseOutlined /> : <MenuOutlined />}
               onClick={toggleMenu}
               className={`p-2 border-none bg-transparent text-xl text-gray-600 flex items-center justify-center rounded-lg transition-all duration-15 ease-in-out z-[51] min-w-11 h-11 ${
-                isMenuOpen 
-                  ? 'bg-black/8 text-gray-800' 
-                  : 'hover:bg-black/5 hover:text-gray-700'
+                isMenuOpen ? 'bg-black/8 text-gray-800' : 'hover:bg-black/5 hover:text-gray-700'
               }`}
             />
 
@@ -122,9 +120,9 @@ export const Header: React.FC = () => {
                 <div className="flex flex-col p-2 gap-1">
                   {navItems.map((item) => (
                     <Link key={item.to} to={item.to} onClick={() => setIsMenuOpen(false)}>
-                      <Button 
-                        type="text" 
-                        block 
+                      <Button
+                        type="text"
+                        block
                         className="justify-start hover:bg-blue-500/5 hover:text-blue-500 focus:bg-blue-500/8 focus:text-blue-500 focus:outline-none"
                       >
                         {item.label}

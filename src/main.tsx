@@ -5,7 +5,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App';
-import theme from './config/theme';
+import theme from '@/constants/theme';
 import { AuthProvider } from './context/AuthContext';
 import './globals.css';
 import queryClient from './query/queryClient';

@@ -1,6 +1,6 @@
 import { ChatArea } from '@/components/ChatArea/ChatArea';
 
-export default function RiskAnalysis() {
+export default function AnalysisPage() {
   return (
     <div className="h-full">
       <ChatArea />

@@ -1,5 +1,5 @@
 // src/hooks/useAuth.ts
-import { useAuth } from '@/context/AuthContext';
+import { useAuth } from '@/context/use-auth';
 import { LoginResponse, RegisterResponse, RegisterUser, User } from '@/interfaces/auth';
 import { queryKeys } from '@/query/queryKeys';
 import { loginUser, registerUser, logoutUser } from '@/services/authService';

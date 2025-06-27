@@ -6,14 +6,11 @@ interface LoadingStepsProps {
   isWaitingForResponse?: boolean;
 }
 
-export const LoadingSteps: React.FC<LoadingStepsProps> = ({ 
-  currentStep, 
-  isWaitingForResponse = false
-}) => {
+export const LoadingSteps: React.FC<LoadingStepsProps> = ({ currentStep, isWaitingForResponse = false }) => {
   const steps = [
     { id: 1, title: 'Lendo documento', description: 'Extraindo e processando conteúdo' },
     { id: 2, title: 'Analisando conteúdo', description: 'Aplicando análise jurídica' },
-    { id: 3, title: 'Gerando resposta', description: 'Preparando insights personalizados' }
+    { id: 3, title: 'Gerando resposta', description: 'Preparando insights personalizados' },
   ];
 
   const getStepState = (stepId: number) => {
@@ -33,23 +30,13 @@ export const LoadingSteps: React.FC<LoadingStepsProps> = ({
     if (stepState === 'completed') {
       return (
         <div className="w-16 h-16 bg-gray-100 border-2 border-gray-300 rounded-full flex items-center justify-center transition-all duration-700 ease-out shadow-sm opacity-60">
-          <svg 
-            className="w-6 h-6 text-gray-500" 
-            fill="none" 
-            stroke="currentColor" 
-            viewBox="0 0 24 24"
-          >
-            <path 
-              strokeLinecap="round" 
-              strokeLinejoin="round" 
-              strokeWidth={3} 
-              d="M5 13l4 4L19 7" 
-            />
+          <svg className="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
           </svg>
         </div>
       );
     }
-    
+
     if (stepState === 'active' || stepState === 'waiting') {
       return (
         <div className="w-16 h-16 border-2 border-cyan-400 rounded-full flex items-center justify-center transition-all duration-700 ease-out bg-cyan-50">
@@ -57,7 +44,7 @@ export const LoadingSteps: React.FC<LoadingStepsProps> = ({
         </div>
       );
     }
-    
+
     return (
       <div className="w-16 h-16 border-2 border-gray-300 rounded-full flex items-center justify-center transition-all duration-700 ease-out bg-gray-50">
         <div className="w-10 h-2 bg-gray-300 rounded-full"></div>
@@ -105,7 +92,9 @@ export const LoadingSteps: React.FC<LoadingStepsProps> = ({
                   <h4 className={`text-base mb-2 transition-all duration-500 ${getTitleStyles(stepState)}`}>
                     {step.title}
                   </h4>
-                  <p className={`text-sm leading-relaxed transition-all duration-500 ${getDescriptionStyles(stepState)}`}>
+                  <p
+                    className={`text-sm leading-relaxed transition-all duration-500 ${getDescriptionStyles(stepState)}`}
+                  >
                     {step.description}
                   </p>
                 </div>

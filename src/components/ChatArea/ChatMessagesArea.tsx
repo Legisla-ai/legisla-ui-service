@@ -1,7 +1,7 @@
 // src/components/ChatArea/ChatMessagesArea.tsx
 import { useRef, useEffect } from 'react';
 import { ChatMessage } from '../ChatMessage/ChatMessage';
-import type { ChatMessageType } from './types';
+import type { ChatMessageType } from '@/interfaces/chat';
 
 interface ChatMessagesAreaProps {
   readonly messages: ChatMessageType[];
@@ -19,9 +19,9 @@ export function ChatMessagesArea({ messages, isSubmitting }: ChatMessagesAreaPro
   return (
     <div className="flex-1 overflow-y-auto p-4 space-y-6 bg-gray-50">
       {messages.map((message) => (
-        <ChatMessage key={message.id} message={message.content} isUser={message.isUser} />
+        <ChatMessage key={message.id} message={message} isUser={message.isUser} />
       ))}
-      
+
       {isSubmitting && (
         <div className="flex justify-start">
           <div className="flex items-start space-x-3 max-w-[80%]">
@@ -32,8 +32,14 @@ export function ChatMessagesArea({ messages, isSubmitting }: ChatMessagesAreaPro
               <div className="flex items-center gap-3 mb-2">
                 <div className="flex gap-1">
                   <div className="w-2 h-2 bg-cyan-700 rounded-full animate-bounce"></div>
-                  <div className="w-2 h-2 bg-cyan-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                  <div className="w-2 h-2 bg-cyan-700 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                  <div
+                    className="w-2 h-2 bg-cyan-400 rounded-full animate-bounce"
+                    style={{ animationDelay: '0.1s' }}
+                  ></div>
+                  <div
+                    className="w-2 h-2 bg-cyan-700 rounded-full animate-bounce"
+                    style={{ animationDelay: '0.2s' }}
+                  ></div>
                 </div>
               </div>
               <p className="text-xs text-gray-600">Analisando documento...</p>

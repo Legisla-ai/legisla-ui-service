@@ -41,7 +41,7 @@ const validateAnalysisRequest = (request: AnalysisRequest): void => {
 
 /**
  * Trata erros específicos da API de análise de documento
- * 
+ *
  * **Benefícios:**
  * - Centralização do tratamento de erros
  * - Mensagens user-friendly específicas por contexto
@@ -56,8 +56,8 @@ const handleDocumentAnalysisError = (error: unknown): never => {
     config: {
       url: isAxiosError(error) ? error.config?.url : undefined,
       method: isAxiosError(error) ? error.config?.method : undefined,
-      headers: isAxiosError(error) ? error.config?.headers : undefined
-    }
+      headers: isAxiosError(error) ? error.config?.headers : undefined,
+    },
   });
 
   // Melhorar as mensagens de erro para o usuário
@@ -70,7 +70,7 @@ const handleDocumentAnalysisError = (error: unknown): never => {
   } else if (error instanceof Error && error.name === 'AbortError') {
     throw new Error('Tempo limite excedido. Tente novamente com um arquivo menor');
   }
-  
+
   throw error;
 };
 
@@ -79,7 +79,7 @@ export const analyzeDocument = async (request: AnalysisRequest): Promise<Analysi
   validateAnalysisRequest(request);
 
   const formData = new FormData();
-  
+
   // Garantir que o arquivo seja anexado corretamente
   formData.append('file', request.file, request.file.name);
 
@@ -91,7 +91,7 @@ export const analyzeDocument = async (request: AnalysisRequest): Promise<Analysi
       timeout: 60000, // 60 segundos
       // Upload progress tracking removed to eliminate unused code
     });
-    
+
     return response.data;
   } catch (error: unknown) {
     // Tratamento de erro delegado para função específica
@@ -106,9 +106,9 @@ function isAxiosError(error: unknown): error is import('axios').AxiosError {
 
 /**
  * Valida os parâmetros de entrada para análise de repositório
- * 
+ *
  * **Benefícios:**
- * - Separação de responsabilidades (SRP) 
+ * - Separação de responsabilidades (SRP)
  * - Redução da complexidade cognitiva
  * - Reutilização de código
  * - Melhores mensagens de erro
@@ -133,7 +133,7 @@ const validateRepositoryAnalysisRequest = (request: RepositoryAnalysisRequest): 
 
 /**
  * Trata erros específicos da API de repositório
- * 
+ *
  * **Benefícios:**
  * - Centralizaçao do tratamento de erros
  * - Mensagens user-friendly específicas por contexto
@@ -148,23 +148,23 @@ const handleRepositoryAnalysisError = (error: unknown): never => {
     if (status === 404) {
       throw new Error('Repositório não encontrado ou não acessível');
     }
-    
+
     if (status === 400) {
       throw new Error('Parâmetros de análise inválidos');
     }
-    
+
     if (status === 422) {
       throw new Error('Documento não pode ser processado para este tipo de análise');
     }
-    
+
     if (status === 500) {
       throw new Error('Erro interno do servidor. Tente novamente em alguns instantes');
     }
-    
+
     if (errorCode === 'ECONNABORTED') {
       throw new Error('Timeout na análise do documento. Tente novamente');
     }
-    
+
     if (errorCode === 'NETWORK_ERROR') {
       throw new Error('Erro de conexão. Verifique sua internet');
     }
@@ -175,7 +175,7 @@ const handleRepositoryAnalysisError = (error: unknown): never => {
 
 /**
  * Analisa um documento existente no repositório usando apenas o repositoryId
- * 
+ *
  * **Melhorias implementadas:**
  * - Validação robusta de entrada seguindo princípios SOLID
  * - Tratamento de erro específico e user-friendly
@@ -183,7 +183,7 @@ const handleRepositoryAnalysisError = (error: unknown): never => {
  * - Type safety com TypeScript
  * - Separação de responsabilidades (SRP)
  * - Redução da complexidade cognitiva
- * 
+ *
  * **Benefícios:**
  * - Evita re-upload desnecessário de arquivos (principio DRY)
  * - Melhor performance ao reutilizar documentos existentes
@@ -200,7 +200,7 @@ export const analyzeRepositoryDocument = async (request: RepositoryAnalysisReque
     // A API do backend segue o padrão: GET /minerva/repository/summarize/{repositoryId}
     // Mantemos flexibilidade para futuras expansões da API
     const response = await api.get<AnalysisResponse>(
-      `/minerva/repository/${request.promptType}/${request.repositoryId}`, 
+      `/minerva/repository/${request.promptType}/${request.repositoryId}`,
       {
         timeout: 60000, // 60 segundos
       }

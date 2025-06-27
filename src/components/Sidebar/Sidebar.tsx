@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { Menu, Plus, FileText, Clock, Trash2, MoreHorizontal, RefreshCw, AlertCircle } from 'lucide-react';
 import { Button, Dropdown, Spin, Alert, Modal, message } from 'antd';
-import { cn } from '@/lib/utils';
+import { cn } from '@/utils';
 import { useRepositoryHistory, useDeleteRepository } from '@/hooks/useRepositoryHistory';
 import { DocumentItem } from '@/interfaces/repositoryHistory';
-import { useRepository } from '@/context/RepositoryContext';
+import { useRepository } from '@/hooks/useRepositoryHooks';
 
 interface SidebarProps {
   readonly isOpen: boolean;
