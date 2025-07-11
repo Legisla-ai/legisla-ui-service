@@ -24,14 +24,14 @@ export const ANALYSIS_OPTIONS: AnalysisOption[] = [
     description: 'Identifique possíveis riscos jurídicos e pontos de atenção',
     shortDescription: 'Identificação de riscos',
     icon: '⚠️',
-    action: 'riskAnalysis',
+    action: 'analyze-risks',
   },
   {
     title: 'Análise Completa',
     description: 'Análise jurídica detalhada e abrangente do documento',
     shortDescription: 'Análise detalhada',
     icon: '📊',
-    action: 'fullAnalysis',
+    action: 'analyze',
   },
 ];
 
@@ -43,13 +43,13 @@ export const promptsItems: PromptsProps['items'] = [
     description: 'Criar um resumo do documento',
   },
   {
-    key: 'riskAnalysis',
+    key: 'analyze-risks',
     icon: <EditOutlined style={{ color: '#52c41a' }} />,
     label: 'Análise de Riscos',
     description: 'Elaborar uma análise de riscos do documento',
   },
   {
-    key: 'fullAnalysis',
+    key: 'analyze',
     icon: <FormOutlined style={{ color: '#f5222d' }} />,
     label: 'Análise Completa',
     description: 'Gerar uma análise completa do documento',
