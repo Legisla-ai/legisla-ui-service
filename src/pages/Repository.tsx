@@ -9,8 +9,6 @@ export default function Repository() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(window.innerWidth >= 768);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
-  // RepositoryId removido pois agora buscamos todos os repositórios do usuário
-
   useEffect(() => {
     const handleResize = () => {
       const mobile = window.innerWidth < 768;

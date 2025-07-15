@@ -72,7 +72,7 @@ export class RepositoryService {
       const formData = new FormData();
       formData.append('file', file, file.name);
 
-      const response = await api.post<CreateRepositoryResponse>('/repository', formData, {
+      const response = await api.post<CreateRepositoryResponse>('/repository/', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

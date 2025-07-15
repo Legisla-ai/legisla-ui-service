@@ -4,7 +4,7 @@ import type { ChatMessageType } from '@/interfaces/chat';
 
 export class RepositoryHistoryService {
   static async getRepositoryHistory(): Promise<RepositoryResponse[]> {
-    const response = await api.get<RepositoryResponse[]>('/repository');
+    const response = await api.get<RepositoryResponse[]>('/repository/');
     return response.data;
   }
 
