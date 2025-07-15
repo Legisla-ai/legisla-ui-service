@@ -1,7 +1,6 @@
-// src/services/api.ts
 import axios, { AxiosError, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8081/core';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8081/legislaai';
 
 const api = axios.create({
   baseURL: API_BASE_URL,

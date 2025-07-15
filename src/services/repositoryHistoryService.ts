@@ -4,17 +4,17 @@ import type { ChatMessageType } from '@/interfaces/chat';
 
 export class RepositoryHistoryService {
   static async getRepositoryHistory(): Promise<RepositoryResponse[]> {
-    const response = await api.get<RepositoryResponse[]>('/minerva/repository');
+    const response = await api.get<RepositoryResponse[]>('/repository');
     return response.data;
   }
 
   static async getRepositoryChatHistory(repositoryId: number): Promise<RepositoryChatHistoryResponse[]> {
-    const response = await api.get<RepositoryChatHistoryResponse[]>(`/minerva/repository/history/${repositoryId}`);
+    const response = await api.get<RepositoryChatHistoryResponse[]>(`/repository/history/${repositoryId}`);
     return response.data;
   }
 
   static async deleteRepository(repositoryId: number): Promise<void> {
-    await api.delete(`/minerva/repository/${repositoryId}`);
+    await api.delete(`/repository/${repositoryId}`);
   }
 
   static transformToDisplayFormat(repositories: RepositoryResponse[]) {
